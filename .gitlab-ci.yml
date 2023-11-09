@@ -22,8 +22,8 @@
 
 variables: &variables
   BUILD_OPTS: "--output-folder $CI_PROJECT_DIR/conda-channel"
-  CHANNEL_OPTS: "-c anaconda -c conda-forge -c file://$CI_PROJECT_DIR/conda-channel"
-  CHANNEL_OPTS_WIN: "-c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel"
+  CHANNEL_OPTS: "-c conda-forge -c nodefaults -c file://$CI_PROJECT_DIR/conda-channel"
+  CHANNEL_OPTS_WIN: "-c conda-forge -c nodefaults $env:CI_PROJECT_DIR/conda-channel"
   EPCT_TEST_DATA_DIR: "/data/data-tailor"
 
 
@@ -63,13 +63,11 @@ build linux:
   stage: build 32
   tags:
     - linux
-  image: conda/miniconda3-centos7:latest
+  image: harbor.eumetsat.int/data-tailor/mamba-conda-rocky-build:1.4.2-23.3.1-8.8.20230518
   before_script:
-    - conda update -n base -c defaults conda
-    - conda install -y conda-build
     - cd conda
   script:
-    - conda build $BUILD_OPTS .
+    - mamba build $BUILD_OPTS .
   artifacts:
     paths:
       - $CI_PROJECT_DIR/conda-channel
@@ -82,7 +80,6 @@ build win32:
   before_script:
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
   script:
-    - conda install -y conda-build
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
     - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat" "&" set CONDA_FORCE_32BIT=1 "&" conda build --output-folder $env:CI_PROJECT_DIR\conda-channel .' 
@@ -99,7 +96,6 @@ build win64:
   before_script:
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
   script:
-    - conda install -y conda-build
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
     - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" "&" conda build --output-folder $env:CI_PROJECT_DIR\conda-channel .'
@@ -113,19 +109,13 @@ test linux py39:
   stage: test linux
   tags:
     - linux
-  image: conda/miniconda3-centos7:latest
+  image: harbor.eumetsat.int/data-tailor/mamba-conda-rocky-tests:1.5.2-23.9.0-8.8.20230518
   dependencies:
     - build linux
   needs:
     - build linux
-  before_script:
-    - conda init bash
-    - source ~/.bashrc
-    - conda create -y --name $CI_JOB_ID python=3.9
-    - conda activate $CI_JOB_ID
-    - conda update -n base -c defaults conda
   script:
-    - conda install -y $CHANNEL_OPTS fcidecomp pytest
+    - mamba install -y $CHANNEL_OPTS fcidecomp
     - pytest -vv tests
     - conda deactivate
 
@@ -140,10 +130,10 @@ test win32 py39:
   before_script:
     - $env:CONDA_FORCE_32BIT=1
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -y --name $env:CI_JOB_ID python=3.9
+    - mamba create -c conda-forge -y --name $env:CI_JOB_ID python=3.9
     - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y -c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
+    - mamba install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
@@ -161,10 +151,10 @@ test win64 py39:
     - build win64
   before_script:
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -y --name $env:CI_JOB_ID python=3.9
+    - mamba create -c conda-forge -y --name $env:CI_JOB_ID python=3.9
     - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y -c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
+    - mamba install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
@@ -186,7 +176,7 @@ test linux py38:
   before_script:
     - conda init bash
     - source ~/.bashrc
-    - conda create -y --name $CI_JOB_ID python=3.8
+    - conda create -c conda-forge -y --name $CI_JOB_ID python=3.8
     - conda activate $CI_JOB_ID
     - conda update -n base -c defaults conda
   script:
@@ -206,10 +196,10 @@ test win32 py38:
   before_script:
     - $env:CONDA_FORCE_32BIT=1
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -y --name $env:CI_JOB_ID python=3.8
+    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.8
     - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y -c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
+    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
@@ -228,10 +218,10 @@ test win64 py38:
     - build win64
   before_script:
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -y --name $env:CI_JOB_ID python=3.8
+    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.8
     - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y -c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
+    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
@@ -273,10 +263,10 @@ test win32 py37:
   before_script:
     - $env:CONDA_FORCE_32BIT=1
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -y --name $env:CI_JOB_ID python=3.7
+    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.7
     - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y -c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
+    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
@@ -295,10 +285,10 @@ test win64 py37:
     - build win64
   before_script:
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -y --name $env:CI_JOB_ID python=3.7
+    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.7
     - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y -c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
+    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
@@ -321,9 +311,9 @@ performance linux py39:
   before_script:
     - conda init bash
     - source ~/.bashrc
-    - conda create -y --name $CI_JOB_ID python=3.9
+    - conda create -c conda-forge -y --name $CI_JOB_ID python=3.9
     - conda activate $CI_JOB_ID
-    - conda update -n base -c defaults conda
+    - conda update -n base -c conda-forge conda
   script:
     - conda install -y $CHANNEL_OPTS fcidecomp pytest pytest-benchmark
     - pytest -vv perf
@@ -342,10 +332,10 @@ performance win32 py39:
   before_script:
     - $env:CONDA_FORCE_32BIT=1
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -y --name $env:CI_JOB_ID python=3.9
+    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.9
     - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y -c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest pytest-benchmark
+    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest pytest-benchmark
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
@@ -365,10 +355,10 @@ performance win64 py39:
     - test win64 py39
   before_script:
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -y --name $env:CI_JOB_ID python=3.9
+    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.9
     - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y -c anaconda -c conda-forge -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest pytest-benchmark
+    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest pytest-benchmark
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
