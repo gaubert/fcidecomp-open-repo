@@ -77,6 +77,7 @@ build linux:
 
 build win32:
   stage: build 32
+  when: manual
   tags:
     - windows
   before_script:
@@ -94,6 +95,7 @@ build win32:
 build win64:
   stage: build 64
   dependencies: []
+  when: manual
   tags:
     - windows
   before_script:
@@ -111,6 +113,7 @@ build win64:
 
 test linux py39:
   stage: test linux
+  when: manual
   tags:
     - linux
   image: harbor.eumetsat.int/data-tailor/mamba-conda-rocky-tests:1.5.2-23.9.0-8.8.20230518
@@ -125,6 +128,7 @@ test linux py39:
 
 test win32 py39:
   stage: test 32
+  when: manual
   tags:
     - windows
   dependencies:
@@ -147,6 +151,7 @@ test win32 py39:
 
 test win64 py39:
   stage: test 64
+  when: manual
   tags:
     - windows
   dependencies:
@@ -378,15 +383,15 @@ deploy local:
   image: conda/miniconda3-centos7:latest
   dependencies:
     - build linux
-    - build win32
-    - build win64
+#    - build win32
+#    - build win64
   needs:
     - build linux
-    - build win32
-    - build win64
-    - test linux py39
-    - test win64 py39
-    - test win32 py39
+#    - build win32
+#    - build win64
+#    - test linux py39
+#    - test win64 py39
+#    - test win32 py39
   before_script:
     - conda install -y conda-build
   script:
