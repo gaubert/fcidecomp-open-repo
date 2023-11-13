@@ -18,21 +18,22 @@ build:
 
 requirements:
   build:
-    - compilers
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - cmake
     - m2-patch              # [win]
     - make                  # [not win]
     - ninja                 # [win]
   host:
-    - charls         # [not win32]
-    - hdf5
+    - charls={{ charls_version }}         # [not win32]
+    - hdf5=1.*
     - h5py             # [not win]
     - h5py=3.6.0            # [win]
     - python
     - zlib
   run:
-    - charls         # [not win32]
-    - hdf5
+    - charls={{ charls_version }}         # [not win32]
+    - hdf5=1.*
     - h5py            # [not win]
     - h5py=3.6.0            # [win]
     - libnetcdf!=4.8.0      # [win]
