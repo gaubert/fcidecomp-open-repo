@@ -68,7 +68,7 @@ build linux:
     - cd conda
   script:
     - mamba create -c conda-forge -n fcidecomp-env
-    - conda activate fcidecomp-env
+    - conda init bash && source ~/.bashrc && conda activate fcidecomp-env
     - mamba build $BUILD_OPTS .
   artifacts:
     paths:
