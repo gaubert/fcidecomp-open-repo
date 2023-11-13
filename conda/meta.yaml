@@ -26,17 +26,17 @@ requirements:
     - ninja                 # [win]
   host:
     - charls         # [not win32]
-    - hdf5=1.*
-    - h5py=2.*              # [not win]
+    - hdf5
+    - h5py             # [not win]
     - h5py=3.6.0            # [win]
-    - python  {{ python }}
+    - python
     - zlib
   run:
     - charls         # [not win32]
-    - hdf5=1.*
-    - h5py=2.*              # [not win]
+    - hdf5
+    - h5py            # [not win]
     - h5py=3.6.0            # [win]
     - libnetcdf!=4.8.0      # [win]
     - libssh2               # [win]
     - netcdf4
-    - python  {{ python }}
+    - python
