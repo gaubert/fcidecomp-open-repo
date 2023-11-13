@@ -22,8 +22,8 @@
 
 variables: &variables
   BUILD_OPTS: "--output-folder $CI_PROJECT_DIR/conda-channel"
-  CHANNEL_OPTS: "-c anaconda -c conda-forge -c file://$CI_PROJECT_DIR/conda-channel"
-  CHANNEL_OPTS_WIN: "-c anaconda -c conda-forge $env:CI_PROJECT_DIR/conda-channel"
+  CHANNEL_OPTS: "-c conda-forge -c nodefaults -c file://$CI_PROJECT_DIR/conda-channel"
+  CHANNEL_OPTS_WIN: "-c conda-forge -c nodefaults $env:CI_PROJECT_DIR/conda-channel"
   EPCT_TEST_DATA_DIR: "/data/data-tailor"
 
 
@@ -63,13 +63,11 @@ build linux:
   stage: build 32
   tags:
     - linux
-  image: conda/miniconda3-centos7:latest
+  image: harbor.eumetsat.int/data-tailor/mamba-conda-rocky-build:1.4.2-23.3.1-8.8.20230518
   before_script:
-    - conda update -n base -c defaults conda
-    - conda install -y conda-build
     - cd conda
   script:
-    - conda build $BUILD_OPTS .
+    - mamba build $BUILD_OPTS .
   artifacts:
     paths:
       - $CI_PROJECT_DIR/conda-channel
