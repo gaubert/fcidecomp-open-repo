@@ -25,14 +25,14 @@ requirements:
     - make                  # [not win]
     - ninja                 # [win]
   host:
-    - charls=2.1.0          # [not win32]
+    - charls         # [not win32]
     - hdf5=1.*
     - h5py=2.*              # [not win]
     - h5py=3.6.0            # [win]
     - python  {{ python }}
     - zlib
   run:
-    - charls=2.1.0          # [not win32]
+    - charls         # [not win32]
     - hdf5=1.*
     - h5py=2.*              # [not win]
     - h5py=3.6.0            # [win]
