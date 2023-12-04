@@ -29,8 +29,8 @@ variables: &variables
 
 stages:
   - docs
-  - build 32
-  - build 64
+  - build linux
+  - build win
   - test linux
   - test 32
   - test 64
@@ -60,7 +60,7 @@ pdf docs:
     expire_in: 7 days
 
 build linux:
-  stage: build 32
+  stage: build linux
   tags:
     - linux
   image: harbor.eumetsat.int/data-tailor/mamba-conda-rocky-build:1.4.2-23.3.1-8.8.20230518
@@ -77,8 +77,8 @@ build linux:
     expire_in: 10 days
 
 build win32:
-  stage: build 32
   when: manual
+  stage: build win
   tags:
     - windows
   before_script:
@@ -87,29 +87,27 @@ build win32:
     - mamba install -c conda-forge -y conda-build
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
-    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat" "&" set CONDA_FORCE_32BIT=1 "&" mamba build -c conda-forge --output-folder $env:CI_PROJECT_DIR\conda-channel .' 
+    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat" "&" set CONDA_FORCE_32BIT=1 "&" mamba build -c anaconda -c conda-forge -c defaults --output-folder $env:CI_PROJECT_DIR\conda-channel .' 
   artifacts:
     paths:
       - $env:CI_PROJECT_DIR\conda-channel
     expire_in: 10 days
 
 build win64:
-  stage: build 64
-  dependencies: []
-  when: manual
+  stage: build win
   tags:
     - windows
   before_script:
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
   script:
-    - conda install -y conda-build
+    - conda install -c conda-forge -y conda-build
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
-    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" "&" conda build --output-folder $env:CI_PROJECT_DIR\conda-channel .'
-  stage: test linux
-  tags:
-    - linux
-  image: conda/miniconda3-centos7:latest
+    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" "&" mamba build -c conda-forge --output-folder $env:CI_PROJECT_DIR\conda-channel .'
+  artifacts:
+    paths:
+      - $env:CI_PROJECT_DIR\conda-channel
+    expire_in: 10 days
 
 
 test linux py39:
@@ -385,11 +383,11 @@ deploy local:
   dependencies:
     - build linux
 #    - build win32
-#    - build win64
+    - build win64
   needs:
     - build linux
 #    - build win32
-#    - build win64
+    - build win64
 #    - test linux py39
 #    - test win64 py39
 #    - test win32 py39
