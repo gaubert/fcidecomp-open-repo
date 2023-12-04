@@ -60,7 +60,6 @@ pdf docs:
     expire_in: 7 days
 
 build linux:
-  when: manual
   stage: build linux
   tags:
     - linux
@@ -78,6 +77,7 @@ build linux:
     expire_in: 10 days
 
 build win32:
+  when: manual
   stage: build win
   tags:
     - windows
@@ -383,11 +383,11 @@ deploy local:
   dependencies:
     - build linux
 #    - build win32
-#    - build win64
+    - build win64
   needs:
     - build linux
 #    - build win32
-#    - build win64
+    - build win64
 #    - test linux py39
 #    - test win64 py39
 #    - test win32 py39
