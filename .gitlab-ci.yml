@@ -29,8 +29,8 @@ variables: &variables
 
 stages:
   - docs
-  - build 32
-  - build 64
+  - build linux
+  - build win
   - test linux
   - test 32
   - test 64
@@ -60,7 +60,7 @@ pdf docs:
     expire_in: 7 days
 
 build linux:
-  stage: build 32
+  stage: build linux
   tags:
     - linux
   image: harbor.eumetsat.int/data-tailor/mamba-conda-rocky-build:1.4.2-23.3.1-8.8.20230518
@@ -77,7 +77,7 @@ build linux:
     expire_in: 10 days
 
 build win32:
-  stage: build 32
+  stage: build win
   tags:
     - windows
   before_script:
@@ -93,9 +93,7 @@ build win32:
     expire_in: 10 days
 
 build win64:
-  stage: build 64
-  dependencies: []
-  when: manual
+  stage: build win
   tags:
     - windows
   before_script:
