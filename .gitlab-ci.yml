@@ -104,9 +104,10 @@ build win64:
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
     - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" "&" conda build --output-folder $env:CI_PROJECT_DIR\conda-channel .'
-  tags:
-    - linux
-  image: conda/miniconda3-centos7:latest
+  artifacts:
+    paths:
+      - $env:CI_PROJECT_DIR\conda-channel
+    expire_in: 10 days
 
 
 test linux py39:
