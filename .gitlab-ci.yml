@@ -78,7 +78,6 @@ build linux:
 
 build win32:
   stage: build 32
-  when: manual
   tags:
     - windows
   before_script:
