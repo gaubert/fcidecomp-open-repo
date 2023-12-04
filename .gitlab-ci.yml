@@ -103,7 +103,7 @@ build win64:
     - conda install -c conda-forge -y conda-build
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
-    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" "&" mamba build -c conda forge --output-folder $env:CI_PROJECT_DIR\conda-channel .'
+    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" "&" mamba build -c conda-forge --output-folder $env:CI_PROJECT_DIR\conda-channel .'
   artifacts:
     paths:
       - $env:CI_PROJECT_DIR\conda-channel
