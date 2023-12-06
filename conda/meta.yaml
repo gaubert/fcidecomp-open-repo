@@ -27,15 +27,13 @@ requirements:
   host:
     - charls={{ charls_version }}         # [not win32]
     - hdf5=1.*
-    - h5py             # [not win]
-    - h5py=3.6.0            # [win]
+    - h5py
     - python
     - zlib
   run:
     - charls={{ charls_version }}         # [not win32]
     - hdf5=1.*
-    - h5py            # [not win]
-    - h5py=3.6.0            # [win]
+    - h5py
     - libnetcdf!=4.8.0      # [win]
     - libssh2               # [win]
     - netcdf4
