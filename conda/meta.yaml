@@ -28,6 +28,7 @@ requirements:
     - charls={{ charls_version }}         # [not win32]
     - hdf5=1.*
     - h5py
+    - h5py=3.6.0     # [win]
     - python
     - zlib
   run:

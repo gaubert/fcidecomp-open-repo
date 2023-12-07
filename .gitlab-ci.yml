@@ -77,6 +77,8 @@ build linux:
     expire_in: 10 days
 
 build win32:
+  needs: []
+  dependencies: []
   when: manual
   stage: build win
   tags:
@@ -94,6 +96,8 @@ build win32:
     expire_in: 10 days
 
 build win64:
+  needs: []
+  dependencies: []
   stage: build win
   tags:
     - windows
