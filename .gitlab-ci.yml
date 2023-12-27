@@ -384,17 +384,10 @@ deploy local:
   tags:
     - linux
   image: conda/miniconda3-centos7:latest
-  dependencies:
-    - build linux
-#    - build win32
-    - build win64
   needs:
     - build linux
 #    - build win32
     - build win64
-#    - test linux py39
-#    - test win64 py39
-#    - test win32 py39
   before_script:
     - conda install -y conda-build
   script:

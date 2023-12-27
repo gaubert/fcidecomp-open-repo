@@ -29,7 +29,7 @@ requirements:
     - hdf5=1.*
     - h5py
     - h5py=3.6.0     # [win]
-    - python
+    - python=3.9
     - zlib
   run:
     - charls={{ charls_version }}         # [not win32]
@@ -38,4 +38,4 @@ requirements:
     - libnetcdf!=4.8.0      # [win]
     - libssh2               # [win]
     - netcdf4
-    - python
+    - python=3.9
