@@ -2,4 +2,5 @@ hdf5:
   - 1.10
   - 1.12
 pin_run_as_build:
-  hdf5: x.x
+  hdf5:
+    max_pin: 1.12
