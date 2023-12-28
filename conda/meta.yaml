@@ -21,19 +21,19 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - cmake
+    - hdf5
     - m2-patch              # [win]
     - make                  # [not win]
     - ninja                 # [win]
   host:
     - charls={{ charls_version }}         # [not win32]
-    - hdf5=1.*
     - h5py
     - h5py=3.6.0     # [win]
     - python=3.9
     - zlib
   run:
     - charls={{ charls_version }}         # [not win32]
-    - hdf5=1.*
+    - hdf5
     - h5py
     - libnetcdf!=4.8.0      # [win]
     - libssh2               # [win]
