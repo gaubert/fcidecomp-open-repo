@@ -20,15 +20,14 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - charls={{ charls_version }}         # [not win32]
     - cmake
+    - h5py
+    - h5py=3.6.0     # [win]
     - hdf5
     - m2-patch              # [win]
     - make                  # [not win]
     - ninja                 # [win]
-  host:
-    - charls={{ charls_version }}         # [not win32]
-    - h5py
-    - h5py=3.6.0     # [win]
     - python=3.9
     - zlib
   run:
