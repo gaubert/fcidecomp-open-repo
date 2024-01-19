@@ -124,6 +124,10 @@ test linux py39:
     - build linux
   script:
     - mamba install -y $CHANNEL_OPTS fcidecomp pytest
+    - python -c "import sys; print (sys.path)"
+    - echo $PYTHONPATH
+    - which python
+    - pip show fcidecomp 
     - pytest -vv tests
     - conda deactivate
 
