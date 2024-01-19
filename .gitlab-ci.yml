@@ -88,7 +88,7 @@ build win32:
   script:
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
-    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat" "&" set CONDA_FORCE_32BIT=1 "&" conda mambabuild -c conda-forge -c nodefaults --output-folder $env:CI_PROJECT_DIR\conda-channel .' 
+    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat" "&" set CONDA_FORCE_32BIT=1 "&" conda build -c conda-forge -c nodefaults --output-folder $env:CI_PROJECT_DIR\conda-channel .' 
   artifacts:
     paths:
       - $env:CI_PROJECT_DIR\conda-channel
@@ -105,7 +105,7 @@ build win64:
   script:
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
-    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" "&" conda mambabuild -c conda-forge --output-folder $env:CI_PROJECT_DIR\conda-channel .'
+    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" "&" conda build -c conda-forge --output-folder $env:CI_PROJECT_DIR\conda-channel .'
   artifacts:
     paths:
       - $env:CI_PROJECT_DIR\conda-channel
@@ -123,7 +123,7 @@ test linux py39:
   needs:
     - build linux
   script:
-    - mamba install -y $CHANNEL_OPTS fcidecomp
+    - mamba install -y $CHANNEL_OPTS fcidecomp pytest
     - pytest -vv tests
     - conda deactivate
 
