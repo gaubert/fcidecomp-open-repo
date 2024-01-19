@@ -23,7 +23,7 @@
 variables: &variables
   BUILD_OPTS: "-c conda-forge --output-folder $CI_PROJECT_DIR/conda-channel"
   CHANNEL_OPTS: "-c conda-forge -c file://$CI_PROJECT_DIR/conda-channel"
-  CHANNEL_OPTS_WIN: "-c conda-forge $env:CI_PROJECT_DIR/conda-channel"
+  CHANNEL_OPTS_WIN: "-c anaconda -c conda-forge $env:CI_PROJECT_DIR/conda-channel"
   EPCT_TEST_DATA_DIR: "/data/data-tailor"
 
 
