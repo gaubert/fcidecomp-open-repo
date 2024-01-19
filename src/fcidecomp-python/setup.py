@@ -32,9 +32,11 @@ try:
     with open("VERSION") as version_file:
         version = version_file.read().strip()
 except FileNotFoundError:
-    version = os.environ.get("CI_COMMIT_TAG", os.popen("git describe --tags --abbrev=0").read())
-    if version == "":
-        version = "0.0.0"
+#    version = os.environ.get(
+#        "CI_COMMIT_TAG", os.popen("git describe --tags --abbrev=0").read()
+#        )
+#    if version == "":
+    version = "0.0.0+"+os.environ.get("CI_COMMIT_SHORT_SHA")
     with open("VERSION", "w") as version_file:
         version_file.write(version)
 
@@ -59,8 +61,6 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
 )
