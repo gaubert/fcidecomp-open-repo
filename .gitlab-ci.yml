@@ -23,7 +23,7 @@
 variables: &variables
   BUILD_OPTS: "-c conda-forge --output-folder $CI_PROJECT_DIR/conda-channel"
   CHANNEL_OPTS: "-c conda-forge -c file://$CI_PROJECT_DIR/conda-channel"
-  CHANNEL_OPTS_WIN: "-c anaconda -c conda-forge $env:CI_PROJECT_DIR/conda-channel"
+  CHANNEL_OPTS_WIN: "-c conda-forge $env:CI_PROJECT_DIR/conda-channel"
   EPCT_TEST_DATA_DIR: "/data/data-tailor"
 
 
@@ -88,7 +88,7 @@ build win32:
   script:
     - mkdir $env:CI_PROJECT_DIR\conda-channel
     - cd conda
-    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat" "&" set CONDA_FORCE_32BIT=1 "&" conda build -c anaconda -c conda-forge -c nodefaults --output-folder $env:CI_PROJECT_DIR\conda-channel .' 
+    - 'cmd.exe /k "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat" "&" set CONDA_FORCE_32BIT=1 "&" conda build -c conda-forge -c nodefaults --output-folder $env:CI_PROJECT_DIR\conda-channel .'
   artifacts:
     paths:
       - $env:CI_PROJECT_DIR\conda-channel
@@ -124,10 +124,6 @@ test linux py39:
     - build linux
   script:
     - mamba install -y $CHANNEL_OPTS fcidecomp pytest
-    - python -c "import sys; print (sys.path)"
-    - echo $PYTHONPATH
-    - which python
-    - pip show fcidecomp 
     - pytest -vv tests
     - conda deactivate
 
