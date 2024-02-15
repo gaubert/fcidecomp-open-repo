@@ -141,7 +141,7 @@ test linux py310:
   before_script:
     - conda init bash
     - source ~/.bashrc
-    - conda create -c conda-forge -y --name $CI_JOB_ID python=3.10
+    - mamba create -c conda-forge -y --name $CI_JOB_ID python=3.10
     - conda activate $CI_JOB_ID
   script:
     - conda install -y $CHANNEL_OPTS fcidecomp pytest
