@@ -25,6 +25,7 @@ variables: &variables
   CHANNEL_OPTS: "-c conda-forge -c file://$CI_PROJECT_DIR/conda-channel"
   CHANNEL_OPTS_WIN: "-c anaconda -c conda-forge $env:CI_PROJECT_DIR/conda-channel"
   EPCT_TEST_DATA_DIR: "/data/data-tailor"
+  BUILD_IMAGE: "harbor.eumetsat.int/data-tailor/mamba-conda-rocky-build:1.4.2-23.3.1-8.8.20230518"
 
 
 stages:
@@ -117,7 +118,7 @@ test linux py39:
   when: manual
   tags:
     - linux
-  image: harbor.eumetsat.int/data-tailor/mamba-conda-rocky-tests:1.5.2-23.9.0-8.8.20230518
+  image: $BUILD_IMAGE
   dependencies:
     - build linux
   needs:
@@ -131,7 +132,7 @@ test linux py310:
   stage: test linux
   tags:
     - linux
-  image: conda/miniconda3-centos7:latest
+  image: $BUILD_IMAGE
   when: manual
   dependencies:
     - build linux
