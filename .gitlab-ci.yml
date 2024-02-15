@@ -144,6 +144,7 @@ test linux py310:
     - conda activate $CI_JOB_ID
   script:
     - conda install -y $CHANNEL_OPTS fcidecomp pytest
+    - conda deactivate && conda activate $CI_JOB_ID
     - pytest -vv tests
     - conda deactivate
 
