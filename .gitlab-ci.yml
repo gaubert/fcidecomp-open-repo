@@ -140,6 +140,7 @@ test linux py310:
     - build linux
   before_script:
     - conda init bash
+    - conda clean --all
     - source ~/.bashrc
     - mamba create -c conda-forge -y --name $CI_JOB_ID python=3.10
     - conda activate $CI_JOB_ID
