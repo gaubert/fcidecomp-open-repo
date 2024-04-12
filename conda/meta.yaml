@@ -22,13 +22,13 @@ requirements:
     - {{ compiler('cxx') }}
     - charls={{ charls_version }}         # [win]
     - cmake
-    - hdf5=1.12.2
+    - hdf5=1.12.2-nompi
     - m2-patch              # [win]
     - make                  # [not win]
     - ninja                 # [win]
   host:
     - charls>={{ charls_version }}         # [not win]
-    - hdf5=1.12.2
+    - hdf5=1.12.2-nompi
     - h5py >=2.10
     - netcdf4                          
     - python {{ python }}
@@ -36,7 +36,7 @@ requirements:
   run:
     - charls={{ charls_version }}          # [win]
     - charls>={{ charls_version }}         # [not win]
-    - hdf5=1.12.2
+    - hdf5=1.12.2-nompi
     - h5py >=2.10
     - libnetcdf!=4.8.0      # [win]
     - libssh2               # [win]
