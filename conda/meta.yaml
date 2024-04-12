@@ -28,6 +28,7 @@ requirements:
     - ninja                 # [win]
   host:
     - charls>={{ charls_version }}         # [not win]
+    - hdf5 {{ hdf5 }}
     - h5py >=2.10                          
     - python {{ python }}
     - zlib                                 
