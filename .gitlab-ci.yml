@@ -138,22 +138,22 @@ build win64:
 test linux py39:
   <<: *tests_common_linux
   variables:
-    PYTHON_VERSION: 3.9
+    PYTHON_VERSION: "3.9"
 
 test linux py310:
   <<: *tests_common_linux
   variables:
-    PYTHON_VERSION: 3.10
+    PYTHON_VERSION: "3.10"
 
 test linux py311:
   <<: *tests_common_linux
   variables:
-    PYTHON_VERSION: 3.11
+    PYTHON_VERSION: "3.11"
 
 test linux py312:
   <<: *tests_common_linux
   variables:
-    PYTHON_VERSION: 3.12
+    PYTHON_VERSION: "3.12"
 
 .tests_common_win64: &tests_common_win64
   stage: test 64
@@ -180,22 +180,22 @@ test linux py312:
 test win64 py39:
   <<: *tests_common_win64
   variables:
-    PYTHON_VERSION: 3.9
+    PYTHON_VERSION: "3.9"
 
 test win64 py310:
   <<: *tests_common_win64
   variables:
-    PYTHON_VERSION: 3.10
+    PYTHON_VERSION: "3.10"
 
 test win64 py311:
   <<: *tests_common_win64
   variables:
-    PYTHON_VERSION: 3.11
+    PYTHON_VERSION: "3.11"
 
 test win64 py312:
   <<: *tests_common_win64
   variables:
-    PYTHON_VERSION: 3.12
+    PYTHON_VERSION: "3.12"
 
 test win32 py39:
   stage: test 32
