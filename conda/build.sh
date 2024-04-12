@@ -25,7 +25,7 @@
 
 #set -ex
 
- $PYTHON -m pip install $RECIPE_DIR/../src/fcidecomp-python --no-deps --ignore-installed -vv 
+ $PYTHON -m pip install $RECIPE_DIR/../src/fcidecomp-python --no-deps --ignore-installed -vv
 
 
 PATH_TO_DELIVERY=$(pwd)
