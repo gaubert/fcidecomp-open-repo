@@ -113,7 +113,7 @@ build win64:
     expire_in: 10 days
 
 
-test linux py39:
+.tests_common_linux: &tests_common_linux
   stage: test linux
   tags:
     - linux
@@ -127,80 +127,75 @@ test linux py39:
     - conda init bash
     - conda clean --all
     - source ~/.bashrc
-    - mamba create -c conda-forge -y --name $CI_JOB_ID python=3.9
+    - mamba create -c conda-forge -y --name $CI_JOB_ID python=$PYTHON_VERSION
     - conda activate $CI_JOB_ID
   script:
     - conda install -y $CHANNEL_OPTS fcidecomp pytest
     - conda deactivate && conda activate $CI_JOB_ID
     - pytest -vv tests
     - conda deactivate
+
+test linux py39:
+  <<: *tests_common_linux
+  variables:
+    PYTHON_VERSION: 3.9
 
 test linux py310:
-  stage: test linux
-  tags:
-    - linux
-  image: $BUILD_IMAGE
-  when: manual
-  dependencies:
-    - build linux
-  needs:
-    - build linux
-  before_script:
-    - conda init bash
-    - conda clean --all
-    - source ~/.bashrc
-    - mamba create -c conda-forge -y --name $CI_JOB_ID python=3.10
-    - conda activate $CI_JOB_ID
-  script:
-    - conda install -y $CHANNEL_OPTS fcidecomp pytest
-    - conda deactivate && conda activate $CI_JOB_ID
-    - pytest -vv tests
-    - conda deactivate
+  <<: *tests_common_linux
+  variables:
+    PYTHON_VERSION: 3.10
 
 test linux py311:
-  stage: test linux
-  tags:
-    - linux
-  image: $BUILD_IMAGE
-  when: manual
-  dependencies:
-    - build linux
-  needs:
-    - build linux
-  before_script:
-    - conda init bash
-    - conda clean --all
-    - source ~/.bashrc
-    - mamba create -c conda-forge -y --name $CI_JOB_ID python=3.11
-    - conda activate $CI_JOB_ID
-  script:
-    - conda install -y $CHANNEL_OPTS fcidecomp pytest
-    - conda deactivate && conda activate $CI_JOB_ID
-    - pytest -vv tests
-    - conda deactivate
+  <<: *tests_common_linux
+  variables:
+    PYTHON_VERSION: 3.11
 
 test linux py312:
-  stage: test linux
-  tags:
-    - linux
-  image: $BUILD_IMAGE
+  <<: *tests_common_linux
+  variables:
+    PYTHON_VERSION: 3.12
+
+.tests_common_win64: &tests_common_win64
+  stage: test 64
   when: manual
+  tags:
+    - windows
   dependencies:
-    - build linux
+    - build win64
   needs:
-    - build linux
+    - build win64
   before_script:
-    - conda init bash
-    - conda clean --all
-    - source ~/.bashrc
-    - mamba create -c conda-forge -y --name $CI_JOB_ID python=3.12
-    - conda activate $CI_JOB_ID
+    - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
+    - mamba create -c conda-forge -y --name $env:CI_JOB_ID python=$PYTHON_VERSION
+    - conda activate $env:CI_JOB_ID
   script:
-    - conda install -y $CHANNEL_OPTS fcidecomp pytest
-    - conda deactivate && conda activate $CI_JOB_ID
+    - mamba install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
+    - conda deactivate
+    - conda activate $env:CI_JOB_ID
+    - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
     - pytest -vv tests
     - conda deactivate
+    - conda env remove -n $env:CI_JOB_ID
 
+test win64 py39:
+  <<: *tests_common_win64
+  variables:
+    PYTHON_VERSION: 3.9
+
+test win64 py310:
+  <<: *tests_common_win64
+  variables:
+    PYTHON_VERSION: 3.10
+
+test win64 py311:
+  <<: *tests_common_win64
+  variables:
+    PYTHON_VERSION: 3.11
+
+test win64 py312:
+  <<: *tests_common_win64
+  variables:
+    PYTHON_VERSION: 3.12
 
 test win32 py39:
   stage: test 32
@@ -225,30 +220,6 @@ test win32 py39:
     - conda deactivate
     - conda env remove -n $env:CI_JOB_ID
 
-test win64 py39:
-  stage: test 64
-  when: manual
-  tags:
-    - windows
-  dependencies:
-    - build win64
-  needs:
-    - build win64
-  before_script:
-    - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - mamba create -c conda-forge -y --name $env:CI_JOB_ID python=3.9
-    - conda activate $env:CI_JOB_ID
-  script:
-    - mamba install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
-    - conda deactivate
-    - conda activate $env:CI_JOB_ID
-    - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
-    - pytest -vv tests
-    - conda deactivate
-    - conda env remove -n $env:CI_JOB_ID
-
-
-
 test win32 py310:
   stage: test 32
   tags:
@@ -271,29 +242,6 @@ test win32 py310:
     - pytest -vv tests
     - conda deactivate
     - conda env remove -n $env:CI_JOB_ID
-
-test win64 py310:
-  stage: test 64
-  tags:
-    - windows
-  when: manual
-  dependencies:
-    - build win64
-  needs:
-    - build win64
-  before_script:
-    - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.10
-    - conda activate $env:CI_JOB_ID
-  script:
-    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
-    - conda deactivate
-    - conda activate $env:CI_JOB_ID
-    - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
-    - pytest -vv tests
-    - conda deactivate
-    - conda env remove -n $env:CI_JOB_ID
-
 
 test win32 py311:
   stage: test 32
@@ -318,28 +266,6 @@ test win32 py311:
     - conda deactivate
     - conda env remove -n $env:CI_JOB_ID
 
-test win64 py311:
-  stage: test 64
-  tags:
-    - windows
-  when: manual
-  dependencies:
-    - build win64
-  needs:
-    - build win64
-  before_script:
-    - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.11
-    - conda activate $env:CI_JOB_ID
-  script:
-    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
-    - conda deactivate
-    - conda activate $env:CI_JOB_ID
-    - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
-    - pytest -vv tests
-    - conda deactivate
-    - conda env remove -n $env:CI_JOB_ID
-
 test win32 py312:
   stage: test 32
   tags:
@@ -351,28 +277,6 @@ test win32 py312:
     - build win32
   before_script:
     - $env:CONDA_FORCE_32BIT=1
-    - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
-    - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.12
-    - conda activate $env:CI_JOB_ID
-  script:
-    - conda install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
-    - conda deactivate
-    - conda activate $env:CI_JOB_ID
-    - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
-    - pytest -vv tests
-    - conda deactivate
-    - conda env remove -n $env:CI_JOB_ID
-
-test win64 py312:
-  stage: test 64
-  tags:
-    - windows
-  when: manual
-  dependencies:
-    - build win64
-  needs:
-    - build win64
-  before_script:
     - invoke-expression -Command C:\BuildTools\Microsoft.PowerShell_profile.ps1
     - conda create -c conda-forge -y --name $env:CI_JOB_ID python=3.12
     - conda activate $env:CI_JOB_ID
