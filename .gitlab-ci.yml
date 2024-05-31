@@ -169,7 +169,7 @@ test linux py312:
     - mamba create -c conda-forge -y --name $env:CI_JOB_ID python=$PYTHON_VERSION
     - conda activate $env:CI_JOB_ID
   script:
-    - mamba install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest
+    - mamba install -y -c conda-forge -c nodefaults -c $env:CI_PROJECT_DIR/conda-channel fcidecomp pytest=7.4
     - conda deactivate
     - conda activate $env:CI_JOB_ID
     - $env:EPCT_TEST_DATA_DIR="C:\\BuildTools\test-data"
