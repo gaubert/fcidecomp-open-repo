@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2]
+
+### Added
+- Added support for Python 3.11, 3.12 on Windows (#69)
+
+### Changed
+- Added summary and description to the conda package.
+
+### Fixed
+- Update outdated INSTALL.md (#69)
+
+
 ## [2.1.1]
 
 ### Added

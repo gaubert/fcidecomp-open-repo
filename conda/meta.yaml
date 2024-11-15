@@ -43,3 +43,13 @@ requirements:
     - libssh2               # [win]
     - netcdf4
     - python {{ python }}
+
+about:
+    home: https://www.eumetsat.int/
+    license: Apache License 2.0
+    license_family: APACHE
+    license_file: ../LICENSE
+    summary: Software to decompress JPEG-LS compressed netCDF files.
+    description: |
+        The fcidecomp software enables decompression of JEPG-LS netCDF files via netCDF-C and 
+        netCDF-Java based softwares, various Python libraries and the EUMETSAT Data-Tailor software.

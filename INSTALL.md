@@ -5,12 +5,13 @@ This document describes how to install the EUMETSAT FCIDECOMP software.
 Two installation methods are available:
 
 - [installation via ``conda``](#installation-from-conda-package) using pre-built packages,
-  supported for the following Operating Systems:
-  - Linux CentOS 7 64-bit
+  supported for the following Operating Systems (although other Linux and Windows systems with 
+  a conda installation on them should allow installation as well):
+  - RockyLinux 8 64-bit (also from source code)
   - Linux Ubuntu 18.04 LTS 64-bit
-  - Linux Ubuntu 20.04 LTS 64-bit
+  - Linux Ubuntu 20.04 LTS 64-bit (also from source code)
   - Windows 10 64-bit
-  - Windows 10 32-bit.
+
 - build and installation [from the source code](#build-and-installation-from-the-source-code),
   available for the following operating systems
   - RockLinux 8 64-bit
@@ -33,7 +34,7 @@ any valid name would do (change the following instructions accordingly):
 
     conda create -n fcidecomp python=$PYTHON_VERSION
     
-where Python versions currently supported by ``fcidecomp`` are 3.7 <= `$PYTHON_VERSION` <= 3.9.
+where Python versions currently supported by ``fcidecomp`` are 3.9 <= `$PYTHON_VERSION` <= 3.12 (3.11 for Windows).
 
 Activate the environment:
 

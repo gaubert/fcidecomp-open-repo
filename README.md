@@ -1,6 +1,6 @@
 # EUMETSAT ``fcidecomp`` software
 
-The ``fcidecomp`` software enables decompression of JEPG-LS netCDF files via netCDF-C and netCDF-Java based softwares,
+The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files via netCDF-C and netCDF-Java based softwares,
 various Python libraries and the EUMETSAT Data-Tailor software.
 
 ## Supported platforms and installation
