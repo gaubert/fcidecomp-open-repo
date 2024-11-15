@@ -1,12 +1,13 @@
 python:
   - 3.9
   - 3.10
-  - 3.11 [not win]
+  - 3.11
   - 3.12 [not win]
 hdf5:
   - 1.12
   - 1.12 [win]
   - 1.14 [not win]
+  - 1.12 [win]
   - 1.14 [not win]
   - 1.14 [not win]
 pin_run_as_build:
