@@ -2,6 +2,18 @@
 _build
 ~$*
 __pycache__/
+build/
+
+
+#cmake artefacts
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+*-config.cmake
+*-config-version.cmake
+CTestTestfile.cmake
+Makefile
 
 # Jupyter Notebook
 .ipynb_checkpoints/

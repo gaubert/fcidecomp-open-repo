@@ -87,8 +87,8 @@ SET (CMAKE_MODULE_PATH ${FCICOMP_CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
 SET (ENV{FCICOMP_JPEGLS_ROOT} ${FCICOMP_JPEGLS_ROOT})
 
 # Find FCICOMP_JPEGLS includes and library
-FIND_PACKAGE (FCICOMP_JPEGLS REQUIRED)
-INCLUDE_DIRECTORIES (${FCICOMP_JPEGLS_INCLUDE_DIR})
+#FIND_PACKAGE (FCICOMP_JPEGLS REQUIRED)
+#INCLUDE_DIRECTORIES (${FCICOMP_JPEGLS_INCLUDE_DIR})
 
 #-----------------------------------------------------------------------------
 # HDF5 Library Settings
@@ -167,37 +167,70 @@ IF ("${isSystemDir}" STREQUAL "-1")
 ENDIF ("${isSystemDir}" STREQUAL "-1")
 
 #-----------------------------------------------------------------------------
-# Define H5Zjpegls library
+# Define H5Zjpegls shared library target
 #-----------------------------------------------------------------------------
 
-# Define the name of the library
-SET (TARGET_LIBRARY_NAME H5Zjpegls)
-
-# Create the list of source code files
-SET (H5ZJPEGLS_SRCS 
-    ${H5ZJPEGLS_SOURCE_DIR}/src/H5Zjpegls.c
-    ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
+set(H5ZJPEGLS_SRCS
+  ${H5ZJPEGLS_SOURCE_DIR}/src/H5Zjpegls.c
+  ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
 )
 
+set(TARGET_LIBRARY_NAME H5Zjpegls)
+
+add_library(${TARGET_LIBRARY_NAME} SHARED ${H5ZJPEGLS_SRCS})
+
+# Includes
+target_include_directories(${TARGET_LIBRARY_NAME}
+  PRIVATE
+    ${H5ZJPEGLS_SOURCE_DIR}/include
+    ${FCICOMP_COMMON_SOURCE_DIR}/include
+    ${FCICOMP_ROOT}/fcicomp-jpegls/include
+)
+
+# Linking
+target_link_libraries(${TARGET_LIBRARY_NAME}
+  PRIVATE
+    fcicomp_jpegls
+    ${HDF5_LIBRARIES}
+)
+
+# Optional: add Zlib on Windows
+if(WIN32)
+  find_package(ZLIB REQUIRED)
+  target_link_libraries(${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_LIBRARIES})
+endif()
+
+# Versioning (for .so symlinks)
+set_target_properties(${TARGET_LIBRARY_NAME} PROPERTIES
+  VERSION ${H5ZJPEGLS_VERSION}
+  SOVERSION ${H5ZJPEGLS_SOVERSION}
+)
+
+# Create the list of source code files
+#SET (H5ZJPEGLS_SRCS 
+#    ${H5ZJPEGLS_SOURCE_DIR}/src/H5Zjpegls.c
+#    ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
+#)
+
 # Include the "include" directory
-INCLUDE_DIRECTORIES (${H5ZJPEGLS_SOURCE_DIR}/include
-    ${FCICOMP_COMMON_SOURCE_DIR}/include)
+#INCLUDE_DIRECTORIES (${H5ZJPEGLS_SOURCE_DIR}/include
+#    ${FCICOMP_COMMON_SOURCE_DIR}/include)
 
 # Create the H5Zjpegls library
-ADD_LIBRARY (${TARGET_LIBRARY_NAME} SHARED ${H5ZJPEGLS_SRCS})
-TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${FCICOMP_JPEGLS_LIBRARIES})
-TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${HDF5_LIBRARIES})
-IF (WIN32)
+#ADD_LIBRARY (${TARGET_LIBRARY_NAME} SHARED ${H5ZJPEGLS_SRCS})
+#TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${FCICOMP_JPEGLS_LIBRARIES})
+#TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${HDF5_LIBRARIES})
+#IF (WIN32)
     # Find ZLIB, this set ZLIB_LIBRARIES
-    FIND_PACKAGE (ZLIB REQUIRED)
-    TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_LIBRARIES})
-ENDIF()
+#    FIND_PACKAGE (ZLIB REQUIRED)
+#    TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_LIBRARIES})
+#ENDIF()
 
 # Set the version and soversion of the library
 # this creates the dynamic links
-SET_TARGET_PROPERTIES (${TARGET_LIBRARY_NAME} PROPERTIES 
-    VERSION ${H5ZJPEGLS_VERSION}
-    SOVERSION ${H5ZJPEGLS_SOVERSION})
+#SET_TARGET_PROPERTIES (${TARGET_LIBRARY_NAME} PROPERTIES 
+#    VERSION ${H5ZJPEGLS_VERSION}
+#    SOVERSION ${H5ZJPEGLS_SOVERSION})
 
     
 #-----------------------------------------------------------------------------
@@ -301,7 +334,19 @@ IF (BUILD_TESTING)
         ${TEST_SOURCE_DIR}/H5Zjpegls_encode_cannot_apply.c
         ${TEST_SOURCE_DIR}/H5Zjpegls_decode_nominal.c
 	)
-    TARGET_LINK_LIBRARIES (H5Zjpegls_test ${HDF5_LIBRARIES})
+
+    # Add missing include directories for the test target
+    target_include_directories(H5Zjpegls_test
+      PRIVATE
+       ${H5ZJPEGLS_SOURCE_DIR}/include
+       ${FCICOMP_COMMON_SOURCE_DIR}/include
+       ${FCICOMP_ROOT}/fcicomp-jpegls/include
+    )
+
+
+    TARGET_LINK_LIBRARIES (H5Zjpegls_test 
+       H5Zjpegls ${HDF5_LIBRARIES}
+    )
     IF (WIN32)
         TARGET_LINK_LIBRARIES (H5Zjpegls_test ${ZLIB_LIBRARIES})
     ENDIF()

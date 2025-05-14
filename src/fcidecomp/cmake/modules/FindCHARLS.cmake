@@ -19,6 +19,7 @@
 # AUTHORS:
 # - THALES Services
 # - B-Open Solutions srl
+# - EUMETSAT Guillaume Aubert
 
 # - Find CharLS, an optimized JPEG-LS compression library
 #
@@ -32,58 +33,46 @@
 # CHARLS_LIBRARY     - Name of the library to link
 # CHARLS_INCLUDE_DIR - Path to the header files to include
 #
+# Try to locate the CharLS library and headers using the CHARLS_ROOT hint
 
-if(DEFINED ENV{CHARLS_ROOT})
-  message(STATUS "CHARLS_ROOT defined: $ENV{CHARLS_ROOT}")
+if(NOT DEFINED CHARLS_ROOT)
+    message(STATUS "CHARLS_ROOT not defined")
 else()
-  message(STATUS "CHARLS_ROOT not defined")
+    message(STATUS "Using CHARLS_ROOT: ${CHARLS_ROOT}")
 endif()
 
-find_path(CHARLS_INCLUDE_DIR
-  NAMES charls.h
-  HINTS CHARLS_ROOT ENV CHARLS_ROOT
-  PATH_SUFFIXES /include/CharLS /include/charls
-  DOC "CharLS include directory."
+# Prefer static libraries
+set(_original_suffixes ${CMAKE_FIND_LIBRARY_SUFFIXES})
+set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+
+# Find include directory
+find_path(CHARLS_INCLUDE_DIRS
+  NAMES charls/charls.h
+  PATHS
+    ${CHARLS_ROOT}/include
+    ${CHARLS_ROOT}
+  DOC "Path to the CharLS include directory"
 )
 
-if(WIN32)
-   if($ENV{ARCH} EQUAL "64")
-      set(charls_lib_name charls-2-x64)
-   else ()
-      set(charls_lib_name charls-2-x86)
-   endif ()
-else ()
-   set(charls_lib_name CharLS charls)
-endif ()
-
-
-find_library(CHARLS_LIBRARY
-  NAMES ${charls_lib_name}
-  HINTS CHARLS_ROOT ENV CHARLS_ROOT
-  PATHS /usr/ /usr/local/
-  PATH_SUFFIXES lib Lib
-  DOC "CharLS library."
+# Find static library
+find_library(CHARLS_LIBRARIES
+  NAMES charls CharLS
+  PATHS
+    ${CHARLS_ROOT}/lib
+    ${CHARLS_ROOT}
+  DOC "Path to the CharLS static library"
 )
 
-if (CHARLS_LIBRARY AND CHARLS_INCLUDE_DIR)
-  set(CHARLS_LIBRARIES ${CHARLS_LIBRARY})
-  set(CHARLS_INCLUDE_DIRS ${CHARLS_INCLUDE_DIR})
-  set(CHARLS_FOUND "YES")
-else ()
-  set(CHARLS_FOUND "NO")
-endif ()
+# Restore original suffixes (for downstream compatibility)
+set(CMAKE_FIND_LIBRARY_SUFFIXES ${_original_suffixes})
 
-if (CHARLS_FOUND)
-  if(NOT CHARLS_FIND_QUIETLY)
-    message(STATUS "Found CHARLS: ${CHARLS_LIBRARY}")
-  endif()
-else()
-  if(CHARLS_FIND_REQUIRED)
-    message(FATAL_ERROR "Couldn't find CharLS library!")
-  endif()
-endif()
-
-mark_as_advanced(
-  CHARLS_LIBRARY
-  CHARLS_INCLUDE_DIR
+# Validate results
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(CharLS
+  REQUIRED_VARS CHARLS_INCLUDE_DIRS CHARLS_LIBRARIES
+  FOUND_VAR CHARLS_FOUND
 )
+
+# Mark internal cache variables as advanced
+mark_as_advanced(CHARLS_INCLUDE_DIRS CHARLS_LIBRARIES)
+

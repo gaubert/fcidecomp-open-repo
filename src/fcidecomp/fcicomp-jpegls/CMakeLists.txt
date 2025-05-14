@@ -42,7 +42,7 @@
 
 cmake_minimum_required (VERSION 2.8.12)
 
-PROJECT (FCICOMP_JPEGLS C)
+PROJECT (FCICOMP_JPEGLS C CXX)
 INCLUDE (${CMAKE_CURRENT_SOURCE_DIR}/Version.cmake)
 
 MESSAGE ("")
@@ -159,13 +159,23 @@ SET (FCICOMP_JPEGLS_SRCS
     ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
 )
 
-# Include the directories
-INCLUDE_DIRECTORIES (${FCICOMP_JPEGLS_SOURCE_DIR}/include 
-    ${FCICOMP_COMMON_SOURCE_DIR}/include)
 
 # Create the fcicomp_jpegls library
 ADD_LIBRARY (${TARGET_LIBRARY_NAME} ${FCICOMP_JPEGLS_SRCS})
 TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${CHARLS_LIBRARIES})
+
+# Include the directories
+#INCLUDE_DIRECTORIES (${FCICOMP_JPEGLS_SOURCE_DIR}/include 
+#    ${FCICOMP_COMMON_SOURCE_DIR}/include)
+
+message(STATUS "CHARLS_INCLUDE_DIR used in fcicomp-jpegls: ${CHARLS_INCLUDE_DIRS}")
+
+target_include_directories(${TARGET_LIBRARY_NAME}
+  PRIVATE
+    ${FCICOMP_JPEGLS_SOURCE_DIR}/include
+    ${FCICOMP_COMMON_SOURCE_DIR}/include
+    ${CHARLS_INCLUDE_DIRS}/charls
+)
 
 # Set the version and soversion of the library
 # this creates the dynamic links
@@ -235,7 +245,9 @@ SET (LIBRARY_INSTALL_DIR lib/)
 # Install the library
 INSTALL (TARGETS ${TARGET_LIBRARY_NAME}
   EXPORT "${PROJECT_NAME_LOWER}-targets"
+  ARCHIVE DESTINATION ${LIBRARY_INSTALL_DIR}
   LIBRARY DESTINATION ${LIBRARY_INSTALL_DIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}      # For Windows DLLs or executables
   INCLUDES DESTINATION ${INCLUDE_INSTALL_DIR}
 )
 
@@ -277,7 +289,17 @@ IF (BUILD_TESTING)
         ${TEST_SOURCE_DIR}/jpegls_read_header_error_case.c
         ${TEST_SOURCE_DIR}/jpegls_decompress_error_case.c
 	)
-    TARGET_LINK_LIBRARIES (jpegls_test ${TARGET_LIBRARY_NAME})
+
+    target_include_directories(jpegls_test
+      PRIVATE
+        ${FCICOMP_JPEGLS_SOURCE_DIR}/include
+        ${FCICOMP_COMMON_SOURCE_DIR}/include
+    )
+
+    find_package(Threads REQUIRED)
+    set(CMAKE_CXX_STANDARD 11)
+
+    TARGET_LINK_LIBRARIES (jpegls_test ${TARGET_LIBRARY_NAME} ${CHARLS_LIBRARIES} stdc++ ${CMAKE_THREAD_LIBS_INIT})
     SET_TARGET_PROPERTIES(jpegls_test PROPERTIES COMPILE_FLAGS "-DLOGGING")
 
     #-------------------------------------------------------------------------
