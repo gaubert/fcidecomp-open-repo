@@ -202,6 +202,7 @@ endif()
 
 # Versioning (for .so symlinks)
 set_target_properties(${TARGET_LIBRARY_NAME} PROPERTIES
+  LINKER_LANGUAGE CXX
   VERSION ${H5ZJPEGLS_VERSION}
   SOVERSION ${H5ZJPEGLS_SOVERSION}
 )
