@@ -56,7 +56,9 @@ make install
 ## 3. Test with `nccopy`
 
 ```bash
+export HDF5_ROOT=/desired/install/path/of/hdf5
 export HDF5_PLUGIN_PATH=/desired/install/path/lib/plugin
+export NETCDF_HOME=/desired/install/path/of/netcdf
 
 nccopy -F none /path/to/compressed.nc decompressed.nc
 ```
