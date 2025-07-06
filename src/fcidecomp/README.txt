@@ -55,3 +55,10 @@ $> /home/gmv/Dev/fcidecomp_fromJoaquin/local/fcicomp_cots/netcdf/bin/nccopy  -F 
 $> 
 
 No errors and no messages and a.nc is produced (-F none means no filters so uncompressed)
+
+On Windows I could prepare everything with this:
+  cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCHARLS_ROOT="C:/Users/User/Dev-Guillaume/libs/charls" -DHDF5_ROOT="C:/Users/User/Dev-Guillaume/libs/hdf5" -DHDF5_INCLUDE_DIRS="C:/Users/User/Dev-Guillaume/libs/hdf5/include" -DHDF5_LIBRARIES="C:/Users/User/Dev-Guillaume/libs/hdf5/lib/hdf5.lib;C:/Users/User/Dev-Guillaume/libs/hdf5/lib/hdf5_cpp.lib" -DCMAKE_TOOLCHAIN_FILE="C:\Users\User\Dev-Guillaume\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_INSTALL_PREFIX="C:\Users\User\Dev-Guillaume\libs\Built-H5ZPlugin"
+ 
+Installing Visual Community Studio, Cmake Tools inside and then compile charls and installing hdf5 and zlib with vcpkg
+
+  cmake --build . --config Release

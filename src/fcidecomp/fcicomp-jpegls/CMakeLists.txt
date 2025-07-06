@@ -40,7 +40,7 @@
 # ${FCICOMP_RESOURCES_DIR}/unitTestSettings.cmake.
 # 
 
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required (VERSION 3.5)
 
 PROJECT (FCICOMP_JPEGLS C CXX)
 INCLUDE (${CMAKE_CURRENT_SOURCE_DIR}/Version.cmake)
@@ -89,12 +89,9 @@ SET (CMAKE_MODULE_PATH ${FCICOMP_CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
 
 option (CHARLS_BUILT_DLL "CharLS was built with shared libraries." 1)
 
-if (WIN32)
-   if (CHARLS_BUILT_DLL)
-     add_definitions(-D CHARLS_DLL)
-   else()
-     add_definitions(-D CHARLS_STATIC)
-   endif()
+if (WIN32 AND NOT BUILD_SHARED_LIBS)
+    # Define CHARLS_STATIC for all targets that use CharLS
+    set(CHARLS_STATIC_DEFINE -DCHARLS_STATIC)
 endif()
 
 #-----------------------------------------------------------------------------
@@ -162,6 +159,12 @@ SET (FCICOMP_JPEGLS_SRCS
 
 # Create the fcicomp_jpegls library
 ADD_LIBRARY (${TARGET_LIBRARY_NAME} ${FCICOMP_JPEGLS_SRCS})
+
+# Add CHARLS_STATIC define if on Windows and using a static CharLS library
+if (WIN32 AND NOT BUILD_SHARED_LIBS)
+    target_compile_definitions(${TARGET_LIBRARY_NAME} PRIVATE CHARLS_STATIC)
+endif()
+
 TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${CHARLS_LIBRARIES})
 
 # Include the directories
@@ -299,8 +302,12 @@ IF (BUILD_TESTING)
     find_package(Threads REQUIRED)
     set(CMAKE_CXX_STANDARD 11)
 
-    TARGET_LINK_LIBRARIES (jpegls_test ${TARGET_LIBRARY_NAME} ${CHARLS_LIBRARIES} stdc++ ${CMAKE_THREAD_LIBS_INIT})
-    SET_TARGET_PROPERTIES(jpegls_test PROPERTIES COMPILE_FLAGS "-DLOGGING")
+    if (WIN32)
+        TARGET_LINK_LIBRARIES (jpegls_test ${TARGET_LIBRARY_NAME} ${CHARLS_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+    else()
+        TARGET_LINK_LIBRARIES (jpegls_test ${TARGET_LIBRARY_NAME} ${CHARLS_LIBRARIES} stdc++ ${CMAKE_THREAD_LIBS_INIT})
+    endif()
+        SET_TARGET_PROPERTIES(jpegls_test PROPERTIES COMPILE_FLAGS "-DLOGGING")
 
     #-------------------------------------------------------------------------
     # Define the test image

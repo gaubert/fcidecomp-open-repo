@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)  # use 3.16+ later for FetchContent
 project(fcidecomp_superbuild C CXX)
 
+cmake_policy(SET CMP0074 NEW)
+
 # Add custom module path for FindCharLS
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
 
