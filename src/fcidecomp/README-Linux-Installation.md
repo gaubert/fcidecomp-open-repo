@@ -41,6 +41,7 @@ export HDF5_ROOT=/path/to/hdf5
 mkdir build && cd build
 
 cmake .. \
+  -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS=OFF \
   -DCHARLS_ROOT=$CHARLS_ROOT \
