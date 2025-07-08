@@ -11,6 +11,7 @@ The ``fcidecomp`` software can be installed on:
 - Linux Ubuntu 18.04 LTS 64-bit
 - Linux Ubuntu 20.04 LTS 64-bit (also from source code)
 - Windows 10 64-bit
+- Windows 11 64-bit (also from source code)
 
 
 ## Installing the ``fcidecomp`` software
