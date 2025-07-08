@@ -102,6 +102,16 @@ SET (ENV{CHARLS_ROOT} ${CHARLS_ROOT})
 
 # Find CHARLS includes and library
 FIND_PACKAGE (CHARLS REQUIRED)
+
+# Try both lib64 and lib
+if(EXISTS "${CHARLS_ROOT}/lib64")
+	    set(CHARLS_LIB_DIR "${CHARLS_ROOT}/lib64")
+    elseif(EXISTS "${CHARLS_ROOT}/lib")
+	        set(CHARLS_LIB_DIR "${CHARLS_ROOT}/lib")
+	else()
+		    message(FATAL_ERROR "CharLS library directory not found under ${CHARLS_ROOT}")
+	    endif()
+
 INCLUDE_DIRECTORIES (${CHARLS_INCLUDE_DIR})
 
 #-----------------------------------------------------------------------------
