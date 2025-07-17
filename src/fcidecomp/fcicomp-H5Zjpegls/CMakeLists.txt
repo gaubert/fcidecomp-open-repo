@@ -34,7 +34,7 @@
 # ${FCICOMP_RESOURCES_DIR}/unitTestSettings.cmake.
 # 
 
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.15)
 PROJECT (H5ZJPEGLS C)
 INCLUDE (${CMAKE_CURRENT_SOURCE_DIR}/Version.cmake)
 
@@ -58,7 +58,12 @@ SET (FCICOMP_COMMON_SOURCE_DIR ${FCICOMP_ROOT}/fcicomp-common)
 #---------------------------------------------------------------------------
 
 # Force building with shared libraries instead of static
-SET(BUILD_SHARED_LIBS ON)
+#SET(BUILD_SHARED_LIBS ON)
+
+# Build with shared libraries instead of static?
+OPTION(BUILD_SHARED_LIBS "Build with shared libraries." OFF)
+
+
 # Build with logging enable?
 OPTION(LOGGING "Enable logging" ON)
 # Build the unit tests?
@@ -170,14 +175,23 @@ ENDIF ("${isSystemDir}" STREQUAL "-1")
 # Define H5Zjpegls shared library target
 #-----------------------------------------------------------------------------
 
-set(H5ZJPEGLS_SRCS
-  ${H5ZJPEGLS_SOURCE_DIR}/src/H5Zjpegls.c
-  ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
-)
-
 set(TARGET_LIBRARY_NAME H5Zjpegls)
 
-add_library(${TARGET_LIBRARY_NAME} SHARED ${H5ZJPEGLS_SRCS})
+
+#set(H5ZJPEGLS_SRCS
+#  ${H5ZJPEGLS_SOURCE_DIR}/src/H5Zjpegls.c
+#  ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
+#)
+
+#ADD_LIBRARY(${TARGET_LIBRARY_NAME} SHARED ${H5ZJPEGLS_SRCS})
+
+# Use target_sources for better encapsulation
+add_library(${TARGET_LIBRARY_NAME} SHARED)
+target_sources(${TARGET_LIBRARY_NAME} PRIVATE
+    ${H5ZJPEGLS_SOURCE_DIR}/src/H5Zjpegls.c
+    ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
+)
+
 
 # Includes
 target_include_directories(${TARGET_LIBRARY_NAME}
@@ -194,11 +208,111 @@ target_link_libraries(${TARGET_LIBRARY_NAME}
     ${HDF5_LIBRARIES}
 )
 
-# Optional: add Zlib on Windows
-if(WIN32)
-  find_package(ZLIB REQUIRED)
-  target_link_libraries(${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_LIBRARIES})
+include(FetchContent)
+
+
+
+
+set(ZLIB_ROOT "" CACHE PATH "Path to custom zlib installation")
+
+if(ZLIB_ROOT)
+    message(STATUS "Using user-specified ZLIB_ROOT: ${ZLIB_ROOT}")
+
+    set(ZLIB_INCLUDE_PATHS "${ZLIB_ROOT}/include")
+    set(ZLIB_LIBRARY_PATHS "${ZLIB_ROOT}/lib" "${ZLIB_ROOT}/lib64" "${ZLIB_ROOT}/lib/x86_64-linux-gnu" )
+
+# Always try to find zlib.h, even if ZLIB_ROOT is not set
+    find_path(ZLIB_INCLUDE_DIRS
+            NAMES zlib.h
+            PATHS ${ZLIB_INCLUDE_PATHS}
+            PATH_SUFFIXES zlib
+            NO_DEFAULT_PATH)
+
+    find_library(ZLIB_LIBRARY
+        NAMES zlib zlibstatic z 
+        PATHS ${ZLIB_LIBRARY_PATHS}
+        NO_DEFAULT_PATH)
+else()
+    message(STATUS "ZLIB_ROOT not set. Falling back to system paths.")
+
+    # usually /usr/include
+    find_path(ZLIB_INCLUDE_DIRS
+        NAMES zlib.h
+    )
+    # not usually /usr/include/z
+	#PATH_SUFFIXES z 
+
+    find_library(ZLIB_LIBRARY
+        NAMES z
+    )
 endif()
+
+
+
+    # Report if found or not
+    if(NOT ZLIB_INCLUDE_DIRS)
+        message(FATAL_ERROR "Could not find libz.h ZLIB_ROOT: ${ZLIB_ROOT}")
+    endif()
+
+    # Report if found or not
+    if(NOT ZLIB_LIBRARY)
+        message(FATAL_ERROR "Could not find static library under ZLIB_ROOT: ${ZLIB_ROOT}")
+    endif()
+	
+	
+    # Validate that it's static
+
+    get_filename_component(ZLIB_LIB_NAME "${ZLIB_LIBRARY}" NAME)
+    message(STATUS "ZLIB_LIB_NAME: ${ZLIB_LIB_NAME}")
+    string(TOLOWER "${ZLIB_LIB_NAME}" ZLIB_LIB_NAME)
+
+
+    if(BUILD_SHARED_LIBS)
+            if(NOT ZLIB_LIB_NAME MATCHES "\\.(so|dll|dylib)$")
+		    message(FATAL_ERROR "BUILD_SHARED_LIBS=ON but found static ZLIB library: ${ZLIB_LIBRARY}")
+            endif()
+
+    else()
+            if(NOT ZLIB_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
+		    message(FATAL_ERROR "BUILD_SHARED_LIBS=OFF but found shared ZLIB library: ${ZLIB_LIBRARY}")
+       endif()
+    endif()
+
+    message(STATUS "Found include zlib: ${ZLIB_INCLUDE_DIRS}")
+    message(STATUS "Found static zlib lib: ${ZLIB_LIBRARY}")
+
+
+    # Use it in your target
+target_include_directories(${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_INCLUDE_DIR})
+target_link_libraries(${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_LIBRARIES})
+
+    ####################################################################
+
+ ########################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Versioning (for .so symlinks)
 set_target_properties(${TARGET_LIBRARY_NAME} PROPERTIES

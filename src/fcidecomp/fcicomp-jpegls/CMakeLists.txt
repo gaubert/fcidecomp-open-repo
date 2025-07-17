@@ -40,9 +40,13 @@
 # ${FCICOMP_RESOURCES_DIR}/unitTestSettings.cmake.
 # 
 
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.15)
 
 PROJECT (FCICOMP_JPEGLS C CXX)
+
+    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 INCLUDE (${CMAKE_CURRENT_SOURCE_DIR}/Version.cmake)
 
 MESSAGE ("")
@@ -63,6 +67,7 @@ ENDIF (NOT FCICOMP_ROOT)
 
 # Build with shared libraries instead of static?
 OPTION(BUILD_SHARED_LIBS "Build with shared libraries." ON)
+
 # Build with logging enable?
 OPTION(LOGGING "Enable logging" ON)
 # Build the unit tests?
@@ -80,39 +85,101 @@ SET (FCICOMP_RESOURCES_DIR     ${FCICOMP_ROOT}/cmake/config)
 # Set the path for external cmake modules
 # FindCHARLS.cmake is used to find CHARLS at the call of FIND_PACKAGE (CHARLS)
 #-----------------------------------------------------------------------------
-SET (CMAKE_MODULE_PATH ${FCICOMP_CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
+#SET (CMAKE_MODULE_PATH ${FCICOMP_CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
 
-#-----------------------------------------------------------------------------
-# CHARLS Library Settings
-# Users can set the CHARLS_ROOT variable which is copied to ENV{CHARLS_ROOT}
-# ENV{CHARLS_ROOT} is used in by FindCHARLS.cmake at the call of FIND_PACKAGE(CHARLS)
 
-option (CHARLS_BUILT_DLL "CharLS was built with shared libraries." 1)
 
-if (WIN32 AND NOT BUILD_SHARED_LIBS)
-    # Define CHARLS_STATIC for all targets that use CharLS
-    set(CHARLS_STATIC_DEFINE -DCHARLS_STATIC)
-endif()
+############################################################################
+####################   CHARLS_ROOT        ##################################
+############################################################################
 
-#-----------------------------------------------------------------------------
 
+set(CHARLS_ROOT "" CACHE PATH "Path to custom CharLS installation")
 # Copy the CHARLS_ROOT variable retrieved from the cmake command line option 
 #  -DCHARLS_ROOT into the ENV{CHARLS_ROOT} variable used by the FIND_PACKAGE(CHARLS_ROOT) command.
-SET (ENV{CHARLS_ROOT} ${CHARLS_ROOT})
+#SET (ENV{CHARLS_ROOT} ${CHARLS_ROOT})
 
-# Find CHARLS includes and library
-FIND_PACKAGE (CHARLS REQUIRED)
 
-# Try both lib64 and lib
-if(EXISTS "${CHARLS_ROOT}/lib64")
-	    set(CHARLS_LIB_DIR "${CHARLS_ROOT}/lib64")
-    elseif(EXISTS "${CHARLS_ROOT}/lib")
-	        set(CHARLS_LIB_DIR "${CHARLS_ROOT}/lib")
-	else()
-		    message(FATAL_ERROR "CharLS library directory not found under ${CHARLS_ROOT}")
-	    endif()
+if(CHARLS_ROOT)
+    message(STATUS "Using user-specified CHARLS_ROOT: ${CHARLS_ROOT}")
 
-INCLUDE_DIRECTORIES (${CHARLS_INCLUDE_DIR})
+    set(CHARLS_INCLUDE_PATHS "${CHARLS_ROOT}/include/charls" "${CHARLS_ROOT}/include")
+    set(CHARLS_LIBRARY_PATHS "${CHARLS_ROOT}/lib" "${CHARLS_ROOT}/lib64")
+
+# Always try to find charls.h and libcharls.a, even if CHARLS_ROOT is not set
+    find_path(CHARLS_INCLUDE_DIRS 
+	    NAMES charls/charls.h charls.h 
+	    PATHS ${CHARLS_INCLUDE_PATHS} 
+	    PATH_SUFFIXES charls
+	    NO_DEFAULT_PATH)
+
+    find_library(CHARLS_LIBRARIES
+        NAMES charls
+        PATHS ${CHARLS_LIBRARY_PATHS}
+	NO_DEFAULT_PATH)
+
+else()
+    message(STATUS "CHARLS_ROOT not set. Falling back to system paths.")
+
+    find_path(CHARLS_INCLUDE_DIRS
+        NAMES charls/charls.h charls.h
+        PATH_SUFFIXES charls
+    )
+
+    find_library(CHARLS_LIBRARIES
+        NAMES charls
+    )
+endif()
+
+ 
+	
+	# Report if found or not
+    if(NOT CHARLS_INCLUDE_DIRS)
+        message(FATAL_ERROR "Could not find charls.h under CHARLS_ROOT: ${CHARLS_ROOT}")
+    endif()
+
+    # Report if found or not
+    if(NOT CHARLS_LIBRARIES)
+        message(FATAL_ERROR "Could not find static library under CHARLS_ROOT: ${CHARLS_ROOT}")
+    endif()
+	
+
+
+    # Validate that it's static
+
+
+    get_filename_component(CHARLS_LIB_NAME "${CHARLS_LIBRARIES}" NAME)
+    message(STATUS "CHARLS_LIB_NAME: ${CHARLS_LIB_NAME}")
+    string(TOLOWER "${CHARLS_LIB_NAME}" CHARLS_LIB_NAME)
+
+    ## Check for known static library patterns
+    #if(NOT CHARLS_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
+    #    message(FATAL_ERROR "Expected a static CharLS library (.a, .lib, .dll.a, .a.lib), but found: ${CHARLS_LIB_NAME}")
+    #endif()
+
+
+
+    message(STATUS "5: Found include CharLS: ${CHARLS_INCLUDE_DIRS}")
+
+    if(BUILD_SHARED_LIBS)
+	    if(NOT CHARLS_LIB_NAME MATCHES "\\.(so|dll|dylib)$")
+	    message(FATAL_ERROR "BUILD_SHARED_LIBS=ON but found static CharLS library: ${CHARLS_LIBRARIES}")
+            endif()
+
+    else()
+	    if(NOT CHARLS_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
+           message(FATAL_ERROR "BUILD_SHARED_LIBS=OFF but found shared CharLS library: ${CHARLS_LIBRARIES}")
+       endif()
+    endif()
+
+    message(STATUS "Found include CharLS: ${CHARLS_INCLUDE_DIRS}")
+    message(STATUS "Found static CharLS lib: ${CHARLS_LIBRARIES}")
+
+
+
+# Define static macro
+add_definitions(-DCHARLS_STATIC)
+
 
 #-----------------------------------------------------------------------------
 # Set the compiler specific flags 
@@ -160,35 +227,29 @@ SET (TARGET_LIBRARY_NAME fcicomp_jpegls)
 # Define where to find the FCICOMP_COMMON source code
 SET (FCICOMP_COMMON_SOURCE_DIR ${FCICOMP_ROOT}/fcicomp-common)
 
-# Create the list of source code files
-SET (FCICOMP_JPEGLS_SRCS 
-    ${FCICOMP_JPEGLS_SOURCE_DIR}/src/fcicomp_jpegls.c
-    ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
+
+# Create the fcicomp_jpegls library
+ADD_LIBRARY (${TARGET_LIBRARY_NAME})
+TARGET_SOURCES (${TARGET_LIBRARY_NAME}  PRIVATE
+	    ${FCICOMP_JPEGLS_SOURCE_DIR}/src/fcicomp_jpegls.c
+	    ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
 )
 
 
-# Create the fcicomp_jpegls library
-ADD_LIBRARY (${TARGET_LIBRARY_NAME} ${FCICOMP_JPEGLS_SRCS})
+message(STATUS "CHARLS_INCLUDE_DIRS used in fcicomp-jpegls: ${CHARLS_INCLUDE_DIRS}")
+message(STATUS "CHARLS_LIBRARIES used in fcicomp-jpegls: ${CHARLS_LIBRARIES}")
 
-# Add CHARLS_STATIC define if on Windows and using a static CharLS library
-if (WIN32 AND NOT BUILD_SHARED_LIBS)
-    target_compile_definitions(${TARGET_LIBRARY_NAME} PRIVATE CHARLS_STATIC)
-endif()
 
-TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${CHARLS_LIBRARIES})
+TARGET_LINK_LIBRARIES(${TARGET_LIBRARY_NAME} PRIVATE ${CHARLS_LIBRARIES})
 
-# Include the directories
-#INCLUDE_DIRECTORIES (${FCICOMP_JPEGLS_SOURCE_DIR}/include 
-#    ${FCICOMP_COMMON_SOURCE_DIR}/include)
-
-message(STATUS "CHARLS_INCLUDE_DIR used in fcicomp-jpegls: ${CHARLS_INCLUDE_DIRS}")
-
-target_include_directories(${TARGET_LIBRARY_NAME}
+TARGET_INCLUDE_DIRECTORIES(${TARGET_LIBRARY_NAME}
   PRIVATE
     ${FCICOMP_JPEGLS_SOURCE_DIR}/include
     ${FCICOMP_COMMON_SOURCE_DIR}/include
+    ${CHARLS_INCLUDE_DIRS}
     ${CHARLS_INCLUDE_DIRS}/charls
 )
+
 
 # Set the version and soversion of the library
 # this creates the dynamic links
@@ -236,12 +297,27 @@ ENDIF (COVERAGE_TESTING)
 
 # Add extra compiler flags if any
 IF (EXTRA_COMPILER_FLAGS)
-  SET_TARGET_PROPERTIES(${TARGET_LIBRARY_NAME} PROPERTIES COMPILE_FLAGS ${EXTRA_COMPILER_FLAGS})
+	# legacy ? 
+	message(STATUS "Using EXTRA_COMPILER_FLAGS ${EXTRA_COMPILER_FLAGS}")
+	SET_TARGET_PROPERTIES(${TARGET_LIBRARY_NAME} PROPERTIES COMPILE_FLAGS ${EXTRA_COMPILER_FLAGS})
+
+	# Following DOES NOT WORK:  it produces Error messages in the compilation !!
+	#separate_arguments(EXTRA_COMPILER_FLAGS)
+	#message(STATUS "Using EXTRA_COMPILER_FLAGS ${EXTRA_COMPILER_FLAGS}")
+        #Using EXTRA_COMPILER_FLAGS -DLOGGING_LEVEL=ERROR_SEVERITY -DLOGGING
+	# this supposely replacing the legacy, does not work, probably it is due to variable extra_comp...  separate_arguments.
+	#target_compile_options(${TARGET_LIBRARY_NAME} PRIVATE $<$<CONFIG:Debug>:${EXTRA_COMPILER_FLAGS}> )
+
 ENDIF (EXTRA_COMPILER_FLAGS)
+
 
 # Add extra link flags if any
 IF (EXTRA_LINK_FLAGS_DEBUG)
-  SET_TARGET_PROPERTIES(${TARGET_LIBRARY_NAME} PROPERTIES LINK_FLAGS_DEBUG ${EXTRA_LINK_FLAGS_DEBUG})
+	#legacy
+	#SET_TARGET_PROPERTIES(${TARGET_LIBRARY_NAME} PROPERTIES LINK_FLAGS_DEBUG ${EXTRA_LINK_FLAGS_DEBUG})
+	target_link_options(${TARGET_LIBRARY_NAME} PRIVATE
+	     $<$<CONFIG:Debug>:${EXTRA_LINK_FLAGS_DEBUG}>
+        )
 ENDIF (EXTRA_LINK_FLAGS_DEBUG)
 
 #-----------------------------------------------------------------------------
@@ -310,14 +386,27 @@ IF (BUILD_TESTING)
     )
 
     find_package(Threads REQUIRED)
-    set(CMAKE_CXX_STANDARD 11)
 
-    if (WIN32)
-        TARGET_LINK_LIBRARIES (jpegls_test ${TARGET_LIBRARY_NAME} ${CHARLS_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-    else()
-        TARGET_LINK_LIBRARIES (jpegls_test ${TARGET_LIBRARY_NAME} ${CHARLS_LIBRARIES} stdc++ ${CMAKE_THREAD_LIBS_INIT})
-    endif()
-        SET_TARGET_PROPERTIES(jpegls_test PROPERTIES COMPILE_FLAGS "-DLOGGING")
+
+    # Ensure the C++ linker is used (important for C code linking to C++ libs)
+     set_property(TARGET jpegls_test PROPERTY LINKER_LANGUAGE CXX)
+
+
+target_link_libraries(jpegls_test
+    PRIVATE
+    ${TARGET_LIBRARY_NAME}
+    ${CHARLS_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
+)
+#${EXTRA_LIBS}
+
+# following is legacy, use target_compile...
+#SET_TARGET_PROPERTIES(jpegls_test PROPERTIES COMPILE_FLAGS "-DLOGGING")
+
+target_compile_definitions(jpegls_test PRIVATE LOGGING)
+
+
+
 
     #-------------------------------------------------------------------------
     # Define the test image
