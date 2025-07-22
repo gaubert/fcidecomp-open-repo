@@ -50,8 +50,8 @@ Following descriptions work for both Linux and Windows, noting following:
 
 Get charls source code zip or tar.gz from...  
 
-   1) brower, https://github.com/team-charls/charls/releases  
-   2) wget https://github.com/team-charls/charls/archive/refs/tags/v2.4.2.zip -O charls-v2.4.2.z
+   1) download from: https://github.com/team-charls/charls/releases  
+   2) or, wget https://github.com/team-charls/charls/archive/refs/tags/v2.4.2.zip -O charls-v2.4.2.z
 
 Unpack or clone the source code under a local directory: e.g.  $HOME/charls-2.4.2
 
@@ -69,8 +69,8 @@ Build and Install static CharLS:
 
 Get zlib source code zip or tar.gz from...
 
-   1) brower: https://zlib.net/  (1.3.1):   
-   2) wget https://github.com/madler/zlib/archive/refs/tags/v1.3.1.zip -O zlib-1.3.1.zip
+   1) download from: https://zlib.net/  (1.3.1):   
+   2) or, wget https://github.com/madler/zlib/archive/refs/tags/v1.3.1.zip -O zlib-1.3.1.zip
 
 Unpack or clone the source code under a local directory: e.g.  $HOME/zlib-1.3.1
 
@@ -90,8 +90,8 @@ Build and Install:
 
 Get source code zip or tar.gz from...
 
-   1) download with in brower: https://github.com/HDFGroup/hdf5/tree/hdf5_1_14_6
-   2) wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.6.zip -O hdf5-1.14.6.zip
+   1) download from: https://github.com/HDFGroup/hdf5/tree/hdf5_1_14_6
+   2) or, wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.6.zip -O hdf5-1.14.6.zip
 
    Unpack or clone the source code under a local directory: e.g.  $HOME/hdf5-1.14.6
 
@@ -102,7 +102,7 @@ Build and Install:
 	 cd    $HOME/hdf5-1.14.6/build
 
 	 cmake -S .. -B .  
-     		-DCMAKE_BUILD_TYPE=Release   
+		-DCMAKE_BUILD_TYPE=Release
 		-DHDF5_BUILD_SHARED_LIBS=ON 
 		-DHDF5_ENABLE_Z_LIB_SUPPORT=ON 
 		-DZLIB_ROOT="$HOME/.local/zlib"
@@ -125,16 +125,15 @@ Build and Install:
 
  Get source code zip or tar.gz:
 
-    1)  https://gitlab.eumetsat.int/open-source/fcidecomp/
-    2) wget  https://gitlab.eumetsat.int/open-source/fcidecomp/
-    3) Alternatively, git clone -b <fcidecomp_tag> https://gitlab.eumetsat.int/open-source/fcidecomp/
+    1) download from https://gitlab.eumetsat.int/open-source/fcidecomp/
+    2) or, wget  https://gitlab.eumetsat.int/open-source/fcidecomp/ ...
 
    Unpack or clone the source code under a local directory: e.g.  $HOME/fcidecomp-<fcidecomp_tag>
 
-
 Create build directory:
-    mkdir fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
-    cd    fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
+
+    mkdir $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
+    cd    $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
 
 Build and Install:
 
@@ -157,13 +156,13 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the install path o
 
  	Linux:
 
-	 export PATH=$PATH:<hdf5_installation_path>/bin
-	 export HDF5_PLUGIN_PATH=<hdf5_installation_path>/lib/plugin/
+	 export PATH=$PATH:$HOME/.local/hdf5/bin
+	 export HDF5_PLUGIN_PATH=$HOME/.local/fcidecomp/lib/plugin/
 	 
 
 	Windows:
 
-	 $env:PATH += "C:\Users\romeror\.local\hdf5\bin"
-	 $env:HDF5_PLUGIN_PATH = "C:\Users\romeror\.local\fcidecomp\bin"
+	 $env:PATH += "$HOME\.local\hdf5\bin"         				#  if not yet done to a hdf5 installation
+	 $env:HDF5_PLUGIN_PATH = "$HOME\.local\fcidecomp\bin"        
 
 
