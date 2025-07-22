@@ -15,19 +15,17 @@ FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this i
 
 Fcidecomp HDF5 plugin is a shared libray built from C/C++ code. cmake is used to build from source code.  
 
-	-In Linux, 
+	 -In Linux, install:   gcc/g++; cmake; make 
 
-	install:   gcc/g++; cmake; make 
-	Ubuntu:    sudo apt install build-essential; sudo apt install cmake
-	AlmaLinux: sudo groupinstall "Development Tools"; sudo dnf install cmake
+		 Ubuntu:    sudo apt install build-essential; sudo apt install cmake
+		 AlmaLinux: sudo groupinstall "Development Tools"; sudo dnf install cmake
 
 		(versions gcc/g++ 11.4.0; cmake 3.20; make 4.3)
 
-			
+	 -In Windows, install: Microsoft Visual Studio Community 2022 Edition, 
+		when installing MSVC include: "Desktop development with C++"  (this includes Dev PowerShell, cmake, vcpkg)
 
-	-In Windows, install: Microsoft Visual Studio Community 2022 Edition, 
-	-when installing MSVC include: "Desktop development with C++"  (this includes Dev PowerShell, cmake, vcpkg)
-			(cmake 3.31.6-msvc6, C/C++ 19.44)
+		(cmake 3.31.6-msvc6, C/C++ 19.44)
 
 
 ## Dependencies
@@ -41,10 +39,11 @@ For simplicity in for the purpose of building fcidecomp, these dependencies are 
 
 Following descriptions work for both Linux and Windows, noting following:
 
-   -at the time of this build, used versions were charls-2.4.2; zlib-1.3.1; hdf5-1.14.6 (it should work with other versions)
-   -Windows 64-bits cmake uses by default of:  -G "Visual Studio 17 2022" -A x64 (include if necessary)
-   -in Windows use Developer Powershell to run cmake
-   -in Windows use windows pathnames, e.g. "C:\Users\local"
+	 -at the time of this build, used versions were charls-2.4.2; zlib-1.3.1; hdf5-1.14.6 (it should work with other versions)
+
+	 -Windows 64-bits cmake uses by default of:  -G "Visual Studio 17 2022" -A x64 (include if necessary)
+	 -in Windows use Developer Powershell to run cmake
+	 -in Windows use windows pathnames, e.g. "C:\Users\tmp"
 
 ### Charls
 
