@@ -48,12 +48,10 @@ Following descriptions work for both Linux and Windows, noting following:
 
 ### Charls
 
-Get charls source code zip or tar.gz:   
+Get charls source code zip or tar.gz from...  
 
-   in brower, https://github.com/team-charls/charls/releases  
-   or, wget https://github.com/team-charls/charls/archive/refs/tags/v2.4.2.zip -O charls-v2.4.2.z
-   or, git clone  -b 2.4.2 https://github.com/team-charls/charls.git
-
+   1) brower, https://github.com/team-charls/charls/releases  
+   2) wget https://github.com/team-charls/charls/archive/refs/tags/v2.4.2.zip -O charls-v2.4.2.z
 
 Unpack or clone the source code under a local directory: e.g.  $HOME/charls-2.4.2
 
@@ -69,9 +67,10 @@ Build and Install static CharLS:
 
 ### zlib
 
-Get zlib source code zip or tar.gz:
+Get zlib source code zip or tar.gz from...
 
-   in brower: https://zlib.net/  (1.3.1):   
+   1) brower: https://zlib.net/  (1.3.1):   
+   2) wget https://github.com/madler/zlib/archive/refs/tags/v1.3.1.zip -O zlib-1.3.1.zip
 
 Unpack or clone the source code under a local directory: e.g.  $HOME/zlib-1.3.1
 
@@ -89,10 +88,12 @@ Build and Install:
 
 ### hdf5
 
-Get source code zip or tar.gz:
-   in brower: https://github.com/HDFGroup/hdf5/tree/hdf5_1_14_6
+Get source code zip or tar.gz from...
 
-	 Unpack or clone the source code under a local directory: e.g.  $HOME/hdf5-1.14.6
+   1) download with in brower: https://github.com/HDFGroup/hdf5/tree/hdf5_1_14_6
+   2) wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.6.zip -O hdf5-1.14.6.zip
+
+   Unpack or clone the source code under a local directory: e.g.  $HOME/hdf5-1.14.6
 
 
 Build and Install:
@@ -115,19 +116,21 @@ Build and Install:
  		-DHDF5_ENABLE_PARALLEL=OFF 
 		-DCMAKE_POSITION_INDEPENDENT_CODE=ON
 
-	cmake --build   . --config=Release
-	cmake --install . --config=Release
-
+	 cmake --build   . --config=Release
+	 cmake --install . --config=Release
 
 ## Build and install ``fcidecomp``
 
 ``fcidecomp`` can be built -once the dependencies are installed: charls-devel, zlib-devel, and hdf5-devel are installed.
 
- Get source code zip or tar.gz: https://gitlab.eumetsat.int/open-source/fcidecomp/
+ Get source code zip or tar.gz:
 
-  	   tar xzvf fcidecomp-$FCIDECOMP_TAG.tar.gz
+    1)  https://gitlab.eumetsat.int/open-source/fcidecomp/
+    2) wget  https://gitlab.eumetsat.int/open-source/fcidecomp/
+    3) Alternatively, git clone -b <fcidecomp_tag> https://gitlab.eumetsat.int/open-source/fcidecomp/
 
-     Alternatively, git clone -b <fcidecomp_tag> https://gitlab.eumetsat.int/open-source/fcidecomp/
+   Unpack or clone the source code under a local directory: e.g.  $HOME/fcidecomp-<fcidecomp_tag>
+
 
 Create build directory:
     mkdir fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
@@ -145,8 +148,8 @@ Build and Install:
 		-DZLIB_ROOT="$HOME/.local/zlib"
 		-DHDF5_ROOT="$HOME/.local/hdf5"
 
-  cmake --build   . --config=Release
-  cmake --install . --config=Release
+	 cmake --build   . --config=Release
+	 cmake --install . --config=Release
 
 Note: if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, you don't need to specify those variables, cmake will find them. Otherwise specify their location. 
 
