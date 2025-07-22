@@ -1,6 +1,6 @@
 # BUILD the EUMETSAT FCIDECOMP software
 
-FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this is quite generic and should work on most platforms and software versions, it has been tested in following 64-bit platforms:
+FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this is quite generic and should work on most recent platforms and software versions of used tools and dependencies, it has been tested in following 64-bit platforms:
 
   - RockLinux 8
   - AlmaLinux 9.6
@@ -13,7 +13,7 @@ FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this i
 
 ## Install pre-requisite packages
 
-Fcidecomp HDF5 plugin is a shared libray built from C/C++ code. cmake is used to build from source code.  
+Fcidecomp HDF5 plugin is a shared libray built from C/C++ code. cmake is used to build from source code.
 
 	 -In Linux, install:   gcc/g++; cmake; make 
 
