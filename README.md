@@ -1,55 +1,22 @@
 # EUMETSAT ``fcidecomp`` software
 
-The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files via netCDF-C and netCDF-Java based softwares,
+The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files. It can be used via netCDF-C and netCDF-Java based softwares,
 various Python libraries and the EUMETSAT Data-Tailor software.
 
 ## Supported platforms and installation
 
-The ``fcidecomp`` software can be installed on:
+The ``fcidecomp`` software as run as C++ library hdf5 plugin can be installed on various O.S. Following ones have been tested (only 64-bit):
 
-- RockyLinux 8 64-bit (also from source code)
-- Linux Ubuntu 18.04 LTS 64-bit
-- Linux Ubuntu 20.04 LTS 64-bit (also from source code)
-- Windows 10 64-bit
-- Windows 11 64-bit (also from source code)
+- RockyLinux 8 
+- AlmaLinux 9 
+- Linux Ubuntu (18.04; 20.04 22.04) 
+- Windows (10; 11)
+
+For building and installing the hdf5 plugin see BUILD.md file.
 
 
-## Installing the ``fcidecomp`` software
+fcidecomp can also be used under conda, getting the pre-built conda fcidecomp package, see CONDA.md file.
 
-Installation procedures are described in the INSTALL file.
-
-## Testing the ``fcidecomp`` software (only for the conda-based installation)
-
-A set of Python unit tests is present to ensure the installed software works correctly. They should be run within the
-Conda environment in which the software has been installed.
-
-### Prerequisites
-
-- `pytest`, installed in the Conda environment in which the software has been installed as described 
-[here](https://anaconda.org/anaconda/pytest)
-
-Also, the tests depend on the presence of a set of test data, which can be downloaded
-[here](<https://gitlab.eumetsat.int/data-tailor/epct-test-data/-/tree/development/MTG/MTGFCIL1>).
-Test files should be placed in a directories tree structured as follows (replace $EPCT_TEST_DATA_DIR
-with any chosen name):
-
-```BASH
-|_$EPCT_TEST_DATA_DIR
-  |_MTG
-    |_MTGFCIL1
-      |_<test_file_1>
-      |_<test_file_2>
-      |_ ...
-```
-
-Once this is done, the environment variable `EPCT_TEST_DATA_DIR` should be set to the full path to the 
-`$EPCT_TEST_DATA_DIR` directory.
-
-### Running the tests
-
-Tests can be executed running the following command from within the root directory of the ``fcidecomp`` software repository:
-
-    pytest -vv tests
 
 ## Using the ``fcidecomp`` software
 
@@ -82,7 +49,7 @@ where:
 
 ### Use with `h5py`-based Python libraries (conda install only)
 
-Once the `fcidecomp` Conda package is installed and the Conda environment in which it is installed is activated,
+Once the `fcidecomp` Conda package is installed and the Conda environment in which it is installed is activated (see CONDA.md),
 use of the ``fcidecomp`` decompression libraries should be automatically enabled for `h5py`-based Python libraries.
 
 To ensure the ``fcidecomp`` filter is loaded, in a Python shell execute:
