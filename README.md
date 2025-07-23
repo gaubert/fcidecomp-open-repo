@@ -2,13 +2,18 @@
 
 The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files. 
 
-It is used as a hdf5 plugin for hdf5/netcdf files, it can be used in any environment being able to use hdf5 plugins: 
+It is a hdf5 plugin for hdf5/netcdf files, so that it can be used with: 
 
-   -netCDF-C tools 
-   -netCDF-Java tools
-   -Conda/Python (prebuilt fcidecomp conda pacakge) 
+- netCDF-C tools 
+- netCDF-Java tools
+- python
 
-The EUMETSAT Data-Tailor also provides a customisation with this plugin.
+The user can:
+
+- built from source-code and use it as hdf5 plugin. (see `BUILD` file)
+- Use conda and import the conda fcidcomp pre-built package with the hdf5 plugin. (see `CONDA` file)
+
+The EUMETSAT Data-Tailor also provides a customisation with fcidecomp.
 
 ## Supported platforms and installation
 
@@ -24,7 +29,7 @@ Following 64-bit platforms have been tested:
 For building and installing the hdf5 plugin see BUILD.md file.
 
 
-For installing fcidecomp under conda (with pre-built conda fcidecomp package) see CONDA.md file.
+For installing fcidecomp package under conda see CONDA.md file.
 
 
 ## Using the ``fcidecomp`` software
