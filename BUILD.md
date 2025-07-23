@@ -165,3 +165,10 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
 	 $env:HDF5_PLUGIN_PATH = "$HOME\.local\fcidecomp\bin"        
 
 
+## Testing the Installation
+
+
+	 h5dump $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/fcidecomp-test/data/sample.nc 
+
+	 the test successes if no error and data is shown properly.
+

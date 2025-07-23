@@ -1,35 +1,33 @@
 # EUMETSAT ``fcidecomp`` software
 
-The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files. 
-
-It is a hdf5 plugin for hdf5/netcdf files, so that it can be used with: 
+The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files. it is provided as hdf5 plugin to be used with: 
 
 - netCDF-C tools 
 - netCDF-Java tools
 - python h5py
 
-fcidecomp is offered as:
+fcidecomp is provided as:
 
-- source code. to be built and use in various Operating Systems. (ee `BUILD` file)
-- conda package with fcidecomp plugin package. to be use in a conda environment. (see `CONDA` file)
+- source code, to be built and used in various Operating Systems. (see `BUILD` file)
+- already built conda package, to be used directly in a conda environment. (see `CONDA` file)
 
 The EUMETSAT Data-Tailor also provides a customisation with fcidecomp for the decompression of JPEG-LS Meteosat Third Generation (MTG) products. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
 
 
 ## Supported platforms and installation
 
-The ``fcidecomp`` software is a C++ library hdf5 plugin which can be built and installed on multiple O.S. 
+``fcidecomp`` software is C/C++ source code which can be built into a shared library to be used as a hdf5 plugin. 
 
-Following 64-bit platforms have been tested:
+It has been built and tested in following 64-bit platforms:
 
 - RockyLinux 8 
 - AlmaLinux 9 
 - Linux Ubuntu (18.04; 20.04 22.04) 
 - Windows (10; 11)
 
-For building and installing the fcidecomp from source code see BUILD.md file.
+For building the hdf5 plugin from source code see BUILD.md file.
 
-For installing the already built fcidecomp package under conda see CONDA.md file.
+For installing the already built conda package see CONDA.md file.
 
 
 ## Using the ``fcidecomp`` software
@@ -43,11 +41,11 @@ The ``fcidecomp`` library, hdf5 plugin, can be used in different ways as describ
 - make sure netCDF tools are installed
 - set ``HDF5_PLUGIN_PATH`` environment to the directory containing the plugin. (see `BUILD` file).
 
-Note that the conda created environment (see `CONDA` file) already contains netCDF tools and the plugin.
+Note that the fcidecomp conda environment (see `CONDA` file) already contains netCDF tools and the plugin configuration.
 
 ### Example with ``nccopy``
 
-netCDF4-C tools will use fcidecomp plugin in $HDF5_PLUGIN_PATH to decompress JPEG-LS compressed netCDF files. For example, to decompress a file using `nccopy`, run the following line:
+netCDF4-C tools use fcidecomp plugin in $HDF5_PLUGIN_PATH to decompress JPEG-LS compressed netCDF files. For example, to decompress a file using `nccopy`, run the following line:
 
     nccopy -F none $PATH_TO_COMPRESSED_FILE $PATH_TO_DECOMPRESSED_FILE
 
@@ -81,7 +79,7 @@ To enable this feature:
     - in RockyLinux (install from source), corresponds to `/usr/lib64`
     - in Ubuntu 20.04 (install from source), corresponds to `/usr/lib/x86_64-linux-gnu/`
 
-    for conda created environment: 
+    for conda fcidecomp created environment: 
 
     - in Linux (conda install), corresponds to `$PATH_TO_CONDA_ENV/lib` 
       with `$PATH_TO_CONDA_ENV` equal to the path to the `conda` environment in which `fcidecomp` is installed.
