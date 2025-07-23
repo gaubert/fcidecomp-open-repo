@@ -4,16 +4,14 @@ FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this i
 
   - RockLinux 8
   - AlmaLinux 9.6
-  - Ubuntu Linux 20.04
-  - Ubuntu Linux 22.04
-  - Ubuntu  Linux 22.04
+  - Ubuntu Linux (20.04; 22.04)
   - Opensuse Leap 15.04
-  - Windows-10/11 64-bits
+  - Windows-10/11 
   - cygwin-64
 
 ## Install pre-requisite packages
 
-Fcidecomp HDF5 plugin is a shared libray built from C/C++ code. cmake is used to build from source code.
+Fcidecomp HDF5 plugin is a shared libray built from C/C++ source code. cmake is used to build from source code.
 
 	 -In Linux, install:   gcc/g++; cmake; make 
 
@@ -30,12 +28,14 @@ Fcidecomp HDF5 plugin is a shared libray built from C/C++ code. cmake is used to
 
 ## Dependencies
 
-Fcidecomp build dependencies:  charls-devel, zlib-devel, and hdf5-devel. 
+Fcidecomp build dependencies:  charls-devel, zlib-devel, and hdf5-devel.  
 
-For simplicity in for the purpose of building fcidecomp, these dependencies are also built and installed here as shown in the subsections below. 
+fcidecomp links statically charls and zlib, at run time only dependency is the plugin mechanism API to hdf5.
+
+For simplicity in for the purpose of building fcidecomp, these dependencies are also built here as shown in the subsections below. 
 
 
-## Build and Install dependencies from Source Code
+## Build and user-local Install dependencies from Source Code
 
 Following descriptions work for both Linux and Windows, noting following:
 
@@ -120,7 +120,7 @@ Build and Install:
 
 ## Build and install ``fcidecomp``
 
-``fcidecomp`` can be built -once the dependencies are installed: charls-devel, zlib-devel, and hdf5-devel are installed.
+Once the dependencies are built and installed, ``fcidecomp`` can be built 
 
  Get source code zip or tar.gz:
 
@@ -149,9 +149,9 @@ Build and Install:
 	 cmake --build   . --config=Release
 	 cmake --install . --config=Release
 
-Note: if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, you don't need to specify those variables, cmake will find them. Otherwise specify their location. 
+	 Note: if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, you don't need to specify those variables, cmake will find them. Otherwise specify their location. 
 
-Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the install path of the compiled HDF5 plugin
+Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plugin -so that HDF5 and netCDF applications use the plugin. 
 
  	Linux:
 
