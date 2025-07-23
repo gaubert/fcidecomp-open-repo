@@ -6,14 +6,15 @@ It is a hdf5 plugin for hdf5/netcdf files, so that it can be used with:
 
 - netCDF-C tools 
 - netCDF-Java tools
-- python
+- python h5py
 
-The user can:
+fcidecomp is offered as:
 
-- built from source-code and use it as hdf5 plugin. (see `BUILD` file)
-- Use conda and import the conda fcidcomp pre-built package with the hdf5 plugin. (see `CONDA` file)
+- source code. to be built and use in various Operating Systems. (ee `BUILD` file)
+- conda package with fcidecomp plugin package. to be use in a conda environment. (see `CONDA` file)
 
-The EUMETSAT Data-Tailor also provides a customisation with fcidecomp.
+The EUMETSAT Data-Tailor also provides a customisation with fcidecomp for the decompression of JPEG-LS Meteosat Third Generation (MTG) products. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
+
 
 ## Supported platforms and installation
 
@@ -26,15 +27,14 @@ Following 64-bit platforms have been tested:
 - Linux Ubuntu (18.04; 20.04 22.04) 
 - Windows (10; 11)
 
-For building and installing the hdf5 plugin see BUILD.md file.
+For building and installing the fcidecomp from source code see BUILD.md file.
 
-
-For installing fcidecomp package under conda see CONDA.md file.
+For installing the already built fcidecomp package under conda see CONDA.md file.
 
 
 ## Using the ``fcidecomp`` software
 
-The ``fcidecomp`` library can be used in different ways as described in following sections.
+The ``fcidecomp`` library, hdf5 plugin, can be used in different ways as described in following sections.
 
 ### Use with netCDF4-C tools
 
@@ -104,14 +104,6 @@ To ensure the ``fcidecomp`` filter is loaded, in a Python shell execute:
 Now every `h5py`-based Python library, such as `xarray`, will be able to open and read JPEG-LS compressed files without 
 further steps.
 
-
-### Use with the EUMETSAT Data-Tailor software
-
-A plugin enabling the decompression of JPEG-LS Meteosat Third Generation (MTG) products via the ``fcidecomp`` software is
-available for the EUMETSAT Data-Tailor software. For further information, refer to the README of its [public GitLab
-repository](<https://gitlab.eumetsat.int/open-source>) and the dedicated EUMETSAT confluence page which, once created,
-will be a subpage of the [Installing or removing customisation plugins](<https://eumetsatspace.atlassian.net/wiki/spaces/DSDT/pages/378273985/Installing+or+removing+customisation+plugins>)
-page.
 
 Inventory Notices
 -----------------
