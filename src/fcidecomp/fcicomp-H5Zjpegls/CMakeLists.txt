@@ -57,15 +57,13 @@ SET (FCICOMP_COMMON_SOURCE_DIR ${FCICOMP_ROOT}/fcicomp-common)
 # Optional Settings
 #---------------------------------------------------------------------------
 
-# Force building with shared libraries instead of static
-#SET(BUILD_SHARED_LIBS ON)
-
-# Build with shared libraries instead of static?
+# Build with static zlib, fcidecomp-jpegls libraries unless option is on?
 OPTION(BUILD_SHARED_LIBS "Build with shared libraries." OFF)
 
 
 # Build with logging enable?
 OPTION(LOGGING "Enable logging" ON)
+
 # Build the unit tests?
 OPTION(BUILD_TESTING "Build unit tests" ON)
 OPTION(MEMORY_CHECK "Enable memory check" OFF)
@@ -228,10 +226,35 @@ if(ZLIB_ROOT)
             PATH_SUFFIXES zlib
             NO_DEFAULT_PATH)
 
-    find_library(ZLIB_LIBRARY
-        NAMES zlib zlibstatic z 
-        PATHS ${ZLIB_LIBRARY_PATHS}
-        NO_DEFAULT_PATH)
+    
+    #find_library(ZLIB_LIBRARY
+    #    NAMES zlib zlibstatic z 
+    #    PATHS ${ZLIB_LIBRARY_PATHS}
+    #    NO_DEFAULT_PATH)
+
+   if(BUILD_SHARED_LIBS)
+        message(STATUS "BUILD_SHARED_LIBS is ON. Searching for SHARED ZLIB library.")
+        find_library(ZLIB_LIBRARY
+            NAMES z zlib                        # 'z' for libz.dylib/libz.so, 'zlib' for libzlib.so/libzlib.dylib
+            PATHS ${ZLIB_LIBRARY_PATHS}
+            NO_DEFAULT_PATH
+            REQUIRED # Fail if not found
+            # Specify search order for shared libraries
+            # This is automatically implied by the default search order
+            # and by not using the STATIC keyword.
+        )
+    else()
+        message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library.")
+        find_library(ZLIB_LIBRARY
+            NAMES z zlib zlibstatic # 'z' for libz.a, 'zlib' for libzlib.a, 'zlibstatic' for libzlibstatic.a 
+            PATHS ${ZLIB_LIBRARY_PATHS}
+            NO_DEFAULT_PATH
+            REQUIRED # Fail if not found
+            STATIC # Explicitly search for static library
+        )
+    endif()
+
+
 else()
     message(STATUS "ZLIB_ROOT not set. Falling back to system paths.")
 
@@ -242,9 +265,25 @@ else()
     # not usually /usr/include/z
 	#PATH_SUFFIXES z 
 
-    find_library(ZLIB_LIBRARY
-        NAMES z
-    )
+    #find_library(ZLIB_LIBRARY
+    #     NAMES z
+    #)
+
+    if(BUILD_SHARED_LIBS)
+	message(STATUS "BUILD_SHARED_LIBS is ON. Searching for SHARED ZLIB library in system paths.")
+	find_library(ZLIB_LIBRARY
+            NAMES z # Common name for shared zlib on Linux
+            # No explicit keywords for shared; it's the default if not STATIC
+        )
+
+    else()
+        message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library in system paths.")
+        find_library(ZLIB_LIBRARY
+            NAMES zlibstatic z # Prioritize common static names
+            STATIC # Explicitly search for static library
+        )
+    endif()
+
 endif()
 
 
@@ -286,29 +325,9 @@ endif()
 target_include_directories(${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_INCLUDE_DIR})
 target_link_libraries(${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_LIBRARIES})
 
-    ####################################################################
+####################################################################
 
- ########################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+####################################################################
 
 
 

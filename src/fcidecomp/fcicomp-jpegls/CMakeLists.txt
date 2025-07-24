@@ -99,7 +99,6 @@ set(CHARLS_ROOT "" CACHE PATH "Path to custom CharLS installation")
 #  -DCHARLS_ROOT into the ENV{CHARLS_ROOT} variable used by the FIND_PACKAGE(CHARLS_ROOT) command.
 #SET (ENV{CHARLS_ROOT} ${CHARLS_ROOT})
 
-
 if(CHARLS_ROOT)
     message(STATUS "Using user-specified CHARLS_ROOT: ${CHARLS_ROOT}")
 
@@ -112,11 +111,24 @@ if(CHARLS_ROOT)
 	    PATHS ${CHARLS_INCLUDE_PATHS} 
 	    PATH_SUFFIXES charls
 	    NO_DEFAULT_PATH)
-
+ 
+    # Define a variable that will be 'STATIC' or empty string based on BUILD_SHARED_LIBS
+    if(BUILD_SHARED_LIBS)
     find_library(CHARLS_LIBRARIES
         NAMES charls
         PATHS ${CHARLS_LIBRARY_PATHS}
-	NO_DEFAULT_PATH)
+	NO_DEFAULT_PATH
+	REQUIRED
+	)
+    else()
+    find_library(CHARLS_LIBRARIES
+        NAMES charls
+        PATHS ${CHARLS_LIBRARY_PATHS}
+	NO_DEFAULT_PATH
+	REQUIRED
+	STATIC
+	)
+    endif()
 
 else()
     message(STATUS "CHARLS_ROOT not set. Falling back to system paths.")
@@ -125,14 +137,21 @@ else()
         NAMES charls/charls.h charls.h
         PATH_SUFFIXES charls
     )
+     if(BUILD_SHARED_LIBS)
+        find_library(CHARLS_LIBRARIES
+           NAMES charls
+           REQUIRED
+        )
+     else()
+        find_library(CHARLS_LIBRARIES
+           NAMES charls
+           REQUIRED
+           STATIC
+        )
+    endif()
 
-    find_library(CHARLS_LIBRARIES
-        NAMES charls
-    )
 endif()
 
- 
-	
 	# Report if found or not
     if(NOT CHARLS_INCLUDE_DIRS)
         message(FATAL_ERROR "Could not find charls.h under CHARLS_ROOT: ${CHARLS_ROOT}")
