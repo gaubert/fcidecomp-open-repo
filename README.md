@@ -46,7 +46,7 @@ At runtime, the following is normally used with the fcidecomp software:
 * python, 	3.9 to 3.12, 		see https://docs.python.org/3/license.html, - , https://www.python.org/, - .
 * h5py, 	2.* and 3.6.0, 		BSD 3-Clause, 		- , https://www.h5py.org/, - .
 
-##Inventory Notices
+## Inventory Notes
 
 Licenses and copyright information for software dependencies up to version 2.0.0
 is documented within the ``inventory`` folder.
