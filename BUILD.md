@@ -9,6 +9,8 @@ FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this i
   - Windows-10/11 
   - cygwin-64
 
+fcidecomp hdf5 plugin is built as a shared library, including statically charls and zlib, adhering to the HDF5 plugin API, and Position Independent Code. So, when using it as a HDF5 plugin the only run-time dependency is hdf5.
+
 ## Install pre-requisite packages
 
 Fcidecomp HDF5 plugin is a shared libray built from C/C++ source code. cmake is used to build from source code.
@@ -60,8 +62,8 @@ Build and Install static CharLS:
 	 cd    $HOME/charls-2.4.2/build
 
  	 cmake -S .. -B .  -DCMAKE_BUILD_TYPE=Release  -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$HOME/.local/charls"
-	 cmake --build   . --config=Release
-	 cmake --install . --config=Release
+	 cmake --build   . --config Release
+	 cmake --install . --config Release
 
 
 ### zlib
@@ -81,8 +83,8 @@ Build and Install:
 	 cd    $HOME/zlib-1.3.1/build
 
 	 cmake -S .. -B .  -DCMAKE_BUILD_TYPE=Release  -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$HOME/.local/zlib"
-	 cmake --build   . --config=Release
-	 cmake --install . --config=Release
+	 cmake --build   . --config Release
+	 cmake --install . --config Release
 
 
 ### hdf5
@@ -115,8 +117,8 @@ Build and Install:
  		-DHDF5_ENABLE_PARALLEL=OFF 
 		-DCMAKE_POSITION_INDEPENDENT_CODE=ON
 
-	 cmake --build   . --config=Release
-	 cmake --install . --config=Release
+	 cmake --build   . --config Release
+	 cmake --install . --config Release
 
 ## Build and install ``fcidecomp``
 
@@ -146,8 +148,8 @@ Build and Install:
 		-DZLIB_ROOT="$HOME/.local/zlib"
 		-DHDF5_ROOT="$HOME/.local/hdf5"
 
-	 cmake --build   . --config=Release
-	 cmake --install . --config=Release
+	 cmake --build   . --config Release
+	 cmake --install . --config Release
 
 	 Note: if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, you don't need to specify those variables, cmake will find them. Otherwise specify their location. 
 
