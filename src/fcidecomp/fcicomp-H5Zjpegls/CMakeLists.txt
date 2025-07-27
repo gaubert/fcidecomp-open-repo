@@ -206,10 +206,6 @@ target_link_libraries(${TARGET_LIBRARY_NAME}
     ${HDF5_LIBRARIES}
 )
 
-include(FetchContent)
-
-
-
 
 set(ZLIB_ROOT "" CACHE PATH "Path to custom zlib installation")
 
@@ -227,14 +223,14 @@ if(ZLIB_ROOT)
             NO_DEFAULT_PATH)
 
     
-    #find_library(ZLIB_LIBRARY
+    #find_library(ZLIB_LIBRARIES
     #    NAMES zlib zlibstatic z 
     #    PATHS ${ZLIB_LIBRARY_PATHS}
     #    NO_DEFAULT_PATH)
 
    if(BUILD_SHARED_LIBS)
         message(STATUS "BUILD_SHARED_LIBS is ON. Searching for SHARED ZLIB library.")
-        find_library(ZLIB_LIBRARY
+        find_library(ZLIB_LIBRARIES
             NAMES z zlib                        # 'z' for libz.dylib/libz.so, 'zlib' for libzlib.so/libzlib.dylib
             PATHS ${ZLIB_LIBRARY_PATHS}
             NO_DEFAULT_PATH
@@ -245,7 +241,7 @@ if(ZLIB_ROOT)
         )
     else()
         message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library.")
-        find_library(ZLIB_LIBRARY
+        find_library(ZLIB_LIBRARIES
             NAMES z zlib zlibstatic # 'z' for libz.a, 'zlib' for libzlib.a, 'zlibstatic' for libzlibstatic.a 
             PATHS ${ZLIB_LIBRARY_PATHS}
             NO_DEFAULT_PATH
@@ -258,6 +254,50 @@ if(ZLIB_ROOT)
 else()
     message(STATUS "ZLIB_ROOT not set. Falling back to system paths.")
 
+if(FETCH)
+    include(FetchContent)
+
+    FetchContent_Declare(
+     zlib_content # Use a unique name for the content itself
+     URL "https://github.com/madler/zlib/archive/refs/tags/v1.3.1.tar.gz" # Or zlib-ng
+    )
+     # Following is only supported in latest versions of cmake.
+     #URL_HASH SHA256=17e88863f3600672ab49182f217281b6fc4d3c762bde361935e436a95214d05c
+     #DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+     # Crucial for requesting static when find_package is attempted
+     #FIND_PACKAGE_ARGS NAMES ZLIB COMPONENTS Static
+     #BUILD_BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/_deps/zlib_content-build/libz.a"
+
+   # Crucial: Use the BUILD_BYPRODUCTS argument to monitor the static library.
+   # This also gives FetchContent a hint about what to expect.
+   set(ZLIB_STATIC_LIB_NAME "zlibstatic.lib") # Typical name for static lib on Windows/Cygwin
+   if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "Darwin") # Unix-like
+      set(ZLIB_STATIC_LIB_NAME "libz.a")
+   endif()
+
+   set(ZLIB_STATIC_LIB_NAME "libz.a")
+
+   # Make the content available (either by finding or fetching)
+   # If ZLIB::ZLIB is built as static
+   FetchContent_MakeAvailable(zlib_content
+   )
+
+
+   if (zlib_content_SOURCE_DIR AND EXISTS "${zlib_content_SOURCE_DIR}/CMakeLists.txt")
+      message(STATUS "FetchContent seems to have downloaded CharLS to: ${zlib_content_SOURCE_DIR}")
+      # You can also check if the build directory exists and contains artifacts
+
+      if (charls_BINARY_DIR AND IS_DIRECTORY "${zlib_content_BINARY_DIR}")
+        message(STATUS "FetchContent built zlib in: ${zlib_content_BINARY_DIR}")
+        SET (ZLIB_INCLUDE_DIRS ${zlib_content_SOURCE_DIR}/include)
+        SET (ZLIB_LIBRARIES ${zlib_content_BINARY_DIR})
+      endif()
+   endif()
+
+else()
+    message(STATUS "ZLIB_ROOT not set. FETCH not set. Falling back to system paths.")
+
+
     # usually /usr/include
     find_path(ZLIB_INCLUDE_DIRS
         NAMES zlib.h
@@ -265,60 +305,60 @@ else()
     # not usually /usr/include/z
 	#PATH_SUFFIXES z 
 
-    #find_library(ZLIB_LIBRARY
+    #find_library(ZLIB_LIBRARIES
     #     NAMES z
     #)
 
+
     if(BUILD_SHARED_LIBS)
 	message(STATUS "BUILD_SHARED_LIBS is ON. Searching for SHARED ZLIB library in system paths.")
-	find_library(ZLIB_LIBRARY
+	find_library(ZLIB_LIBRARIES
             NAMES z # Common name for shared zlib on Linux
             # No explicit keywords for shared; it's the default if not STATIC
         )
 
     else()
         message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library in system paths.")
-        find_library(ZLIB_LIBRARY
+        find_library(ZLIB_LIBRARIES
             NAMES zlibstatic z # Prioritize common static names
             STATIC # Explicitly search for static library
         )
     endif()
 
 endif()
-
-
-
-    # Report if found or not
-    if(NOT ZLIB_INCLUDE_DIRS)
-        message(FATAL_ERROR "Could not find libz.h ZLIB_ROOT: ${ZLIB_ROOT}")
-    endif()
+endif()
 
     # Report if found or not
-    if(NOT ZLIB_LIBRARY)
-        message(FATAL_ERROR "Could not find static library under ZLIB_ROOT: ${ZLIB_ROOT}")
-    endif()
+#    if(NOT ZLIB_INCLUDE_DIRS)
+#        message(FATAL_ERROR "Could not find libz.h ZLIB_ROOT: ${ZLIB_ROOT}")
+#    endif()
+
+    # Report if found or not
+#    if(NOT ZLIB_LIBRARIES)
+#        message(FATAL_ERROR "Could not find static library under ZLIB_ROOT: ${ZLIB_ROOT}")
+#    endif()
 	
 	
     # Validate that it's static
 
-    get_filename_component(ZLIB_LIB_NAME "${ZLIB_LIBRARY}" NAME)
+    get_filename_component(ZLIB_LIB_NAME "${ZLIB_LIBRARIES}" NAME)
     message(STATUS "ZLIB_LIB_NAME: ${ZLIB_LIB_NAME}")
     string(TOLOWER "${ZLIB_LIB_NAME}" ZLIB_LIB_NAME)
 
 
-    if(BUILD_SHARED_LIBS)
-            if(NOT ZLIB_LIB_NAME MATCHES "\\.(so|dll|dylib)$")
-		    message(FATAL_ERROR "BUILD_SHARED_LIBS=ON but found static ZLIB library: ${ZLIB_LIBRARY}")
-            endif()
-
-    else()
-            if(NOT ZLIB_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
-		    message(FATAL_ERROR "BUILD_SHARED_LIBS=OFF but found shared ZLIB library: ${ZLIB_LIBRARY}")
-       endif()
-    endif()
+#    if(BUILD_SHARED_LIBS)
+#            if(NOT ZLIB_LIB_NAME MATCHES "\\.(so|dll|dylib)$")
+#		    message(FATAL_ERROR "BUILD_SHARED_LIBS=ON but found static ZLIB library: ${ZLIB_LIBRARIES}")
+#            endif()
+#
+#    else()
+#            if(NOT ZLIB_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
+#		    message(FATAL_ERROR "BUILD_SHARED_LIBS=OFF but found shared ZLIB library: ${ZLIB_LIBRARIES}")
+#       endif()
+#    endif()
 
     message(STATUS "Found include zlib: ${ZLIB_INCLUDE_DIRS}")
-    message(STATUS "Found static zlib lib: ${ZLIB_LIBRARY}")
+    message(STATUS "Found static zlib lib: ${ZLIB_LIBRARIES}")
 
 
     # Use it in your target
@@ -481,9 +521,11 @@ IF (BUILD_TESTING)
     TARGET_LINK_LIBRARIES (H5Zjpegls_test 
        H5Zjpegls ${HDF5_LIBRARIES}
     )
-    IF (WIN32)
-        TARGET_LINK_LIBRARIES (H5Zjpegls_test ${ZLIB_LIBRARIES})
-    ENDIF()
+
+    # why?
+    #IF (WIN32)
+    #    TARGET_LINK_LIBRARIES (H5Zjpegls_test ${ZLIB_LIBRARIES})
+    #ENDIF()
 
     #-------------------------------------------------------------------------
     # Define the test image

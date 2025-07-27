@@ -89,30 +89,29 @@ SET (FCICOMP_RESOURCES_DIR     ${FCICOMP_ROOT}/cmake/config)
 
 
 
-############################################################################
-####################   CHARLS_ROOT        ##################################
-############################################################################
 
-
+### RRS #######################   CHARLS_ROOT        ##################################
+#
 set(CHARLS_ROOT "" CACHE PATH "Path to custom CharLS installation")
-# Copy the CHARLS_ROOT variable retrieved from the cmake command line option 
-#  -DCHARLS_ROOT into the ENV{CHARLS_ROOT} variable used by the FIND_PACKAGE(CHARLS_ROOT) command.
-#SET (ENV{CHARLS_ROOT} ${CHARLS_ROOT})
+## Copy the CHARLS_ROOT variable retrieved from the cmake command line option 
+##  -DCHARLS_ROOT into the ENV{CHARLS_ROOT} variable used by the FIND_PACKAGE(CHARLS_ROOT) command.
+
+SET (ENV{CHARLS_ROOT} ${CHARLS_ROOT})
 
 if(CHARLS_ROOT)
-    message(STATUS "Using user-specified CHARLS_ROOT: ${CHARLS_ROOT}")
+   message(STATUS "Using user-specified CHARLS_ROOT: ${CHARLS_ROOT}")
 
     set(CHARLS_INCLUDE_PATHS "${CHARLS_ROOT}/include/charls" "${CHARLS_ROOT}/include")
     set(CHARLS_LIBRARY_PATHS "${CHARLS_ROOT}/lib" "${CHARLS_ROOT}/lib64")
 
-# Always try to find charls.h and libcharls.a, even if CHARLS_ROOT is not set
+ #Always try to find charls.h and charlibrary, even if CHARLS_ROOT is not set
     find_path(CHARLS_INCLUDE_DIRS 
 	    NAMES charls/charls.h charls.h 
 	    PATHS ${CHARLS_INCLUDE_PATHS} 
 	    PATH_SUFFIXES charls
 	    NO_DEFAULT_PATH)
- 
-    # Define a variable that will be 'STATIC' or empty string based on BUILD_SHARED_LIBS
+
+   # Define a variable that will be 'STATIC' or empty string based on BUILD_SHARED_LIBS
     if(BUILD_SHARED_LIBS)
     find_library(CHARLS_LIBRARIES
         NAMES charls
@@ -130,74 +129,132 @@ if(CHARLS_ROOT)
 	)
     endif()
 
+
 else()
-    message(STATUS "CHARLS_ROOT not set. Falling back to system paths.")
+   message(STATUS "CHARLS_ROOT not set. try to find package in system or wget it")
+
+if(FETCH)
+   # --- CharLS Integration with URL ---
+   include(FetchContent)
+
+   # FIND_PACKAGE_ARGS
+   # This tells FetchContent_MakeAvailable(charls) to first try to fulfill the dependency to Static library by calling find_package(CharLS NAMES CharLS).
+   # message(STATUS "CHARLS_ROOT not set. Falling back to system paths.")
+
+   message(STATUS "Before FetchContent_Declare...")
+
+FetchContent_Declare(
+charls
+URL "https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz"
+)
+#URL_HASH SHA256=d1c2c35664976f1e43fec7764d72755e6a50a80f38eca70fcc7553cad4fe19d9
+#DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+#FIND_PACKAGE_ARGS NAMES CharLS COMPONENTS Static
+
+   FetchContent_MakeAvailable(charls)
+
+
+
+
+
+
+
+
+
+
+   if (charls_SOURCE_DIR AND EXISTS "${charls_SOURCE_DIR}/CMakeLists.txt")
+      message(STATUS "FetchContent seems to have downloaded CharLS to: ${charls_SOURCE_DIR}")
+      # You can also check if the build directory exists and contains artifacts
+
+      if (charls_BINARY_DIR AND IS_DIRECTORY "${charls_BINARY_DIR}")
+        message(STATUS "FetchContent built CharLS in: ${charls_BINARY_DIR}")
+        SET (CHARLS_INCLUDE_DIRS ${charls_SOURCE_DIR}/include)
+        SET (CHARLS_LIBRARIES ${charls_BINARY_DIR})
+      endif()
+     endif()
+
+ else()
+    message(STATUS "CHARLS_ROOT not set. Fetch not set. Falling back to system paths.")
 
     find_path(CHARLS_INCLUDE_DIRS
         NAMES charls/charls.h charls.h
         PATH_SUFFIXES charls
-    )
-     if(BUILD_SHARED_LIBS)
+      )
+
+    #find_library(CHARLS_LIBRARIES
+    #   NAMES charls
+    #)
+
+    if(BUILD_SHARED_LIBS)
+        message(STATUS "BUILD_SHARED_LIBS is ON. Searching for SHARED ZLIB library in system paths.")
         find_library(CHARLS_LIBRARIES
-           NAMES charls
-           REQUIRED
+            NAMES charls # Common name for shared zlib on Linux
+            # No explicit keywords for shared; it's the default if not STATIC
         )
-     else()
+
+    else()
+        message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library in system paths.")
         find_library(CHARLS_LIBRARIES
-           NAMES charls
-           REQUIRED
-           STATIC
+            NAMES charls # Prioritize common static names
+            STATIC # Explicitly search for static library
         )
     endif()
 
+
+   endif()
 endif()
 
-	# Report if found or not
+# Report if found or not
     if(NOT CHARLS_INCLUDE_DIRS)
         message(FATAL_ERROR "Could not find charls.h under CHARLS_ROOT: ${CHARLS_ROOT}")
     endif()
 
-    # Report if found or not
+# Report if found or not
     if(NOT CHARLS_LIBRARIES)
-        message(FATAL_ERROR "Could not find static library under CHARLS_ROOT: ${CHARLS_ROOT}")
+        message(FATAL_ERROR "Could not find library under CHARLS_ROOT: ${CHARLS_ROOT}")
     endif()
-	
 
+### RRS ## # This only works when the library is built, but not when Fetched!!
+### RRS ## # Validate that it's static
+### RRS ## 
+### RRS ## get_filename_component(CHARLS_LIB_NAME "${_CHARLS_LIB_TARGET}" NAME)
+### RRS ## string(TOLOWER "${CHARLS_LIB_NAME}" CHARLS_LIB_NAME)
+### RRS ## 
+### RRS ## message(STATUS "CHARLS_LIB_NAME: ${_CHARLS_LIB_TARGET}")
+### RRS ## 
+### RRS ## message(STATUS "5: Found include CharLS: ${CHARLS_INCLUDE_DIRS}")
+### RRS ## 
+### RRS ##     if(BUILD_SHARED_LIBS)
+### RRS ## 	    if(NOT CHARLS_LIB_NAME MATCHES "\\.(so|dll|dylib)$")
+### RRS ## 	    message(FATAL_ERROR "BUILD_SHARED_LIBS=ON but found static CharLS library: ${CHARLS_LIBRARIES}")
+### RRS ##             endif()
+### RRS ## 
+### RRS ##     else()
+### RRS ## 	    if(NOT CHARLS_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
+### RRS ##            message(FATAL_ERROR "BUILD_SHARED_LIBS=OFF but found shared CharLS library: ${CHARLS_LIBRARIES}")
+### RRS ##        endif()
+### RRS ##     endif()
+### RRS ## 
 
-    # Validate that it's static
-
-
-    get_filename_component(CHARLS_LIB_NAME "${CHARLS_LIBRARIES}" NAME)
-    message(STATUS "CHARLS_LIB_NAME: ${CHARLS_LIB_NAME}")
-    string(TOLOWER "${CHARLS_LIB_NAME}" CHARLS_LIB_NAME)
-
-    ## Check for known static library patterns
-    #if(NOT CHARLS_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
-    #    message(FATAL_ERROR "Expected a static CharLS library (.a, .lib, .dll.a, .a.lib), but found: ${CHARLS_LIB_NAME}")
-    #endif()
-
-
-
-    message(STATUS "5: Found include CharLS: ${CHARLS_INCLUDE_DIRS}")
-
-    if(BUILD_SHARED_LIBS)
-	    if(NOT CHARLS_LIB_NAME MATCHES "\\.(so|dll|dylib)$")
-	    message(FATAL_ERROR "BUILD_SHARED_LIBS=ON but found static CharLS library: ${CHARLS_LIBRARIES}")
-            endif()
-
-    else()
-	    if(NOT CHARLS_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
-           message(FATAL_ERROR "BUILD_SHARED_LIBS=OFF but found shared CharLS library: ${CHARLS_LIBRARIES}")
-       endif()
-    endif()
 
     message(STATUS "Found include CharLS: ${CHARLS_INCLUDE_DIRS}")
     message(STATUS "Found static CharLS lib: ${CHARLS_LIBRARIES}")
 
 
-
 # Define static macro
 add_definitions(-DCHARLS_STATIC)
+
+#add_library(fcicomp_jpegls_lib STATIC your_source.cpp)
+
+# Link directly to the CharLS target created by FetchContent
+# This will automatically handle include directories and linking to the correct CharLS library.
+#target_link_libraries(fcicomp_jpegls PRIVATE CharLS)
+
+# Add include directories for your OWN library's public headers
+#target_include_directories(fcicomp_jpegls_lib PUBLIC
+#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # Where your public headers are
+#    $<INSTALL_INTERFACE:include/fcicomp-jpegls> # For installation
+#)
 
 
 #-----------------------------------------------------------------------------
@@ -258,8 +315,13 @@ TARGET_SOURCES (${TARGET_LIBRARY_NAME}  PRIVATE
 message(STATUS "CHARLS_INCLUDE_DIRS used in fcicomp-jpegls: ${CHARLS_INCLUDE_DIRS}")
 message(STATUS "CHARLS_LIBRARIES used in fcicomp-jpegls: ${CHARLS_LIBRARIES}")
 
-
-TARGET_LINK_LIBRARIES(${TARGET_LIBRARY_NAME} PRIVATE ${CHARLS_LIBRARIES})
+if(CHARLS_ROOT)
+  # not working with fetch?
+  TARGET_LINK_LIBRARIES(${TARGET_LIBRARY_NAME} PRIVATE ${CHARLS_LIBRARIES})
+else()
+  #not working with charls_root ?
+  TARGET_LINK_LIBRARIES(${TARGET_LIBRARY_NAME} PRIVATE charls)
+endif()
 
 TARGET_INCLUDE_DIRECTORIES(${TARGET_LIBRARY_NAME}
   PRIVATE
@@ -410,13 +472,36 @@ IF (BUILD_TESTING)
     # Ensure the C++ linker is used (important for C code linking to C++ libs)
      set_property(TARGET jpegls_test PROPERTY LINKER_LANGUAGE CXX)
 
+if(CHARLS_ROOT)
+target_link_libraries(jpegls_test PRIVATE 
+                ${TARGET_LIBRARY_NAME}
+		${CHARLS_LIBRARIES}
+		${CMAKE_THREAD_LIBS_INIT}
+)    
+else()
+target_link_libraries(jpegls_test PRIVATE 
+                ${TARGET_LIBRARY_NAME}
+	        charls	
+		${CMAKE_THREAD_LIBS_INIT}
+)    
+endif()
 
-target_link_libraries(jpegls_test
-    PRIVATE
-    ${TARGET_LIBRARY_NAME}
-    ${CHARLS_LIBRARIES}
-    ${CMAKE_THREAD_LIBS_INIT}
-)
+
+		# charls
+			#/home/romeror/fcidecomp/src/fcidecomp/build/_deps/charls-build/libcharls.a
+			#CharLS
+### # Also ensure test executable can find CharLS headers if needed for test files
+#target_include_directories(jpegls_test PRIVATE
+#		${CHARLS_INCLUDE_DIRS}
+#)
+###     /home/romeror/fcidecomp/src/fcidecomp/build/_deps/charls-src/include/charls
+###     /home/romeror/fcidecomp/src/fcidecomp/build/_deps/charls-src/include
+###    "${CHARLS_SOURCE_LOCATION_FOR_SUBPROJECTS}/include"
+### RRS
+###    ${TARGET_LIBRARY_NAME}
+#fcicomp_jpegls
+###    ${CMAKE_THREAD_LIBS_INIT}
+###)
 #${EXTRA_LIBS}
 
 # following is legacy, use target_compile...
