@@ -160,12 +160,16 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
 	 export HDF5_PLUGIN_PATH=$HOME/.local/fcidecomp/lib/plugin/
 	 
 
-	Windows:
+	Windows PowerShell:
 
-	 $env:PATH += "$HOME\.local\hdf5\bin"         				#  if not yet done to a hdf5 installation
-	 $env:PATH += "$HOME\.local\zlib\bin"         				#  if not yet done 
-	 $env:HDF5_PLUGIN_PATH = "$HOME\.local\fcidecomp\bin"        
+	  $env:PATH += "$HOME\.local\hdf5\bin"         				#  if not yet done to a hdf5 installation
+	  $env:PATH += "$HOME\.local\zlib\bin"         				#  if not yet done 
+	  $env:HDF5_PLUGIN_PATH = "$HOME\.local\fcidecomp\bin"        
 
+	Windows DOS:
+
+	  %PATH%;$HOME\.local\hdf5\bin;$HOME\.local\zlib\bin
+          set HDF5_PLUGIN_PATH=$HOME\.local\fcidecomp\bin
 
 ## Testing the Installation
 

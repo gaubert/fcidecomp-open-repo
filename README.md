@@ -24,7 +24,6 @@ fcidecomp build is quite generic and should work in most platforms, at least fol
 - AlmaLinux 9 
 - Linux Ubuntu (18.04; 20.04 22.04) 
 - Windows (10; 11)
-- cygwin64
 
 ## Using the ``fcidecomp`` software
 
