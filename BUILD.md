@@ -7,7 +7,6 @@ FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this i
   - Ubuntu Linux (20.04; 22.04)
   - Opensuse Leap 15.04
   - Windows-10/11 
-  - cygwin-64
 
 fcidecomp hdf5 plugin is built as a shared library, including statically charls and zlib, adhering to the HDF5 plugin API, and Position Independent Code. So, when using it as a HDF5 plugin the only run-time dependency is hdf5.
 
@@ -164,6 +163,7 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
 	Windows:
 
 	 $env:PATH += "$HOME\.local\hdf5\bin"         				#  if not yet done to a hdf5 installation
+	 $env:PATH += "$HOME\.local\zlib\bin"         				#  if not yet done 
 	 $env:HDF5_PLUGIN_PATH = "$HOME\.local\fcidecomp\bin"        
 
 
