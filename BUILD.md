@@ -1,12 +1,10 @@
 # BUILD the EUMETSAT FCIDECOMP software
 
-FCIDECOMP build and installation from source code:
+FCIDECOMP software build and installation from source code:
 
-  - produces mailny the HDF5 plugin
+  - builds the fcidecomp library and the fcidecomp HDF5 plugin
+  - HDF5 plugin is built as a shared library, Position Independent Code, adhering to the HDF5 plugin API.  
   - uses cmake, build is quite generic and should work on most recent platforms and versions, 
-  - is built as a shared library, Position Independent Code, adhering to the HDF5 plugin API.  
-  - as default, it links statically charls and zlib, so that run-time dependencies are minimised.
-  - the only run-time dependency is hdf5 (with zlib).
 
 it has been tested in following 64-bit platforms:
 
@@ -19,7 +17,7 @@ it has been tested in following 64-bit platforms:
 
 ## Install pre-requisite packages
 
-Fcidecomp plugin is built using cmake as a shared libray from C/C++ source code. Following tools are required:
+Fcidecomp is built using cmake as a shared libray from C/C++ source code. Following tools are required:
 
 	 -Linux:   gcc/g++; cmake; make 
 
@@ -38,9 +36,9 @@ Fcidecomp plugin is built using cmake as a shared libray from C/C++ source code.
 
 Fcidecomp build dependencies:  charls-devel, zlib-devel, and hdf5-devel.  
 
-fcidecomp links statically charls and zlib, at run time only dependency is the plugin mechanism API to hdf5.
+By default, fcidecomp links statically charls and zlib, at run time only dependency is the plugin mechanism API to hdf5.
 
-For simplicity in for the purpose of building fcidecomp, these dependencies are also built here as shown in the subsections below. 
+In case not yet installed in your system, the build of these dependencies are shown in the subsections below. 
 
 
 ## Build and Install dependencies from Source Code
