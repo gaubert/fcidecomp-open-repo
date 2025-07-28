@@ -1,6 +1,14 @@
 # BUILD the EUMETSAT FCIDECOMP software
 
-FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this is quite generic and should work on most recent platforms and software versions of used tools and dependencies, it has been tested in following 64-bit platforms:
+FCIDECOMP build and installation from source code:
+
+  - produces mailny the HDF5 plugin
+  - uses cmake, build is quite generic and should work on most recent platforms and versions, 
+  - is built as a shared library, Position Independent Code, adhering to the HDF5 plugin API.  
+  - as default, it links statically charls and zlib, so that run-time dependencies are minimised.
+  - the only run-time dependency is hdf5 (with zlib).
+
+it has been tested in following 64-bit platforms:
 
   - RockLinux 8
   - AlmaLinux 9.6
@@ -8,23 +16,22 @@ FCIDECOMP HDF5 plugin build and installation from source code uses cmake, this i
   - Opensuse Leap 15.04
   - Windows-10/11 
 
-fcidecomp hdf5 plugin is built as a shared library, including statically charls and zlib, adhering to the HDF5 plugin API, and Position Independent Code. So, when using it as a HDF5 plugin the only run-time dependency is hdf5.
 
 ## Install pre-requisite packages
 
-Fcidecomp HDF5 plugin is a shared libray built from C/C++ source code. cmake is used to build from source code.
+Fcidecomp plugin is built using cmake as a shared libray from C/C++ source code. Following tools are required:
 
-	 -In Linux, install:   gcc/g++; cmake; make 
+	 -Linux:   gcc/g++; cmake; make 
 
 		 Ubuntu:    sudo apt install build-essential; sudo apt install cmake
 		 AlmaLinux: sudo groupinstall "Development Tools"; sudo dnf install cmake
 
-		(versions gcc/g++ 11.4.0; cmake 3.20; make 4.3)
+		(e.g. gcc/g++ 11.4.0; cmake 3.15; make 4.3)
 
-	 -In Windows, install: Microsoft Visual Studio Community 2022 Edition, 
+	 -Windows: Microsoft Visual Studio Community 2022 Edition, 
 		when installing MSVC include: "Desktop development with C++"  (this includes Dev PowerShell, cmake, vcpkg)
 
-		(cmake 3.31.6-msvc6, C/C++ 19.44)
+		(e.g. cmake 3.31.6-msvc6, C/C++ 19.44)
 
 
 ## Dependencies
@@ -36,15 +43,17 @@ fcidecomp links statically charls and zlib, at run time only dependency is the p
 For simplicity in for the purpose of building fcidecomp, these dependencies are also built here as shown in the subsections below. 
 
 
-## Build and user-local Install dependencies from Source Code
+## Build and Install dependencies from Source Code
 
 Following descriptions work for both Linux and Windows, noting following:
 
 	 -at the time of this build, used versions were charls-2.4.2; zlib-1.3.1; hdf5-1.14.6 (it should work with other versions)
 
-	 -Windows 64-bits cmake uses by default of:  -G "Visual Studio 17 2022" -A x64 (include if necessary)
+	 -Windows 64-bits cmake uses by default:  -G "Visual Studio 17 2022" -A x64 (not included below)
 	 -in Windows use Developer Powershell to run cmake
 	 -in Windows use windows pathnames, e.g. "C:\Users\tmp"
+
+If your system hasn't installed yet any of these dependencies, you can following below instruction to install them for the build.
 
 ### Charls
 
@@ -121,7 +130,7 @@ Build and Install:
 
 ## Build and install ``fcidecomp``
 
-Once the dependencies are built and installed, ``fcidecomp`` can be built 
+Once the dependencies are installed, fcidecomp`can be built 
 
  Get source code zip or tar.gz:
 
@@ -150,7 +159,7 @@ Build and Install:
 	 cmake --build   . --config Release
 	 cmake --install . --config Release
 
-	 Note: if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, you don't need to specify those variables, cmake will find them. Otherwise specify their location. 
+	 Note: if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, don't include CHARLS_ROOT, ZLIB_ROOT, or HDF5_ROOT, cmake will find them. Otherwise specify their location. 
 
 Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plugin -so that HDF5 and netCDF applications use the plugin. 
 
