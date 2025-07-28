@@ -31,7 +31,7 @@ See ``USAGE`` file.
 
 
 ## Dependencies
-Building fcidecomp, required charls, zlib, and hdf5. See ``BUILD.md`` 
+Building fcidecomp requires charls, zlib, and hdf5. See ``BUILD.md`` 
 
 At runtime, the following is normally used with the fcidecomp software:
 
