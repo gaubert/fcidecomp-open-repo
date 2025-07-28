@@ -31,7 +31,7 @@ See ``USAGE`` file.
 
 
 ## Dependencies
-For building fcidecomp, charls and zlib are used, see ``BUILD.md`` 
+Building fcidecomp, required charls, zlib, and hdf5. See ``BUILD.md`` 
 
 At runtime, the following is normally used with the fcidecomp software:
 
