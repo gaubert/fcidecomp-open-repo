@@ -2,9 +2,9 @@
 
 FCIDECOMP software build and installation from source code:
 
-  - builds the fcidecomp library and the fcidecomp HDF5 plugin
-  - HDF5 plugin is built as a shared library, Position Independent Code, adhering to the HDF5 plugin API.  
-  - uses cmake, build is quite generic and should work on most recent platforms and versions, 
+  - builds the fcidecomp library and the corresponding HDF5 plugin
+  - HDF5 plugin is built as a shared library, Position Independent Code, conforming the HDF5 plugin API.  
+  - uses cmake, therefore it is quite generic and should work on most recent platforms and versions, 
 
 it has been tested in following 64-bit platforms:
 
@@ -36,9 +36,9 @@ Fcidecomp is built using cmake as a shared libray from C/C++ source code. Follow
 
 Fcidecomp build dependencies:  charls-devel, zlib-devel, and hdf5-devel.  
 
-By default, fcidecomp links statically charls and zlib, at run time only dependency is the plugin mechanism API to hdf5.
+In order to avoid runtime dependencies, fcidecomp statically links charls and zlib (as described below). At run-time only dependency is the plugin mechanism API to hdf5.
 
-In case not yet installed in your system, the build of these dependencies are shown in the subsections below. 
+In case not yet installed in your system, the build of these dependencies is shown below. In any case and for the build of fcidecomp, it is recommended to build and install them in a temporarilly local place just for fcidecomp build.
 
 
 ## Build and Install dependencies from Source Code
@@ -92,6 +92,8 @@ Build and Install:
 	 cmake --build   . --config Release
 	 cmake --install . --config Release
 
+	 Note: static zlib library is built.
+
 
 ### hdf5
 
@@ -111,20 +113,24 @@ Build and Install:
 	 cmake -S .. -B .  
 		-DCMAKE_BUILD_TYPE=Release
 		-DHDF5_BUILD_SHARED_LIBS=ON 
-		-DHDF5_ENABLE_Z_LIB_SUPPORT=ON 
-		-DZLIB_ROOT="$HOME/.local/zlib"
-		-DHDF5_ENABLE_SZIP_SUPPORT=OFF 
+		-DCMAKE_POSITION_INDEPENDENT_CODE=ON
 		-DCMAKE_INSTALL_PREFIX="$HOME/.local/hdf5"
+		-DHDF5_ENABLE_Z_LIB_SUPPORT=ON 
+		-DZLIB_USE_EXTERNAL=ON
+		-DZLIB_ROOT="$HOME/.local/zlib"
+		-DZLIB_USE_STATIC_LIBS=ON
+		-DHDF5_ENABLE_SZIP_SUPPORT=OFF 
 		-DHDF5_BUILD_TOOLS=ON 
 		-DHDF5_BUILD_EXAMPLES=OFF 
 		-DHDF5_BUILD_TESTS=OFF 
 		-DHDF5_BUILD_CPP_LIB=ON 
 		-DHDF5_BUILD_FORTRAN=OFF 
  		-DHDF5_ENABLE_PARALLEL=OFF 
-		-DCMAKE_POSITION_INDEPENDENT_CODE=ON
 
 	 cmake --build   . --config Release
 	 cmake --install . --config Release
+
+	 Notes: ZLIB_USE_EXTERNAL, zlib will be statically linked
 
 ## Build and install ``fcidecomp``
 
@@ -170,12 +176,13 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
 	Windows PowerShell:
 
 	  $env:PATH += "$HOME\.local\hdf5\bin"         				#  if not yet done to a hdf5 installation
-	  $env:PATH += "$HOME\.local\zlib\bin"         				#  if not yet done 
+	  $env:PATH += "$HOME\.local\zlib\bin"         				#  if hdf5 uses shared zlib library
 	  $env:HDF5_PLUGIN_PATH = "$HOME\.local\fcidecomp\bin"        
 
 	Windows DOS:
 
-	  %PATH%;$HOME\.local\hdf5\bin;$HOME\.local\zlib\bin
+	  %PATH%;$HOME\.local\hdf5\bin;
+          %PATH%;$HOME\.local\zlib\bin
           set HDF5_PLUGIN_PATH=$HOME\.local\fcidecomp\bin
 
 ## Testing the Installation
