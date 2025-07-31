@@ -62,7 +62,7 @@ Get charls source code zip or tar.gz from...
 
 Unpack or clone the source code under a local directory: e.g.  $HOME/charls-2.4.2
 
-Build and Install static CharLS:
+Build and Install static library charls:
 
 	 mkdir $HOME/charls-2.4.2/build
 	 cd    $HOME/charls-2.4.2/build
@@ -82,7 +82,7 @@ Get zlib source code zip or tar.gz from...
 Unpack or clone the source code under a local directory: e.g.  $HOME/zlib-1.3.1
 
 
-Build and Install:
+Build and Install static library zlib:
 
 
 	 mkdir $HOME/zlib-1.3.1/build
@@ -105,7 +105,7 @@ Get source code zip or tar.gz from...
    Unpack or clone the source code under a local directory: e.g.  $HOME/hdf5-1.14.6
 
 
-Build and Install:
+Build and Install hdf5, include static zlib:
 
 	 mkdir $HOME/hdf5-1.14.6/build
 	 cd    $HOME/hdf5-1.14.6/build
@@ -148,7 +148,7 @@ Create build directory:
     mkdir $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
     cd    $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
 
-Build and Install:
+Build and Install fcidecomp:
 
 	 cmake -S .. -B . 
 		-DCMAKE_BUILD_TYPE=Release   
@@ -163,7 +163,7 @@ Build and Install:
 	 cmake --build   . --config Release
 	 cmake --install . --config Release
 
-	 Note: if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, don't include CHARLS_ROOT, ZLIB_ROOT, or HDF5_ROOT, cmake will find them. Otherwise specify their location. 
+	 Note: BUILD_SHARED_LIBS will try to link static libraries charls and zlib. if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, don't include CHARLS_ROOT, ZLIB_ROOT, or HDF5_ROOT, cmake will find them. Otherwise specify their location. 
 
 Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plugin -so that HDF5 and netCDF applications use the plugin. 
 
