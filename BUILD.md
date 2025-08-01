@@ -2,7 +2,7 @@
 
 FCIDECOMP software build and installation from source code:
 
-  - builds the fcidecomp library and the corresponding HDF5 plugin
+  - builds the fcidecomp library H5Zjpegls to be used as HDF5 plugin
   - HDF5 plugin is built as a shared library, Position Independent Code, conforming the HDF5 plugin API.  
   - uses cmake, therefore it is quite generic and should work on most recent platforms and versions, 
 
@@ -17,7 +17,7 @@ it has been tested in following 64-bit platforms:
 
 ## Install pre-requisite packages
 
-Fcidecomp is built using cmake as a shared libray from C/C++ source code. Following tools are required:
+Fcidecomp is built using cmake as a shared libray from C/C++ source code, following tools are required:
 
 	 -Linux:   gcc/g++; cmake; make 
 
@@ -36,9 +36,11 @@ Fcidecomp is built using cmake as a shared libray from C/C++ source code. Follow
 
 Fcidecomp build dependencies are:  charls-devel, zlib-devel, and hdf5-devel.  
 
-By default, fcidecomp statically links charls and zlib (as described below). At run-time only dependency is the plugin mechanism API to hdf5.
+By default, as described here, fcidecomp statically links charls and zlib. Consequently, at run-time only dependency is the plugin mechanism API to hdf5.
 
-In case not yet installed in your system, the build of these dependencies is shown below, however, it is recommended to build and install them in a temporarilly local directory, in order to have an isolating build for more controlled
+It is recommended to build and install them in a temporarilly local directory, in order to have an isolated build for more control and visibility of the results. Moreover this is more robust and will work in most platforms.
+
+Alternatively, if they are already installed the build can also use them (see fcidecomp cmake below).
 
 
 ## Build and Install dependencies from Source Code
@@ -50,8 +52,6 @@ Following descriptions work for both Linux and Windows, noting following:
 	 -Windows 64-bits cmake uses by default:  -G "Visual Studio 17 2022" -A x64 (not included below)
 	 -in Windows use Developer Powershell to run cmake
 	 -in Windows use windows pathnames, e.g. "C:\Users\tmp"
-
-If your system hasn't installed yet any of these dependencies, you can following below instruction to install them for the build.
 
 ### charls
 
@@ -71,6 +71,7 @@ Build and Install static library charls:
 	 cmake --build   . --config Release
 	 cmake --install . --config Release
 
+	 Note: static charls library is built.
 
 ### zlib
 
@@ -93,7 +94,9 @@ Build and Install static library zlib:
 	 cmake --install . --config Release
 
 	 Note: static zlib library is built.
+	 Note: zlib is also needed to build hdf5.
 
+	
 
 ### hdf5
 
@@ -174,7 +177,8 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
 
  	Linux:
 
-	 export PATH=$PATH:$HOME/.local/hdf5/bin
+	 export PATH=$PATH:$HOME/.local/hdf5/bin 				# if hdf5 not installed in system
+	 export LD_LIBRARY_PATH="$HOME/.local/zlib/lib:$LD_LIBRARY_PATH"        # if zlib not installed in system
 	 export HDF5_PLUGIN_PATH=$HOME/.local/fcidecomp/lib/plugin/
 	 
 
@@ -186,9 +190,9 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
 
 	Windows DOS:
 
-	  %PATH%;$HOME\.local\hdf5\bin;
-          %PATH%;$HOME\.local\zlib\bin
-          set HDF5_PLUGIN_PATH=$HOME\.local\fcidecomp\bin
+	  set PATH=%PATH%;%USERPROFILE%\.local\hdf5\bin;
+          set PATH=%PATH%;%USERPROFILE%\.local\zlib\bin
+          set HDF5_PLUGIN_PATH=%USERPROFILE%\.local\fcidecomp\bin
 
 ## Testing the Installation
 

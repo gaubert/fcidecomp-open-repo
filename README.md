@@ -1,6 +1,6 @@
 # EUMETSAT ``fcidecomp`` software
 
-The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files, it is used as hdf5 plugin with: 
+The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files, it is built as hdf5 plugin and normally used with: 
 
 - netCDF-C tools 
 - netCDF-Java tools
@@ -8,12 +8,12 @@ The ``fcidecomp`` software enables decompression of JPEG-LS netCDF files, it is 
 
 fcidecomp is provided as:
 
-- C/C++ source code, to be cmake built as hdf5 plugin library and used in various Operating Systems. For building the hdf5 plugin from source code see `BUILD` file.
-- already built conda package, to be used directly as hdf5 plugin in a conda environment. For installing the already built conda package see `CONDA` file.
+- C/C++ source code, to be built as hdf5 plugin in any Operating Systems, see `BUILD` file.
+- already built conda package, to be used directly as hdf5 plugin in a conda environment, for installing see `CONDA` file.
 
-The EUMETSAT Data-Tailor also provides a customisation with fcidecomp for the decompression of JPEG-LS Meteosat Third Generation (MTG) products. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
+- The EUMETSAT Data-Tailor also provides decompression of JEPG-LS netCDF files with fcidecomp. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
 
-(Also, note that the python package hdf5plugin integrates fcidecomp software with other compressions https://pypi.org/project/hdf5plugin/)
+- Also, note that the python package hdf5plugin integrates fcidecomp with other compressions https://pypi.org/project/hdf5plugin/
 
 
 ## Supported platforms and installation
@@ -31,9 +31,12 @@ See ``USAGE`` file.
 
 
 ## Dependencies
+
 Building fcidecomp requires charls, zlib, and hdf5. See ``BUILD.md`` 
 
-At runtime, the following is normally used with the fcidecomp software:
+Running fcidecomp plugin requires hdf5 with zlib.
+
+The following software is normally used with the fcidecomp plugin:
 
 * component name, version, SPDX license id, copyright, home_url, comments
 
