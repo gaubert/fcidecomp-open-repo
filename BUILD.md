@@ -34,11 +34,11 @@ Fcidecomp is built using cmake as a shared libray from C/C++ source code. Follow
 
 ## Dependencies
 
-Fcidecomp build dependencies:  charls-devel, zlib-devel, and hdf5-devel.  
+Fcidecomp build dependencies are:  charls-devel, zlib-devel, and hdf5-devel.  
 
-In order to avoid runtime dependencies, fcidecomp statically links charls and zlib (as described below). At run-time only dependency is the plugin mechanism API to hdf5.
+By default, fcidecomp statically links charls and zlib (as described below). At run-time only dependency is the plugin mechanism API to hdf5.
 
-In case not yet installed in your system, the build of these dependencies is shown below. In any case and for the build of fcidecomp, it is recommended to build and install them in a temporarilly local place just for fcidecomp build.
+In case not yet installed in your system, the build of these dependencies is shown below, however, it is recommended to build and install them in a temporarilly local directory, in order to have an isolating build for more controlled
 
 
 ## Build and Install dependencies from Source Code
@@ -53,7 +53,7 @@ Following descriptions work for both Linux and Windows, noting following:
 
 If your system hasn't installed yet any of these dependencies, you can following below instruction to install them for the build.
 
-### Charls
+### charls
 
 Get charls source code zip or tar.gz from...  
 
@@ -116,9 +116,10 @@ Build and Install hdf5, include static zlib:
 		-DCMAKE_POSITION_INDEPENDENT_CODE=ON
 		-DCMAKE_INSTALL_PREFIX="$HOME/.local/hdf5"
 		-DHDF5_ENABLE_Z_LIB_SUPPORT=ON 
-		-DZLIB_USE_EXTERNAL=ON
-		-DZLIB_ROOT="$HOME/.local/zlib"
 		-DZLIB_USE_STATIC_LIBS=ON
+		-DZLIB_USE_EXTERNAL=ON
+		-DCMAKE_INCLUDE_PATH="$HOME/.local/zlib/include"  
+		-DCMAKE_LIBRARY_PATH="$HOME/.local/zlib/lib"
 		-DHDF5_ENABLE_SZIP_SUPPORT=OFF 
 		-DHDF5_BUILD_TOOLS=ON 
 		-DHDF5_BUILD_EXAMPLES=OFF 
@@ -163,7 +164,11 @@ Build and Install fcidecomp:
 	 cmake --build   . --config Release
 	 cmake --install . --config Release
 
-	 Note: BUILD_SHARED_LIBS will try to link static libraries charls and zlib. if any of charls, zlib and/or hdf5 are installed in default system paths and you want to use them, don't include CHARLS_ROOT, ZLIB_ROOT, or HDF5_ROOT, cmake will find them. Otherwise specify their location. 
+
+	 Note: BUILD_SHARED_LIBS=OFF will try to link static libraries charls and zlib. 
+	 Note: Include CHARLS_ROOT, ZLIB_ROOT, or HDF5_ROOT for specific locations, otherwise don't include them and cmake will try to find them in default system paths.
+	 Note: If -DFETCH=ON is included, then charls and zlib will be fetched from Internet.
+
 
 Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plugin -so that HDF5 and netCDF applications use the plugin. 
 

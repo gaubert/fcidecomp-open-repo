@@ -176,13 +176,6 @@ ENDIF ("${isSystemDir}" STREQUAL "-1")
 set(TARGET_LIBRARY_NAME H5Zjpegls)
 
 
-#set(H5ZJPEGLS_SRCS
-#  ${H5ZJPEGLS_SOURCE_DIR}/src/H5Zjpegls.c
-#  ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
-#)
-
-#ADD_LIBRARY(${TARGET_LIBRARY_NAME} SHARED ${H5ZJPEGLS_SRCS})
-
 # Use target_sources for better encapsulation
 add_library(${TARGET_LIBRARY_NAME} SHARED)
 target_sources(${TARGET_LIBRARY_NAME} PRIVATE
@@ -222,12 +215,6 @@ if(ZLIB_ROOT)
             PATH_SUFFIXES zlib
             NO_DEFAULT_PATH)
 
-    
-    #find_library(ZLIB_LIBRARIES
-    #    NAMES zlib zlibstatic z 
-    #    PATHS ${ZLIB_LIBRARY_PATHS}
-    #    NO_DEFAULT_PATH)
-
    if(BUILD_SHARED_LIBS)
         message(STATUS "BUILD_SHARED_LIBS is ON. Searching for SHARED ZLIB library.")
         find_library(ZLIB_LIBRARIES
@@ -255,6 +242,7 @@ else()
     message(STATUS "ZLIB_ROOT not set. Falling back to system paths.")
 
 if(FETCH)
+	message(STATUS "FETCH is set. Fetching zlib.")
     include(FetchContent)
 
     FetchContent_Declare(
@@ -328,7 +316,8 @@ else()
 endif()
 endif()
 
-    # Report if found or not
+# --this does not work if not yet built--
+# Report if found or not
 #    if(NOT ZLIB_INCLUDE_DIRS)
 #        message(FATAL_ERROR "Could not find libz.h ZLIB_ROOT: ${ZLIB_ROOT}")
 #    endif()
@@ -339,7 +328,7 @@ endif()
 #    endif()
 	
 	
-    # Validate that it's static
+# Validate that it's static
 
     get_filename_component(ZLIB_LIB_NAME "${ZLIB_LIBRARIES}" NAME)
     message(STATUS "ZLIB_LIB_NAME: ${ZLIB_LIB_NAME}")
@@ -370,35 +359,12 @@ target_link_libraries(${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_LIBRARIES})
 ####################################################################
 
 
-
-
-
 # Versioning (for .so symlinks)
 set_target_properties(${TARGET_LIBRARY_NAME} PROPERTIES
   LINKER_LANGUAGE CXX
   VERSION ${H5ZJPEGLS_VERSION}
   SOVERSION ${H5ZJPEGLS_SOVERSION}
 )
-
-# Create the list of source code files
-#SET (H5ZJPEGLS_SRCS 
-#    ${H5ZJPEGLS_SOURCE_DIR}/src/H5Zjpegls.c
-#    ${FCICOMP_COMMON_SOURCE_DIR}/src/fcicomp_log.c
-#)
-
-# Include the "include" directory
-#INCLUDE_DIRECTORIES (${H5ZJPEGLS_SOURCE_DIR}/include
-#    ${FCICOMP_COMMON_SOURCE_DIR}/include)
-
-# Create the H5Zjpegls library
-#ADD_LIBRARY (${TARGET_LIBRARY_NAME} SHARED ${H5ZJPEGLS_SRCS})
-#TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${FCICOMP_JPEGLS_LIBRARIES})
-#TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${HDF5_LIBRARIES})
-#IF (WIN32)
-    # Find ZLIB, this set ZLIB_LIBRARIES
-#    FIND_PACKAGE (ZLIB REQUIRED)
-#    TARGET_LINK_LIBRARIES (${TARGET_LIBRARY_NAME} PRIVATE ${ZLIB_LIBRARIES})
-#ENDIF()
 
 # Set the version and soversion of the library
 # this creates the dynamic links
@@ -521,11 +487,6 @@ IF (BUILD_TESTING)
     TARGET_LINK_LIBRARIES (H5Zjpegls_test 
        H5Zjpegls ${HDF5_LIBRARIES}
     )
-
-    # why?
-    #IF (WIN32)
-    #    TARGET_LINK_LIBRARIES (H5Zjpegls_test ${ZLIB_LIBRARIES})
-    #ENDIF()
 
     #-------------------------------------------------------------------------
     # Define the test image

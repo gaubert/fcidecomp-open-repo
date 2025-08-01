@@ -88,8 +88,6 @@ SET (FCICOMP_RESOURCES_DIR     ${FCICOMP_ROOT}/cmake/config)
 #SET (CMAKE_MODULE_PATH ${FCICOMP_CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
 
 
-
-
 ### RRS #######################   CHARLS_ROOT        ##################################
 #
 set(CHARLS_ROOT "" CACHE PATH "Path to custom CharLS installation")
@@ -137,6 +135,7 @@ if(FETCH)
    # --- CharLS Integration with URL ---
    include(FetchContent)
 
+   # Not supported in all platforms
    # FIND_PACKAGE_ARGS
    # This tells FetchContent_MakeAvailable(charls) to first try to fulfill the dependency to Static library by calling find_package(CharLS NAMES CharLS).
    # message(STATUS "CHARLS_ROOT not set. Falling back to system paths.")
@@ -147,19 +146,12 @@ FetchContent_Declare(
 charls
 URL "https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz"
 )
+# not supported in all platforms
 #URL_HASH SHA256=d1c2c35664976f1e43fec7764d72755e6a50a80f38eca70fcc7553cad4fe19d9
 #DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 #FIND_PACKAGE_ARGS NAMES CharLS COMPONENTS Static
 
    FetchContent_MakeAvailable(charls)
-
-
-
-
-
-
-
-
 
 
    if (charls_SOURCE_DIR AND EXISTS "${charls_SOURCE_DIR}/CMakeLists.txt")
@@ -214,47 +206,12 @@ endif()
         message(FATAL_ERROR "Could not find library under CHARLS_ROOT: ${CHARLS_ROOT}")
     endif()
 
-### RRS ## # This only works when the library is built, but not when Fetched!!
-### RRS ## # Validate that it's static
-### RRS ## 
-### RRS ## get_filename_component(CHARLS_LIB_NAME "${_CHARLS_LIB_TARGET}" NAME)
-### RRS ## string(TOLOWER "${CHARLS_LIB_NAME}" CHARLS_LIB_NAME)
-### RRS ## 
-### RRS ## message(STATUS "CHARLS_LIB_NAME: ${_CHARLS_LIB_TARGET}")
-### RRS ## 
-### RRS ## message(STATUS "5: Found include CharLS: ${CHARLS_INCLUDE_DIRS}")
-### RRS ## 
-### RRS ##     if(BUILD_SHARED_LIBS)
-### RRS ## 	    if(NOT CHARLS_LIB_NAME MATCHES "\\.(so|dll|dylib)$")
-### RRS ## 	    message(FATAL_ERROR "BUILD_SHARED_LIBS=ON but found static CharLS library: ${CHARLS_LIBRARIES}")
-### RRS ##             endif()
-### RRS ## 
-### RRS ##     else()
-### RRS ## 	    if(NOT CHARLS_LIB_NAME MATCHES "\\.(a|lib|dll\\.a|a\\.lib)$")
-### RRS ##            message(FATAL_ERROR "BUILD_SHARED_LIBS=OFF but found shared CharLS library: ${CHARLS_LIBRARIES}")
-### RRS ##        endif()
-### RRS ##     endif()
-### RRS ## 
-
-
     message(STATUS "Found include CharLS: ${CHARLS_INCLUDE_DIRS}")
     message(STATUS "Found static CharLS lib: ${CHARLS_LIBRARIES}")
 
 
 # Define static macro
 add_definitions(-DCHARLS_STATIC)
-
-#add_library(fcicomp_jpegls_lib STATIC your_source.cpp)
-
-# Link directly to the CharLS target created by FetchContent
-# This will automatically handle include directories and linking to the correct CharLS library.
-#target_link_libraries(fcicomp_jpegls PRIVATE CharLS)
-
-# Add include directories for your OWN library's public headers
-#target_include_directories(fcicomp_jpegls_lib PUBLIC
-#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # Where your public headers are
-#    $<INSTALL_INTERFACE:include/fcicomp-jpegls> # For installation
-#)
 
 
 #-----------------------------------------------------------------------------
@@ -487,30 +444,7 @@ target_link_libraries(jpegls_test PRIVATE
 endif()
 
 
-		# charls
-			#/home/romeror/fcidecomp/src/fcidecomp/build/_deps/charls-build/libcharls.a
-			#CharLS
-### # Also ensure test executable can find CharLS headers if needed for test files
-#target_include_directories(jpegls_test PRIVATE
-#		${CHARLS_INCLUDE_DIRS}
-#)
-###     /home/romeror/fcidecomp/src/fcidecomp/build/_deps/charls-src/include/charls
-###     /home/romeror/fcidecomp/src/fcidecomp/build/_deps/charls-src/include
-###    "${CHARLS_SOURCE_LOCATION_FOR_SUBPROJECTS}/include"
-### RRS
-###    ${TARGET_LIBRARY_NAME}
-#fcicomp_jpegls
-###    ${CMAKE_THREAD_LIBS_INIT}
-###)
-#${EXTRA_LIBS}
-
-# following is legacy, use target_compile...
-#SET_TARGET_PROPERTIES(jpegls_test PROPERTIES COMPILE_FLAGS "-DLOGGING")
-
 target_compile_definitions(jpegls_test PRIVATE LOGGING)
-
-
-
 
     #-------------------------------------------------------------------------
     # Define the test image
