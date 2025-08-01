@@ -36,7 +36,7 @@ Fcidecomp is built using cmake as a shared libray from C/C++ source code, follow
 
 Fcidecomp build dependencies are:  charls-devel, zlib-devel, and hdf5-devel.  
 
-By default, as described here, fcidecomp statically links charls and zlib. Consequently, at run-time only dependency is the plugin mechanism API to hdf5.
+By default, as described here, fcidecomp statically links charls and zlib, so that at run-time the only dependency is hdf5 (the plugin mechanism API).
 
 It is recommended to build and install them in a temporarilly local directory, in order to have an isolated build for more control and visibility of the results. Moreover this is more robust and will work in most platforms.
 
@@ -49,7 +49,7 @@ Following descriptions work for both Linux and Windows, noting following:
 
 	 -at the time of this build, used versions were charls-2.4.2; zlib-1.3.1; hdf5-1.14.6 (it should work with other versions)
 
-	 -Windows 64-bits cmake uses by default:  -G "Visual Studio 17 2022" -A x64 (not included below)
+	 -Windows 64-bits cmake uses by default:  -G "Visual Studio 17 2022" -A x64 (not included below as it is default in Windows)
 	 -in Windows use Developer Powershell to run cmake
 	 -in Windows use windows pathnames, e.g. "C:\Users\tmp"
 
@@ -95,8 +95,6 @@ Build and Install static library zlib:
 
 	 Note: static zlib library is built.
 	 Note: zlib is also needed to build hdf5.
-
-	
 
 ### hdf5
 
