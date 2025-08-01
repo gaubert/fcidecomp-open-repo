@@ -1,6 +1,6 @@
 # BUILD the EUMETSAT FCIDECOMP software
 
-This builds and install the **H5ZJPEGLS** plugin from source code, allowing HDF5 tools (e.g., `nccopy`, `h5dump`) to decompress JPEG-LS compressed datasets.
+This builds and installs the **H5ZJPEGLS** plugin from source code, allowing HDF5 tools (e.g., `nccopy`, `h5dump`) to decompress JPEG-LS compressed datasets.
 
   - builds the fcidecomp library H5Zjpegls to be used as HDF5 plugin
   - HDF5 plugin is built as a shared library, Position Independent Code, conforming the HDF5 plugin API.  
@@ -40,9 +40,7 @@ By default, as described here, fcidecomp statically links charls and zlib. Conse
 
 It is recommended to build and install them in a temporarilly local directory, in order to have an isolated build for more control and visibility of the results. Moreover this is more robust and will work in most platforms.
 
-Alternatively, if already installed the build can also use them (see fcidecomp cmake below).
-
-	 Windows: vcpkg install zlib:x64-windows
+Alternatively, if any of this dependencies are pre-installed in the system, the fcidecomp build can also find them (see fcidecomp cmake notes below).
 
 
 ## 🛠️ Build and Install dependencies from Source Code
