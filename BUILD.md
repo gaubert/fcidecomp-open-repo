@@ -1,6 +1,6 @@
 # BUILD the EUMETSAT FCIDECOMP software
 
-FCIDECOMP software build and installation from source code:
+This builds and install the **H5ZJPEGLS** plugin from source code, allowing HDF5 tools (e.g., `nccopy`, `h5dump`) to decompress JPEG-LS compressed datasets.
 
   - builds the fcidecomp library H5Zjpegls to be used as HDF5 plugin
   - HDF5 plugin is built as a shared library, Position Independent Code, conforming the HDF5 plugin API.  
@@ -15,7 +15,7 @@ it has been tested in following 64-bit platforms:
   - Windows-10/11 
 
 
-## Install pre-requisite packages
+## 🧰 Prerequisites
 
 Fcidecomp is built using cmake as a shared libray from C/C++ source code, following tools are required:
 
@@ -32,7 +32,7 @@ Fcidecomp is built using cmake as a shared libray from C/C++ source code, follow
 		(e.g. cmake 3.31.6-msvc6, C/C++ 19.44)
 
 
-## Dependencies
+## 📦 Dependencies
 
 Fcidecomp build dependencies are:  charls-devel, zlib-devel, and hdf5-devel.  
 
@@ -40,10 +40,12 @@ By default, as described here, fcidecomp statically links charls and zlib. Conse
 
 It is recommended to build and install them in a temporarilly local directory, in order to have an isolated build for more control and visibility of the results. Moreover this is more robust and will work in most platforms.
 
-Alternatively, if they are already installed the build can also use them (see fcidecomp cmake below).
+Alternatively, if already installed the build can also use them (see fcidecomp cmake below).
+
+	 Windows: vcpkg install zlib:x64-windows
 
 
-## Build and Install dependencies from Source Code
+## 🛠️ Build and Install dependencies from Source Code
 
 Following descriptions work for both Linux and Windows, noting following:
 
@@ -136,7 +138,7 @@ Build and Install hdf5, include static zlib:
 
 	 Notes: ZLIB_USE_EXTERNAL, zlib will be statically linked
 
-## Build and install ``fcidecomp``
+## 🛠️ Build and install ``fcidecomp``
 
 Once the dependencies are installed, fcidecomp`can be built 
 
@@ -167,9 +169,10 @@ Build and Install fcidecomp:
 	 cmake --build   . --config Release
 	 cmake --install . --config Release
 
+	 When successful, $HOME/.local/fcidecomp/hdf5/lib/plugin (Linux) or $HOME/.local/fcidecomp/hdf5/bin (Windows) contain H5Zjpels plugin
 
 	 Note: BUILD_SHARED_LIBS=OFF will try to link static libraries charls and zlib. 
-	 Note: Include CHARLS_ROOT, ZLIB_ROOT, or HDF5_ROOT for specific locations, otherwise don't include them and cmake will try to find them in default system paths.
+	 Note: Include CHARLS_ROOT, ZLIB_ROOT, or HDF5_ROOT for specific locations, otherwise cmake will try to find them in default system paths.
 	 Note: If -DFETCH=ON is included, then charls and zlib will be fetched from Internet.
 
 
@@ -194,10 +197,9 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
           set PATH=%PATH%;%USERPROFILE%\.local\zlib\bin
           set HDF5_PLUGIN_PATH=%USERPROFILE%\.local\fcidecomp\bin
 
-## Testing the Installation
-
+## 🧪 Testing the Installation
 
 	 h5dump $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/fcidecomp-test/data/sample.nc 
 
-	 the test successes if no error and data is shown properly.
+	 The test successes if the file is dumped and data is shown properly ( dataset pixel_quality )will show is data --no error).
 
