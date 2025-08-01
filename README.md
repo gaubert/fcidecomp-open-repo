@@ -11,9 +11,11 @@ fcidecomp is provided as:
 - C/C++ source code, to be built as hdf5 plugin in any Operating Systems, see `BUILD` file.
 - already built conda package, to be used directly as hdf5 plugin in a conda environment, for installing see `CONDA` file.
 
+also notice that:
+
 - The EUMETSAT Data-Tailor also provides decompression of JEPG-LS netCDF files with fcidecomp. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
 
-- Also, note that the python package hdf5plugin integrates fcidecomp with other compressions https://pypi.org/project/hdf5plugin/
+- the python package hdf5plugin (authored by ESRF) integrates fcidecomp with other compressions https://pypi.org/project/hdf5plugin/
 
 
 ## Supported platforms and installation
