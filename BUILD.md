@@ -36,12 +36,9 @@ Fcidecomp is built using cmake as a shared libray from C/C++ source code, follow
 
 Fcidecomp build dependencies are:  charls-devel, zlib-devel, and hdf5-devel.  
 
-By default, as described here, fcidecomp statically links charls and zlib, so that at run-time the only dependency is hdf5 (the plugin mechanism API).
+Here fcidecomp links statically charls and zlib, so that at run-time the only dependency is hdf5 (the plugin mechanism API).
 
-It is recommended to build and install them in a temporarilly local directory, in order to have an isolated build for more control and visibility of the results. Moreover this is more robust and will work in most platforms.
-
-Alternatively, if any of this dependencies are pre-installed in the system, the fcidecomp build can also find them (see fcidecomp cmake notes below).
-
+As specified in below steps, the build and install of fcidecomp and its dependencies is done in a temporarilly local directory ($HOME/.local), this allows more control and visibility of the results. Also this is more robust and will work in most platforms. Alternatively, fcidecomp build can be adapted to use the pre-installed packages in the system, or to fecth zlib or charls from Internet (see fcidecomp cmake notes below).
 
 ## 🛠️ Build and Install dependencies from Source Code
 
@@ -169,7 +166,7 @@ Build and Install fcidecomp:
 
 	 Note: BUILD_SHARED_LIBS=OFF will try to link static libraries charls and zlib. 
 	 Note: Include CHARLS_ROOT, ZLIB_ROOT, or HDF5_ROOT for specific locations, otherwise cmake will try to find them in default system paths.
-	 Note: If -DFETCH=ON is included, then charls and zlib will be fetched from Internet.
+	 Note: If -DFETCH=ON is included, then charls and zlib will be fetched from Internet if not specified by CHARLS_ROOT or ZLIB_ROOT.
 
 
 Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plugin -so that HDF5 and netCDF applications use the plugin. 
