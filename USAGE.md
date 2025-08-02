@@ -1,7 +1,7 @@
 
 ## Using the ``fcidecomp`` software
 
-The ``fcidecomp`` library, hdf5 plugin, can be used in different ways as described in following sections.
+The ``fcidecomp`` library, hdf5 plugin H5ZJPEGLS, can be used in different ways as described in following sections.
 
 ### Use with netCDF4-C tools
 
