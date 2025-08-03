@@ -38,33 +38,19 @@ Building fcidecomp from source code requires charls, zlib, and hdf5. See ``BUILD
 
 Running fcidecomp plugin requires hdf5 with zlib.
 
-the fcidecomp plugin is normally used with hdf5, netcdf4, libnetcdf, python, h5py. 
 
-* component name, version, SPDX license id, copyright, home_url, comments
+### Tools versions
 
-* netcdf4, 	1.6.2, 			-, 			- , https://unidata.github.io/netcdf4-python/, - .
-* libnetcdf, 	4.8.1, 			MIT , 			- , https://www.unidata.ucar.edu/software/netcdf/, - .
-* python, 	3.9 to 3.12, 		see https://docs.python.org/3/license.html, - , https://www.python.org/, - .
-* h5py, 	2.* and 3.6.0, 		BSD 3-Clause, 		- , https://www.h5py.org/, - .
-### Usage Tools
+Following versions have been tested with fcidecomp hdf5 plugin
 
-| Tool | Version | SPDX licence id | URL |
+| Name | Version | SPDX licence id | URL |
 |---|---|---|---|
 | hdf5 | 1.12.* to 1.14.* | BSD 3-Clause | https://www.h5py.org/ |
+| netcdf4 | 1.6.2 | - | https://unidata.github.io/netcdf4-python/ |
+| libnetcdf | 4.8.1 | MIT | https://www.unidata.ucar.edu/software/netcdf/ |
+| python | 3.9 to 3.12 | see https://docs.python.org/3/license.html | https://www.python.org |
+| h5py | 2.* and 3.6.0 | BDS 3-Clause | https://www.python.org |
 
-### Linux
-
-| Command | Description |
-|---|---|
-| `command-for-linux` | This is a Linux-specific command. |
-| `ls -al` | Example for listing files. |
-
-### macOS
-
-| Command | Description |
-|---|---|
-| `command-for-mac` | This is a macOS-specific command. |
-| `ls -alG` | Example for listing files with color. |
 ## Inventory Notes
 
 Licenses and copyright information for software dependencies up to version 2.0.0
