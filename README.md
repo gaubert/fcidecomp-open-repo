@@ -49,9 +49,8 @@ the fcidecomp plugin is normally used with hdf5, netcdf4, libnetcdf, python, h5p
 ### Usage Tools
 
 | Tool | Version | SPDX licence id | URL |
+|---|---|---|---|
 | hdf5 | 1.12.* to 1.14.* | BSD 3-Clause | https://www.h5py.org/ |
-| `command-for-win.exe` | This is a Windows-specific command. |
-| `dir /s` | Example for listing files. |
 
 ### Linux
 
