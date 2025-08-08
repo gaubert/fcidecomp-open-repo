@@ -10,7 +10,7 @@ Once built and installed, the ``fcidecomp`` library, HDF5 filter plugin H5ZJPEGL
 
 Note that the fcidecomp conda environment (see `CONDA` file) already contains netCDF tools and the plugin configuration.
 
-### Example with ``nccopy``
+#### Example with ``nccopy``
 
 netCDF4-C tools use fcidecomp plugin in $HDF5_PLUGIN_PATH to decompress JPEG-LS compressed netCDF files. For example, to decompress a file using `nccopy`, run the following line:
 
