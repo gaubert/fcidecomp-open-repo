@@ -1,6 +1,6 @@
 # EUMETSAT ``fcidecomp`` software
 
-The ``fcidecomp`` software enables decompression of MTG JPEG-LS netCDF files, it is built as a hdf5 plugin (H5ZJPEGLS) and normally used with: 
+The ``fcidecomp`` software enables decompression of MTG JPEG-LS netCDF files, it is built as an HDF5 filter plugin (H5ZJPEGLS) and normally used with: 
 
 - hdf5 (e.g. h5dump)
 - netCDF-C tools (e.g. nccopy, ncdump) 
@@ -9,18 +9,17 @@ The ``fcidecomp`` software enables decompression of MTG JPEG-LS netCDF files, it
 
 fcidecomp is provided as:
 
-- C/C++ source code to be built and installed as hdf5 plugin in various Operating Systems, see `BUILD` file.
-- already built conda package, to be used directly as hdf5 plugin in a conda environment, for installing see `CONDA` file.
+- C/C++ source code to be built and installed as HDF5 filter plugin in various Operating Systems, see `BUILD` file.
+- already built conda package, to be used directly as HDF5 filter plugin in a conda environment, see `CONDA` file.
 
 In addition:
 
-- The EUMETSAT Data-Tailor also provides decompression of JEPG-LS netCDF files with fcidecomp. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
+- by using fcidecomp, the EUMETSAT Data-Tailor provides decompression of MTG JEPG-LS netCDF files. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
 - the python package hdf5plugin (authored by ESRF) also includes fcidecomp decompression https://pypi.org/project/hdf5plugin/
-
 
 ## Supported Operating Systems 
 
-fcidecomp build is quite generic and should work in most Operating Systems, at least following 64-bit platforms have been successfully tested:
+fcidecomp build is quite generic and should work in most Operating Systems, following 64-bit platforms have been successfully tested:
 
 - RockyLinux 8 
 - AlmaLinux 9 
@@ -31,17 +30,15 @@ fcidecomp build is quite generic and should work in most Operating Systems, at l
 
 See ``USAGE`` file.
 
-
 ## Dependencies
 
 Building fcidecomp from source code requires charls, zlib, and hdf5. See ``BUILD.md`` 
 
-Running fcidecomp plugin requires hdf5 with zlib.
-
+Running fcidecomp HDF5 filter plugin (H5ZJPEGLS) requires hdf5 with zlib.
 
 ### Tools versions
 
-Following versions have been tested with fcidecomp hdf5 plugin
+Following versions have been tested with fcidecomp hdf5 filter plugin
 
 | Name | Version | SPDX licence id | URL |
 |---|---|---|---|
