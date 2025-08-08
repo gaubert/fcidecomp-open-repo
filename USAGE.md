@@ -58,9 +58,11 @@ Panoply issue).
 
 ### Use with python
 
-	 export HDF5_PLUGIN_PATH=/path/to/your/plugin/directory
-	 python fcidecomp_ex.py
+export HDF5_PLUGIN_PATH=/path/to/your/plugin/directory
+
+python fcidecomp_ex.py
 	 
+where fcidecomp_ex.py is:
 	 
 	 import netCDF4
 	 import numpy as np
