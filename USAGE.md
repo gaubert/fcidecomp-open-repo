@@ -1,7 +1,7 @@
 
 ## Using the ``fcidecomp`` software
 
-The ``fcidecomp`` library, hdf5 plugin H5ZJPEGLS, can be used in different ways as described in following sections.
+Once built and installed, the ``fcidecomp`` library, HDF5 filter plugin H5ZJPEGLS, can be used in different ways as described in following sections.
 
 ### Use with netCDF4-C tools
 
@@ -56,6 +56,45 @@ To enable this feature:
 Tested with ToolsUI 5.5.3 on Windows, Panoply 5.1.1 on Linux (known as not working for Panoply for that version in Windows due to a 
 Panoply issue).
 
+### Use with python
+
+	 export HDF5_PLUGIN_PATH=/path/to/your/plugin/directory
+	 python fcidecomp_ex.py
+	 
+	 
+	 import netCDF4
+	 import numpy as np
+	 
+	 # The NetCDF file that was created using fcicomp.
+	 NETCDF_FILE = 'fcidecomp_sample.nc'
+	 
+	 try:
+	     # Open the NetCDF file for reading.
+	     # The 'r' mode is sufficient. No special flags or arguments are needed to decompress.
+	     with netCDF4.Dataset(NETCDF_FILE, 'r') as nc_file:
+	         # Access the variable that contains the compressed data (in this case pixel_quality).
+	         variable = nc_file.variables['pixel_quality']
+	 
+	         # Read the entire dataset into a NumPy array.
+	         # The HDF5 library will call your plugin to decompress the data as it's read.
+	         data_read = variable[:]
+	 
+	         print(f"Successfully read data of shape: {data_read.shape}")
+	         print("Data type:", data_read.dtype)
+	         
+	         # Optional: Print some metadata to confirm the filter was used.
+	         # This shows the filter ID, which is stored in the file's metadata.
+	         filter_id = variable._filters['id']
+	         print(f"The variable was compressed with filter ID: {filter_id}")
+	 
+	 except FileNotFoundError:
+	     print(f"Error: The file '{NETCDF_FILE}' was not found.")
+	 except KeyError:
+	     print("Error: The variable 'pixel_quality' was not found in the file.")
+	 except RuntimeError as e:
+	     # This might indicate that the HDF5 library failed to load the plugin.
+	     print(f"A runtime error occurred. This could mean the HDF5 filter plugin path is incorrect or the plugin is faulty. Error details: {e}")
+	 
 
 ### Use with Conda: `h5py`-based Python libraries.
 
