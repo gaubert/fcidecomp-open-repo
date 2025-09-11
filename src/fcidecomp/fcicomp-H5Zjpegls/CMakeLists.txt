@@ -34,7 +34,7 @@
 # ${FCICOMP_RESOURCES_DIR}/unitTestSettings.cmake.
 # 
 
-cmake_minimum_required (VERSION 3.15)
+cmake_minimum_required (VERSION 3.16)
 PROJECT (H5ZJPEGLS C)
 INCLUDE (${CMAKE_CURRENT_SOURCE_DIR}/Version.cmake)
 
@@ -229,7 +229,7 @@ if(ZLIB_ROOT)
     else()
         message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library.")
         find_library(ZLIB_LIBRARIES
-            NAMES z zlib zlibstatic # 'z' for libz.a, 'zlib' for libzlib.a, 'zlibstatic' for libzlibstatic.a 
+            NAMES z.a zlib.a libz.a zlibstatic.a # 'z' for libz.a, 'zlib' for libzlib.a, 'zlibstatic' for libzlibstatic.a 
             PATHS ${ZLIB_LIBRARY_PATHS}
             NO_DEFAULT_PATH
             REQUIRED # Fail if not found
@@ -239,10 +239,10 @@ if(ZLIB_ROOT)
 
 
 else()
-    message(STATUS "ZLIB_ROOT not set. Falling back to system paths.")
+    message(STATUS "ZLIB_ROOT not set.")
 
 if(FETCH)
-	message(STATUS "FETCH is set. Fetching zlib.")
+	message(STATUS "ZLIB_ROOT not set; FETCH is set. Fetching zlib.")
     include(FetchContent)
 
     FetchContent_Declare(
@@ -272,10 +272,10 @@ if(FETCH)
 
 
    if (zlib_content_SOURCE_DIR AND EXISTS "${zlib_content_SOURCE_DIR}/CMakeLists.txt")
-      message(STATUS "FetchContent seems to have downloaded CharLS to: ${zlib_content_SOURCE_DIR}")
+      message(STATUS "FetchContent seems to have downloaded zlib to: ${zlib_content_SOURCE_DIR}")
       # You can also check if the build directory exists and contains artifacts
 
-      if (charls_BINARY_DIR AND IS_DIRECTORY "${zlib_content_BINARY_DIR}")
+      if (zlib_content_BINARY_DIR AND IS_DIRECTORY "${zlib_content_BINARY_DIR}")
         message(STATUS "FetchContent built zlib in: ${zlib_content_BINARY_DIR}")
         SET (ZLIB_INCLUDE_DIRS ${zlib_content_SOURCE_DIR}/include)
         SET (ZLIB_LIBRARIES ${zlib_content_BINARY_DIR})
@@ -306,7 +306,7 @@ else()
         )
 
     else()
-        message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library in system paths.")
+	message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library in system paths, or default to SHARED library.")
         find_library(ZLIB_LIBRARIES
             NAMES zlibstatic z # Prioritize common static names
             STATIC # Explicitly search for static library

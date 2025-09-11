@@ -40,7 +40,7 @@
 # ${FCICOMP_RESOURCES_DIR}/unitTestSettings.cmake.
 # 
 
-cmake_minimum_required (VERSION 3.15)
+cmake_minimum_required (VERSION 3.16)
 
 PROJECT (FCICOMP_JPEGLS C CXX)
 
@@ -169,7 +169,7 @@ URL "https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz"
     message(STATUS "CHARLS_ROOT not set. Fetch not set. Falling back to system paths.")
 
     find_path(CHARLS_INCLUDE_DIRS
-        NAMES charls/charls.h charls.h
+        NAMES CharLS/charls.h charls/charls.h charls.h
         PATH_SUFFIXES charls
       )
 
@@ -178,14 +178,14 @@ URL "https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz"
     #)
 
     if(BUILD_SHARED_LIBS)
-        message(STATUS "BUILD_SHARED_LIBS is ON. Searching for SHARED ZLIB library in system paths.")
+	    message(STATUS "BUILD_SHARED_LIBS is ON. Searching for SHARED CharLS library in system paths.")
         find_library(CHARLS_LIBRARIES
             NAMES charls # Common name for shared zlib on Linux
             # No explicit keywords for shared; it's the default if not STATIC
         )
 
     else()
-        message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC ZLIB library in system paths.")
+	    message(STATUS "BUILD_SHARED_LIBS is OFF. Searching for STATIC CharLS library in system paths.")
         find_library(CHARLS_LIBRARIES
             NAMES charls # Prioritize common static names
             STATIC # Explicitly search for static library
