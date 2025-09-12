@@ -1,6 +1,6 @@
 # EUMETSAT ``fcidecomp`` software
 
-The ``fcidecomp`` software enables decompression of MTG JPEG-LS netCDF files, it is built as an HDF5 filter plugin (H5ZJPEGLS) allowing HDF5 tools, e.g. `nccopy` or `h5dump`, to decompress JPEG-LS datasets. Normally it is used with: 
+The ``fcidecomp`` software enables decompression of MTG JPEG-LS netCDF files, it works by acting as a HDF5 filter plugin (H5ZJPEGLS), which allows it to be used directly with standard tools that support HDF5 including:
 
 - hdf5 (e.g. h5dump)
 - netCDF-C tools (e.g. nccopy, ncdump) 
