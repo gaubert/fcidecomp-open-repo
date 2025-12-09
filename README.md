@@ -28,11 +28,11 @@ fcidecomp build is quite generic and should work in most Operating Systems, foll
 
 ## Using the ``fcidecomp`` software
 
-See ``USAGE`` file.
+See [USAGE.md](./USAGE.md) file.
 
 ## Dependencies
 
-Building fcidecomp from source code requires charls, zlib, and hdf5. See ``BUILD.md`` 
+Building fcidecomp from source code requires charls, zlib, and hdf5. See [BUILD.md](./BUILD.md). 
 
 Running fcidecomp HDF5 filter plugin (H5ZJPEGLS) requires hdf5 with zlib.
 
