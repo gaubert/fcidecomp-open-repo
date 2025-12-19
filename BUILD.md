@@ -79,10 +79,10 @@ Following descriptions work for both Linux and Windows, noting following:
 
 fcidecomp builds charls from source code making sure that the charls static library is built. (to be linked statically and avoid runtime dependencies).
 
-Get charls source code zip or tar.gz from...  
+Get charls source code zip or tar.gz from the releases page and pick the latest package (currently 2.4.2):  
 
-   1) download from: https://github.com/team-charls/charls/releases  
-   2) or, wget https://github.com/team-charls/charls/archive/refs/tags/v2.4.2.zip -O charls-v2.4.2.z
+   1) browse to https://github.com/team-charls/charls/releases and download the latest package  
+   2) or use wget/curl with the package link shown on that page (e.g. the current tag archive) to save locally
 
 Unpack or clone the source code under a local directory: e.g.  $HOME/charls-2.4.2
 
@@ -167,11 +167,13 @@ Create build directory:
 
 Build and Install fcidecomp:
 
-	 cmake -S .. -B .  -DCMAKE_BUILD_TYPE=Release   -DBUILD_SHARED_LIBS=OFF   -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$HOME/.local/fcidecomp" -DCHARLS_ROOT="$HOME/.local/charls"
+	 INSTALL_PREFIX="$HOME/.local/fcidecomp"
+
+	 cmake -S .. -B .  -DCMAKE_BUILD_TYPE=Release   -DBUILD_SHARED_LIBS=OFF   -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX" -DCHARLS_ROOT="$HOME/.local/charls"
 
 
 	 cmake --build   . --config Release
-	 cmake --install . --config Release
+	 cmake --install . --config Release --prefix "$INSTALL_PREFIX"    # defaults to /usr/local if --prefix/variable omitted
 
 	 When successful, $HOME/.local/fcidecomp/hdf5/lib/plugin (Linux) or $HOME/.local/fcidecomp/hdf5/bin (Windows) contain H5Zjpels plugin.
 
@@ -187,7 +189,7 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
 
 	 export PATH=$PATH:$HOME/.local/hdf5/bin 				# if hdf5 not installed in system
 	 export LD_LIBRARY_PATH="$HOME/.local/zlib/lib:$LD_LIBRARY_PATH"        # if zlib not installed in system
-	 export HDF5_PLUGIN_PATH=$HOME/.local/fcidecomp/hdf5/lib/plugin/
+	 export HDF5_PLUGIN_PATH=$HOME/.local/fcidecomp/hdf5/lib/plugin/        # replace with $INSTALL_PREFIX if using a different location
 	 
 
 	Windows PowerShell:
@@ -200,11 +202,28 @@ Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plu
 
 	  set PATH=%PATH%;%USERPROFILE%\.local\hdf5\bin;
           set PATH=%PATH%;%USERPROFILE%\.local\zlib\bin
-          set HDF5_PLUGIN_PATH=%USERPROFILE%\.local\fcidecomp\bin
+	  set HDF5_PLUGIN_PATH=%USERPROFILE%\.local\fcidecomp\bin
 
 ## 🧪 Testing the Installation
 
-	 h5dump $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/fcidecomp-test/data/sample.nc 
+Ensure the test data are available (fetch via ``git lfs pull`` if the repository uses LFS) and that ``ncdump`` is installed (e.g. ``apt-get install netcdf-bin`` on Debian/Ubuntu). Then run:
 
-	 The test successes if the file is dumped and data is shown properly, check that dataset pixel_quality is shown).
+  git lfs pull -I src/fcidecomp/fcidecomp-test/data/sample.nc   # download test NetCDF if stored in LFS
 
+  export HDF5_PLUGIN_PATH=$HOME/.local/fcidecomp/hdf5/lib/plugin/   # or your INSTALL_PREFIX
+  ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
+
+The script runs ``ncdump`` on ``sample.nc`` with the plugin enabled and compares against the reference output. It succeeds if it prints ``*** SUCCESS! ***``.
+
+### Running the post-install test via CTest (optional)
+
+Enable the CTest hook during configure and run ``ctest`` from the build directory. To only run the post-install smoke test (and skip the component/unit tests that compare generated HDF5 files to references), leave ``FCIDECOMP_ENABLE_COMPONENT_TESTS`` at its default ``OFF``:
+
+  cmake -S src/fcidecomp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DFCIDECOMP_ENABLE_POSTINSTALL_TEST=ON -DFCIDECOMP_ENABLE_COMPONENT_TESTS=OFF
+  cmake --build build --config Release
+  ctest --test-dir build --output-on-failure
+
+Notes:
+- The CTest rule sets ``HDF5_PLUGIN_PATH`` to the built plugin directory (``build/fcicomp-H5Zjpegls``). Use ``ctest --output-on-failure`` to see the script output.
+- ``ncdump`` must be on ``PATH`` (install via your package manager, e.g. ``netcdf-bin`` on Debian/Ubuntu).
+- If the repository uses Git LFS, ensure ``git lfs pull -I src/fcidecomp/fcidecomp-test/data/sample.nc`` has been run before ``ctest`` so ``sample.nc`` is present.
