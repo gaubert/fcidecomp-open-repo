@@ -1,0 +1,229 @@
+# BUILD the EUMETSAT FCIDECOMP software
+
+This describes the build and install of the **H5ZJPEGLS** HDF5 filter plugin from source code.
+
+  - builds the fcidecomp library H5Zjpegls to be used as HDF5 filter plugin
+  - HDF5 filter plugin is built as a shared library, Position Independent Code, conforming to HDF5 filter plugin API
+  - uses cmake, therefore it is quite generic and should work on most recent Operating Systems
+
+it has been tested in following 64-bit Operating Systems:
+
+  - RockLinux 8
+  - AlmaLinux 9.6
+  - Ubuntu Linux (20.04; 22.04)
+  - Opensuse Leap 15.04
+  - Windows-10/11 
+
+Below, instructions to build on Ubuntu 22.04, AlmaLinux 9.6, and Windows 11.
+
+
+## 🧰 Prerequisites
+
+Fcidecomp is built using cmake as a shared libray from C/C++ source code, following tools are required:
+
+	 -Linux:   gcc/g++; cmake; make 
+
+		 Ubuntu:    sudo apt install build-essential; sudo apt install cmake
+		 AlmaLinux: sudo groupinstall "Development Tools"; sudo dnf install cmake
+
+		(e.g. gcc/g++ 11.4.0; cmake 3.15; make 4.3)
+
+	 -Windows: Microsoft Visual Studio Community 2022 Edition, 
+		when installing MSVC include: "Desktop development with C++"  (this includes Dev PowerShell, cmake, vcpkg)
+
+		(e.g. cmake 3.31.6-msvc6, C/C++ 19.44)
+
+
+## 📦 Dependencies
+
+Fcidecomp build required dependencies are:  charls, zlib, and hdf5, they can be found as standard packages or can be built and installed from source code:
+
+	-charls is built from source code as shown below. (there are no pre-built packages for all O.S. Also to make sure that charls static library is built and used)  
+	-hdf5 and zlib packages installations are shown below, for the case that they are not yet installed.
+
+
+## 🛠️ Install dependencies from packages
+
+If not already installed in the system, zlib-devel and hdf5-devel can be installed from packages. Charls is not found as pre-built package.
+
+	 -Linux:   
+
+		 Ubuntu:    
+			    sudo apt update 
+			    sudo apt install zlib1g-dev
+		            sudo apt install libhdf5-dev hdf5-tools
+
+		 AlmaLinux: sudo dnf install epel-release 
+		            sudo dnf install zlib zlib-devel 
+		            sudo dnf install hdf5 hdf5-devel 
+
+		(e.g. hdf5 1.12; zlib 1.2)
+
+	 -Windows: 
+	 	Download and install hdf5 as MSI package from https://support.hdfgroup.org/downloads/hdf5 (includes devel options).
+		(hdf5 package includes zlib)
+
+
+## 🛠️ Build and Install dependencies from Source Code
+
+
+Following descriptions work for both Linux and Windows, noting following:
+
+	 -at the time of this build, used versions were charls-2.4.2; zlib-1.3.1; hdf5-1.14.6 (it should work with other recent versions)
+
+	 -Windows 64-bits cmake uses by default:  -G "Visual Studio 17 2022" -A x64 (not included below as it is default in Windows)
+	 -in Windows, use Developer Powershell to run cmake
+	 -in Windows, note windows pathnames! e.g. "C:\Users\tmp"
+
+### charls
+
+fcidecomp builds charls from source code making sure that the charls static library is built. (to be linked statically and avoid runtime dependencies).
+
+Get charls source code zip or tar.gz from the releases page and pick the latest package (currently 2.4.2):  
+
+   1) browse to https://github.com/team-charls/charls/releases and download the latest package  
+   2) or use wget/curl with the package link shown on that page (e.g. the current tag archive) to save locally
+
+Unpack or clone the source code under a local directory: e.g.  $HOME/charls-2.4.2
+
+Build and Install static library charls:
+
+	 mkdir $HOME/charls-2.4.2/build
+	 cd    $HOME/charls-2.4.2/build
+
+ 	 cmake -S .. -B .  -DCMAKE_BUILD_TYPE=Release  -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$HOME/.local/charls"
+	 cmake --build   . --config Release
+	 cmake --install . --config Release
+
+	 Note: static charls library is built.
+
+### zlib
+
+fcidecomp uses the standard zlib-devel package. If there is no pre-built zlib package for the O.S. following installation from source code can be done.
+
+Get zlib source code zip or tar.gz from...
+
+   1) download from: https://zlib.net/  (1.3.1):   
+   2) or, wget https://github.com/madler/zlib/archive/refs/tags/v1.3.1.zip -O zlib-1.3.1.zip
+
+Unpack or clone the source code under a local directory: e.g.  $HOME/zlib-1.3.1
+
+
+Build and Install static library zlib:
+
+
+	 mkdir $HOME/zlib-1.3.1/build
+	 cd    $HOME/zlib-1.3.1/build
+
+	 cmake -S .. -B .  -DCMAKE_BUILD_TYPE=Release  -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$HOME/.local/zlib"
+	 cmake --build   . --config Release
+	 cmake --install . --config Release
+
+	 Note: static zlib library is built.
+	 Note: zlib is also needed to build hdf5.
+
+### hdf5
+
+fcidecomp uses the standard hdf5 package. If there is no pre-built hdf5 package for the O.S. following installation from source code can be used (note that cmake variables can slightly vary depending on OS).
+
+Get source code zip or tar.gz from...
+
+   1) download from: https://github.com/HDFGroup/hdf5/tree/hdf5_1_14_6
+   2) or, wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.6.zip -O hdf5-1.14.6.zip
+
+   Unpack or clone the source code under a local directory: e.g.  $HOME/hdf5-1.14.6
+
+
+Build and Install hdf5, include static zlib:
+
+	 mkdir $HOME/hdf5-1.14.6/build
+	 cd    $HOME/hdf5-1.14.6/build
+
+	 cmake -S .. -B .  -DCMAKE_BUILD_TYPE=Release -DHDF5_BUILD_SHARED_LIBS=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$HOME/.local/hdf5" -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DZLIB_USE_STATIC_LIBS=ON -DZLIB_ROOT="$HOME/.local/zlib"  -DHDF5_ENABLE_SZIP_SUPPORT=OFF -DHDF5_BUILD_TOOLS=ON -DHDF5_BUILD_EXAMPLES=OFF -DHDF5_BUILD_TESTS=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_FORTRAN=OFF -DHDF5_ENABLE_PARALLEL=OFF 
+
+	 cmake --build   . --config Release
+	 cmake --install . --config Release
+
+	 Notes: This will try to link with static zlib, if existing. 
+	 Notes: use DZLIB_ROOT or following
+	        	-DCMAKE_INCLUDE_PATH="$HOME/.local/zlib/include"  
+			-DCMAKE_LIBRARY_PATH="$HOME/.local/zlib/lib"
+
+## 🛠️ Build and Install ``fcidecomp``
+
+Once the dependencies are installed, fcidecomp`can be built 
+
+ Get source code zip or tar.gz:
+
+    1) download from https://gitlab.eumetsat.int/open-source/fcidecomp/
+    2) or, wget  https://gitlab.eumetsat.int/open-source/fcidecomp/ ...
+
+   Unpack or clone the source code under a local directory: e.g.  $HOME/fcidecomp-<fcidecomp_tag>
+
+Create build directory:
+
+    mkdir $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
+    cd    $HOME/fcidecomp-<fcidecomp_tag>/src/fcidecomp/build
+
+Build and Install fcidecomp:
+
+	 INSTALL_PREFIX="$HOME/.local/fcidecomp"
+
+	 cmake -S .. -B .  -DCMAKE_BUILD_TYPE=Release   -DBUILD_SHARED_LIBS=OFF   -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX" -DCHARLS_ROOT="$HOME/.local/charls"
+
+
+	 cmake --build   . --config Release
+	 cmake --install . --config Release --prefix "$INSTALL_PREFIX"    # defaults to /usr/local if --prefix/variable omitted
+
+	 When successful, $HOME/.local/fcidecomp/hdf5/lib/plugin (Linux) or $HOME/.local/fcidecomp/hdf5/bin (Windows) contain H5Zjpels plugin.
+
+	 Note: BUILD_SHARED_LIBS=OFF will try to link static libraries charls and zlib. 
+	 Note: Include ZLIB_ROOT, or HDF5_ROOT for specific locations, otherwise cmake will try to find them in default system paths.
+		-DZLIB_ROOT="$HOME/.local/zlib"     			
+		-DHDF5_ROOT="$HOME/.local/hdf5"			
+
+
+Finally, set the environment variable ``HDF5_PLUGIN_PATH`` to the built HDF5 plugin -so that HDF5 and netCDF applications use the plugin. 
+
+ 	Linux:
+
+	 export PATH=$PATH:$HOME/.local/hdf5/bin 				# if hdf5 not installed in system
+	 export LD_LIBRARY_PATH="$HOME/.local/zlib/lib:$LD_LIBRARY_PATH"        # if zlib not installed in system
+	 export HDF5_PLUGIN_PATH=$HOME/.local/fcidecomp/hdf5/lib/plugin/        # replace with $INSTALL_PREFIX if using a different location
+	 
+
+	Windows PowerShell:
+
+	  $env:PATH += "$HOME\.local\hdf5\bin"         				#  if not yet done to a hdf5 installation
+	  $env:PATH += "$HOME\.local\zlib\bin"         				#  if hdf5 uses shared zlib library
+	  $env:HDF5_PLUGIN_PATH = "$HOME\.local\fcidecomp\bin"        
+
+	Windows DOS:
+
+	  set PATH=%PATH%;%USERPROFILE%\.local\hdf5\bin;
+          set PATH=%PATH%;%USERPROFILE%\.local\zlib\bin
+	  set HDF5_PLUGIN_PATH=%USERPROFILE%\.local\fcidecomp\bin
+
+## 🧪 Testing the Installation
+
+Ensure the test data are available (fetch via ``git lfs pull`` if the repository uses LFS) and that ``ncdump`` is installed (e.g. ``apt-get install netcdf-bin`` on Debian/Ubuntu). Then run:
+
+  git lfs pull -I src/fcidecomp/fcidecomp-test/data/sample.nc   # download test NetCDF if stored in LFS
+
+  export HDF5_PLUGIN_PATH=$HOME/.local/fcidecomp/hdf5/lib/plugin/   # or your INSTALL_PREFIX
+  ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
+
+The script runs ``ncdump`` on ``sample.nc`` with the plugin enabled and compares against the reference output. It succeeds if it prints ``*** SUCCESS! ***``.
+
+### Running the post-install test via CTest (optional)
+
+Enable the CTest hook during configure and run ``ctest`` from the build directory. To only run the post-install smoke test (and skip the component/unit tests that compare generated HDF5 files to references), leave ``FCIDECOMP_ENABLE_COMPONENT_TESTS`` at its default ``OFF``:
+
+  cmake -S src/fcidecomp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DFCIDECOMP_ENABLE_POSTINSTALL_TEST=ON -DFCIDECOMP_ENABLE_COMPONENT_TESTS=OFF
+  cmake --build build --config Release
+  ctest --test-dir build --output-on-failure
+
+Notes:
+- The CTest rule sets ``HDF5_PLUGIN_PATH`` to the built plugin directory (``build/fcicomp-H5Zjpegls``). Use ``ctest --output-on-failure`` to see the script output.
+- ``ncdump`` must be on ``PATH`` (install via your package manager, e.g. ``netcdf-bin`` on Debian/Ubuntu).
+- If the repository uses Git LFS, ensure ``git lfs pull -I src/fcidecomp/fcidecomp-test/data/sample.nc`` has been run before ``ctest`` so ``sample.nc`` is present.
