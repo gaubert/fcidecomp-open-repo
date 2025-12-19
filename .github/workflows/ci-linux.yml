@@ -26,8 +26,7 @@ jobs:
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Release \
             -DBUILD_SHARED_LIBS=OFF \
-            -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-            -DCHARLS_ROOT=/usr
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 
       - name: Build
         working-directory: src/fcidecomp
