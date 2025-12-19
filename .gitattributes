@@ -1,3 +1,4 @@
 *.nc filter=lfs diff=lfs merge=lfs -text
+tests/sample-data/MTG/MTGFCIL1/* filter=lfs diff=lfs merge=lfs -text
 tests/sample-data/MTG/MTGFCIL1/body_test.txt filter=lfs diff=lfs merge=lfs -text
 tests/sample-data/MTG/MTGFCIL1/body_res.txt filter=lfs diff=lfs merge=lfs -text
