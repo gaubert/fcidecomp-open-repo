@@ -1,0 +1,62 @@
+name: ci-windows
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Ensure vcpkg root is set
+        shell: pwsh
+        run: |
+          if (-not $Env:VCPKG_ROOT) {
+            if ($Env:VCPKG_INSTALLATION_ROOT) {
+              $Env:VCPKG_ROOT = $Env:VCPKG_INSTALLATION_ROOT
+            } else {
+              $Env:VCPKG_ROOT = 'C:\vcpkg'
+            }
+          }
+          "VCPKG_ROOT=$Env:VCPKG_ROOT" | Out-File -FilePath $Env:GITHUB_ENV -Append
+
+      - name: Install dependencies (vcpkg)
+        shell: pwsh
+        run: |
+          git lfs install
+          & "$Env:VCPKG_ROOT\vcpkg.exe" install `
+            charls:x64-windows `
+            hdf5[cpp,zlib]:x64-windows `
+            netcdf-c[tools]:x64-windows
+
+      - name: Configure
+        shell: bash
+        run: |
+          cmake -S src/fcidecomp -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake \
+            -DVCPKG_TARGET_TRIPLET=x64-windows
+
+      - name: Build
+        shell: bash
+        run: cmake --build build --config Release
+
+      - name: Install
+        shell: bash
+        run: cmake --install build --config Release --prefix "$GITHUB_WORKSPACE/install"
+
+      - name: Post-install test
+        shell: bash
+        env:
+          HDF5_PLUGIN_PATH: "$GITHUB_WORKSPACE/install/hdf5/bin"
+          PATH: "$GITHUB_WORKSPACE/install/hdf5/bin:$GITHUB_WORKSPACE/install/bin:$VCPKG_ROOT/installed/x64-windows/tools/netcdf-c:$PATH"
+        run: |
+          cd src/fcidecomp
+          ./fcidecomp-test/postInstallationTest.sh

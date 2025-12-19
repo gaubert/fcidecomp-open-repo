@@ -1,0 +1,45 @@
+name: ci-linux
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential libhdf5-dev hdf5-tools zlib1g-dev libcharls-dev git-lfs netcdf-bin
+          git lfs install
+
+      - name: Configure
+        working-directory: src/fcidecomp
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+            -DCHARLS_ROOT=/usr
+
+      - name: Build
+        working-directory: src/fcidecomp
+        run: cmake --build build --config Release
+
+      - name: Install
+        working-directory: src/fcidecomp
+        run: cmake --install build --config Release --prefix "$GITHUB_WORKSPACE/install"
+
+      - name: Post-install test
+        env:
+          HDF5_PLUGIN_PATH: ${{ github.workspace }}/install/hdf5/lib/plugin
+        run: |
+          cd src/fcidecomp
+          ./fcidecomp-test/postInstallationTest.sh
