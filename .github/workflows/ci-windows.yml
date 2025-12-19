@@ -31,9 +31,9 @@ jobs:
         run: |
           git lfs install
           & "$Env:VCPKG_ROOT\vcpkg.exe" install `
-            charls:x64-windows `
-            hdf5[cpp,zlib]:x64-windows `
-            netcdf-c[tools]:x64-windows
+            charls:x64-windows-static `
+            hdf5[cpp,zlib]:x64-windows-static `
+            netcdf-c[tools]:x64-windows-static
 
       - name: Configure
         shell: bash
@@ -42,8 +42,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DBUILD_SHARED_LIBS=OFF \
             -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake \
-            -DCHARLS_ROOT=$VCPKG_ROOT/installed/x64-windows \
-            -DVCPKG_TARGET_TRIPLET=x64-windows
+            -DCHARLS_ROOT=$VCPKG_ROOT/installed/x64-windows-static \
+            -DVCPKG_TARGET_TRIPLET=x64-windows-static
 
       - name: Build
         shell: bash
@@ -57,7 +57,7 @@ jobs:
         shell: bash
         env:
           HDF5_PLUGIN_PATH: "$GITHUB_WORKSPACE/install/hdf5/bin"
-          PATH: "$GITHUB_WORKSPACE/install/hdf5/bin:$GITHUB_WORKSPACE/install/bin:$VCPKG_ROOT/installed/x64-windows/tools/netcdf-c:$PATH"
+          PATH: "$GITHUB_WORKSPACE/install/hdf5/bin:$GITHUB_WORKSPACE/install/bin:$VCPKG_ROOT/installed/x64-windows-static/tools/netcdf-c:$PATH"
         run: |
           cd src/fcidecomp
           ./fcidecomp-test/postInstallationTest.sh
