@@ -34,6 +34,7 @@ The plugin is installed to:
 Set environment variables:
 
   export HDF5_PLUGIN_PATH="$HOME/.local/fcidecomp/hdf5/lib/plugin"
+  export DYLD_LIBRARY_PATH="$HOME/.local/fcidecomp/lib:$HOME/.local/fcidecomp/hdf5/lib:$DYLD_LIBRARY_PATH"
 
 ## Test the installation
 

@@ -3,7 +3,7 @@
 This describes the build and install of the **H5ZJPEGLS** HDF5 filter plugin from source code.
 
   - builds the fcidecomp library H5Zjpegls to be used as HDF5 filter plugin
-  - HDF5 filter plugin is built as a shared library, Position Independent Code, conforming to HDF5 filter plugin API
+  - HDF5 filter plugin is built as a shared library (PIC), conforming to HDF5 filter plugin API
   - uses cmake, therefore it is quite generic and should work on most recent Operating Systems
 
 it has been tested in following 64-bit Operating Systems:
@@ -27,14 +27,17 @@ Fcidecomp is built using cmake as a shared libray from C/C++ source code, follow
 	 -Linux: gcc/g++; cmake; make
 	 -Windows: Visual Studio 2022 with "Desktop development with C++" (includes Developer PowerShell, cmake, vcpkg)
 
-See the platform guides above for full setup details.
+For detailed platform instructions, see:
+  - documentation/INSTALL_LINUX.md
+  - documentation/INSTALL_WINDOWS.md
+  - documentation/INSTALL_MACOS.md
 
 ## 📦 Dependencies
 
 Fcidecomp build required dependencies are:  charls, zlib, and hdf5, they can be found as standard packages or can be built and installed from source code:
 
-	-charls is built from source code as shown below. (there are no pre-built packages for all O.S. Also to make sure that charls static library is built and used)  
-	-hdf5 and zlib packages installations are shown below, for the case that they are not yet installed.
+	-charls can be built from source (Linux), or installed via package managers (Windows vcpkg, macOS Homebrew).
+	-hdf5 and zlib can be installed from packages or built from source.
 
 
 ## 🛠️ Install dependencies from packages
@@ -47,7 +50,7 @@ See the platform guides above for package manager steps.
 ## 🛠️ Build and Install dependencies from Source Code
 
 
-Following descriptions work for both Linux and Windows, noting following:
+Following descriptions work for Linux (and other Unix-like systems):
 
 	 -at the time of this build, used versions were charls-2.4.2; zlib-1.3.1; hdf5-1.14.6 (it should work with other recent versions)
 
@@ -151,9 +154,10 @@ Build and Install fcidecomp:
 	 cmake --build   . --config Release
 	 cmake --install . --config Release --prefix "$INSTALL_PREFIX"    # defaults to /usr/local if --prefix/variable omitted
 
-	 When successful, $HOME/.local/fcidecomp/hdf5/lib/plugin (Linux) or $HOME/.local/fcidecomp/hdf5/bin (Windows) contain H5Zjpels plugin.
+	 When successful, $HOME/.local/fcidecomp/hdf5/lib/plugin (Linux/macOS) or $HOME/.local/fcidecomp/hdf5/bin (Windows) contain H5Zjpels plugin.
 
-	 Note: BUILD_SHARED_LIBS=OFF will try to link static libraries charls and zlib. 
+	 Note: BUILD_SHARED_LIBS=OFF will try to link static libraries charls and zlib.
+	 Note: macOS uses BUILD_SHARED_LIBS=ON when linking against Homebrew charls (see documentation/INSTALL_MACOS.md).
 	 Note: Include ZLIB_ROOT, or HDF5_ROOT for specific locations, otherwise cmake will try to find them in default system paths.
 		-DZLIB_ROOT="$HOME/.local/zlib"     			
 		-DHDF5_ROOT="$HOME/.local/hdf5"			

@@ -2,6 +2,10 @@
 
 The ``fcidecomp`` software enables decompression of MTG JPEG-LS netCDF files, it works by acting as a HDF5 filter plugin (H5ZJPEGLS), which allows it to be used directly with standard tools that support HDF5 including:
 
+[![ci-linux](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml/badge.svg?branch=main)](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml)
+[![ci-windows](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml/badge.svg?branch=main)](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml)
+[![ci-macos](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml/badge.svg?branch=main)](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml)
+
 - hdf5 (e.g. h5dump)
 - netCDF-C tools (e.g. nccopy, ncdump) 
 - netCDF-Java tools (e.g. panoply)
