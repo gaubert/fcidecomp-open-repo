@@ -9,7 +9,9 @@ The ``fcidecomp`` software enables decompression of MTG JPEG-LS netCDF files, it
 
 fcidecomp is provided as:
 
-- C/C++ source code to be built and installed as HDF5 filter plugin in various Operating Systems, see the [BUILD.md](./BUILD.md) documentation file.
+- C/C++ source code to be built and installed as HDF5 filter plugin in various Operating Systems, see [BUILD.md](./BUILD.md). Platform-specific guides:
+  - documentation/INSTALL_LINUX.md
+  - documentation/INSTALL_WINDOWS.md
 - already built conda package, to be used directly as HDF5 filter plugin in a conda environment, see the [CONDA.md](CONDA.md) documentation file.
 
 In addition:
@@ -53,4 +55,3 @@ Following versions have been tested with fcidecomp hdf5 filter plugin
 Licenses and copyright information for software dependencies is documented within the ``inventory`` folder.
 
 Files listed under `inventory/items/data_proprietary.ABOUT` are licensed under EUMETSAT Proprietary license.
-

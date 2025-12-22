@@ -14,25 +14,19 @@ it has been tested in following 64-bit Operating Systems:
   - Opensuse Leap 15.04
   - Windows-10/11 
 
-Below, instructions to build on Ubuntu 22.04, AlmaLinux 9.6, and Windows 11.
+Platform-specific install guides:
+  - documentation/INSTALL_LINUX.md
+  - documentation/INSTALL_WINDOWS.md
 
 
 ## 🧰 Prerequisites
 
 Fcidecomp is built using cmake as a shared libray from C/C++ source code, following tools are required:
 
-	 -Linux:   gcc/g++; cmake; make 
+	 -Linux: gcc/g++; cmake; make
+	 -Windows: Visual Studio 2022 with "Desktop development with C++" (includes Developer PowerShell, cmake, vcpkg)
 
-		 Ubuntu:    sudo apt install build-essential; sudo apt install cmake
-		 AlmaLinux: sudo groupinstall "Development Tools"; sudo dnf install cmake
-
-		(e.g. gcc/g++ 11.4.0; cmake 3.15; make 4.3)
-
-	 -Windows: Microsoft Visual Studio Community 2022 Edition, 
-		when installing MSVC include: "Desktop development with C++"  (this includes Dev PowerShell, cmake, vcpkg)
-
-		(e.g. cmake 3.31.6-msvc6, C/C++ 19.44)
-
+See the platform guides above for full setup details.
 
 ## 📦 Dependencies
 
@@ -46,22 +40,7 @@ Fcidecomp build required dependencies are:  charls, zlib, and hdf5, they can be 
 
 If not already installed in the system, zlib-devel and hdf5-devel can be installed from packages. Charls is not found as pre-built package.
 
-	 -Linux:   
-
-		 Ubuntu:    
-			    sudo apt update 
-			    sudo apt install zlib1g-dev
-		            sudo apt install libhdf5-dev hdf5-tools
-
-		 AlmaLinux: sudo dnf install epel-release 
-		            sudo dnf install zlib zlib-devel 
-		            sudo dnf install hdf5 hdf5-devel 
-
-		(e.g. hdf5 1.12; zlib 1.2)
-
-	 -Windows: 
-	 	Download and install hdf5 as MSI package from https://support.hdfgroup.org/downloads/hdf5 (includes devel options).
-		(hdf5 package includes zlib)
+See the platform guides above for package manager steps.
 
 
 ## 🛠️ Build and Install dependencies from Source Code
@@ -70,10 +49,6 @@ If not already installed in the system, zlib-devel and hdf5-devel can be install
 Following descriptions work for both Linux and Windows, noting following:
 
 	 -at the time of this build, used versions were charls-2.4.2; zlib-1.3.1; hdf5-1.14.6 (it should work with other recent versions)
-
-	 -Windows 64-bits cmake uses by default:  -G "Visual Studio 17 2022" -A x64 (not included below as it is default in Windows)
-	 -in Windows, use Developer Powershell to run cmake
-	 -in Windows, note windows pathnames! e.g. "C:\Users\tmp"
 
 ### charls
 
