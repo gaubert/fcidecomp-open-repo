@@ -18,12 +18,12 @@ Install tools:
 Install build and runtime dependencies:
 
   brew update
-  brew install cmake hdf5 zlib netcdf git-lfs
+  brew install cmake hdf5 zlib netcdf git-lfs charls
   git lfs install
 
 ## Build and install fcidecomp
 
-  cmake -S src/fcidecomp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF
+  cmake -S src/fcidecomp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DCHARLS_ROOT="$(brew --prefix charls)"
   cmake --build build --config Release
   cmake --install build --config Release --prefix "$HOME/.local/fcidecomp"
 
