@@ -33,7 +33,7 @@ set -o errexit
 #   
 
 NC_DUMP="ncdump"
-PLUGIN_BASENAME="libH5Zjpegls"
+PLUGIN_BASENAMES=("libH5Zjpegls" "H5Zjpegls")
 
 # Get the path to that script
 SCRIPT_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
@@ -107,9 +107,16 @@ function print_environment {
 function print_plugin_info {
     local plugin_found=0
     local plugin_match
+    local plugin_dir
+    local plugin_base
+    local path_separator=':'
     if [[ -z "${HDF5_PLUGIN_PATH:-}" ]]; then
         echo "Plugin: HDF5_PLUGIN_PATH is not set; plugin discovery may fail."
         return 0
+    fi
+
+    if [[ "${HDF5_PLUGIN_PATH}" == *";"* ]]; then
+        path_separator=';'
     fi
 
     while IFS= read -r plugin_dir; do
@@ -118,23 +125,25 @@ function print_plugin_info {
             echo "Plugin: directory not found: ${plugin_dir}"
             continue
         fi
-        plugin_match=$(find "${plugin_dir}" -maxdepth 1 -type f -name "${PLUGIN_BASENAME}.*" 2>/dev/null | head -n 1 || true)
-        if [[ -n "${plugin_match}" ]]; then
-            echo "Plugin: using ${plugin_match}"
-            plugin_found=1
-            break
-        fi
+        for plugin_base in "${PLUGIN_BASENAMES[@]}"; do
+            plugin_match=$(find "${plugin_dir}" -maxdepth 1 -type f -name "${plugin_base}.*" 2>/dev/null | head -n 1 || true)
+            if [[ -n "${plugin_match}" ]]; then
+                echo "Plugin: using ${plugin_match}"
+                plugin_found=1
+                break
+            fi
+        done
         [[ ${plugin_found} -eq 1 ]] && break
-    done < <(printf '%s\n' "${HDF5_PLUGIN_PATH}" | tr ';:' '\n')
+    done < <(printf '%s\n' "${HDF5_PLUGIN_PATH}" | tr "${path_separator}" '\n')
 
     if [[ ${plugin_found} -eq 0 ]]; then
         echo "Plugin: no match found; contents of HDF5_PLUGIN_PATH:"
-        printf '%s\n' "${HDF5_PLUGIN_PATH}" | tr ';:' '\n' | while IFS= read -r plugin_dir; do
+        printf '%s\n' "${HDF5_PLUGIN_PATH}" | tr "${path_separator}" '\n' | while IFS= read -r plugin_dir; do
             [[ -z "${plugin_dir}" ]] && continue
             echo "  ${plugin_dir}"
             ls -la "${plugin_dir}" 2>/dev/null || true
         done
-        echo "Plugin: ${PLUGIN_BASENAME}.* not found in HDF5_PLUGIN_PATH"
+        echo "Plugin: no ${PLUGIN_BASENAMES[*]}.* found in HDF5_PLUGIN_PATH"
         exit_failure
     fi
 }
