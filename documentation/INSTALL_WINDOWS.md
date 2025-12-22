@@ -1,0 +1,49 @@
+# Install on Windows
+
+This guide covers Windows 10/11 setup for building and testing fcidecomp.
+
+## Prerequisites
+
+- Visual Studio 2022 with "Desktop development with C++"
+- Developer PowerShell for VS (for building)
+- Git + Git LFS
+
+## Dependencies with vcpkg (recommended)
+
+Install vcpkg and dependencies (including ncdump tools):
+
+  git clone https://github.com/microsoft/vcpkg C:\vcpkg
+  C:\vcpkg\bootstrap-vcpkg.bat
+  C:\vcpkg\vcpkg.exe install charls:x64-windows-static hdf5[cpp,zlib]:x64-windows-static netcdf-c[tools]:x64-windows-static
+
+## Build and install fcidecomp
+
+From a Developer PowerShell:
+
+  cmake -S src\fcidecomp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCHARLS_ROOT=C:\vcpkg\installed\x64-windows-static
+  cmake --build build --config Release
+  cmake --install build --config Release --prefix C:\fcidecomp
+
+The plugin is installed to:
+
+  C:\fcidecomp\hdf5\bin
+
+Set environment variables (PowerShell):
+
+  $env:HDF5_PLUGIN_PATH = "C:\fcidecomp\hdf5\bin"
+  $env:PATH = "C:\fcidecomp\hdf5\bin;C:\fcidecomp\bin;C:\vcpkg\installed\x64-windows-static\tools\netcdf-c;$env:PATH"
+
+## Test the installation
+
+Ensure the sample file is present (LFS):
+
+  git lfs pull -I src/fcidecomp/fcidecomp-test/data/sample.nc
+
+Run the post-install test from Git Bash (or a bash shell):
+
+  export HDF5_PLUGIN_PATH="/c/fcidecomp/hdf5/bin"
+  export PATH="/c/fcidecomp/hdf5/bin:/c/fcidecomp/bin:/c/vcpkg/installed/x64-windows-static/tools/netcdf-c:$PATH"
+  cd /c/path/to/fcidecomp
+  ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
+
+It succeeds if it prints "*** SUCCESS! ***".
