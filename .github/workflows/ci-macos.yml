@@ -34,7 +34,19 @@ jobs:
         run: cmake --install build --config Release --prefix "$GITHUB_WORKSPACE/install"
 
       - name: Post-install test
-        env:
-          HDF5_PLUGIN_PATH: ${{ github.workspace }}/install/hdf5/lib/plugin
         run: |
+          echo "Listing install tree:"
+          ls -la "$GITHUB_WORKSPACE/install"
+          echo "Listing HDF5 plugin dir:"
+          ls -la "$GITHUB_WORKSPACE/install/hdf5/lib/plugin" || true
+          echo "Searching for H5Zjpegls plugin:"
+          PLUGIN_PATH="$(find "$GITHUB_WORKSPACE/install" -name "*H5Zjpegls*.dylib" -o -name "*H5Zjpegls*.so" | head -n 1)"
+          if [ -n "$PLUGIN_PATH" ]; then
+            echo "Found plugin: $PLUGIN_PATH"
+            otool -L "$PLUGIN_PATH" || true
+            export HDF5_PLUGIN_PATH="$(dirname "$PLUGIN_PATH")"
+          else
+            export HDF5_PLUGIN_PATH="$GITHUB_WORKSPACE/install/hdf5/lib/plugin"
+          fi
+          export DYLD_LIBRARY_PATH="$GITHUB_WORKSPACE/install/hdf5/lib:$DYLD_LIBRARY_PATH"
           ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
