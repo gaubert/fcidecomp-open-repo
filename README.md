@@ -12,6 +12,7 @@ fcidecomp is provided as:
 - C/C++ source code to be built and installed as HDF5 filter plugin in various Operating Systems, see [BUILD.md](./BUILD.md). Platform-specific guides:
   - [documentation/INSTALL_LINUX.md](./documentation/INSTALL_LINUX.md)
   - [documentation/INSTALL_WINDOWS.md](./documentation/INSTALL_WINDOWS.md)
+  - [documentation/INSTALL_MACOS.md](./documentation/INSTALL_MACOS.md)
 - already built conda package, to be used directly as HDF5 filter plugin in a conda environment, see the [CONDA.md](CONDA.md) documentation file.
 
 In addition:

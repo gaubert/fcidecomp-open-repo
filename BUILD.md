@@ -17,6 +17,7 @@ it has been tested in following 64-bit Operating Systems:
 Platform-specific install guides:
   - documentation/INSTALL_LINUX.md
   - documentation/INSTALL_WINDOWS.md
+  - documentation/INSTALL_MACOS.md
 
 
 ## 🧰 Prerequisites

@@ -59,14 +59,6 @@ jobs:
           VCPKG_ROOT_POSIX="$(cygpath -u "$VCPKG_ROOT")"
           WORKSPACE_POSIX="$(cygpath -u "$GITHUB_WORKSPACE")"
           WORKSPACE_WIN="$(cygpath -w "$GITHUB_WORKSPACE")"
-          echo "Listing install tree:"
-          ls -la "$WORKSPACE_POSIX/install"
-          echo "Listing HDF5 plugin dir (lib/plugin):"
-          ls -la "$WORKSPACE_POSIX/install/hdf5/lib/plugin" || true
-          echo "Listing HDF5 bin dir:"
-          ls -la "$WORKSPACE_POSIX/install/hdf5/bin" || true
-          echo "Plugin DLL search:"
-          find "$WORKSPACE_POSIX/install" -iname "*H5Zjpegls*" -o -iname "*h5zjpegls*"
           export PATH="$WORKSPACE_POSIX/install/hdf5/bin:$WORKSPACE_POSIX/install/bin:$VCPKG_ROOT_POSIX/installed/x64-windows-static/tools/netcdf-c:$PATH"
           export HDF5_PLUGIN_PATH="$WORKSPACE_WIN\\install\\hdf5\\bin;$WORKSPACE_WIN\\install\\hdf5\\lib\\plugin"
           cd "$WORKSPACE_POSIX/src/fcidecomp"

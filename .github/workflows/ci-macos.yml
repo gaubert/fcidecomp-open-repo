@@ -1,0 +1,39 @@
+name: ci-macos
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install deps
+        run: |
+          brew update
+          brew install cmake hdf5 zlib netcdf git-lfs
+          git lfs install
+
+      - name: Configure
+        run: |
+          cmake -S src/fcidecomp -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=OFF
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Install
+        run: cmake --install build --config Release --prefix "$GITHUB_WORKSPACE/install"
+
+      - name: Post-install test
+        env:
+          HDF5_PLUGIN_PATH: ${{ github.workspace }}/install/hdf5/lib/plugin
+        run: |
+          ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
