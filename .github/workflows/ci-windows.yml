@@ -55,9 +55,10 @@ jobs:
 
       - name: Post-install test
         shell: bash
-        env:
-          HDF5_PLUGIN_PATH: "$GITHUB_WORKSPACE/install/hdf5/bin"
-          PATH: "$GITHUB_WORKSPACE/install/hdf5/bin:$GITHUB_WORKSPACE/install/bin:$VCPKG_ROOT/installed/x64-windows-static/tools/netcdf-c:$PATH"
         run: |
-          cd src/fcidecomp
+          VCPKG_ROOT_POSIX="$(cygpath -u "$VCPKG_ROOT")"
+          WORKSPACE_POSIX="$(cygpath -u "$GITHUB_WORKSPACE")"
+          export PATH="$WORKSPACE_POSIX/install/hdf5/bin:$WORKSPACE_POSIX/install/bin:$VCPKG_ROOT_POSIX/installed/x64-windows-static/tools/netcdf-c:$PATH"
+          export HDF5_PLUGIN_PATH="$WORKSPACE_POSIX/install/hdf5/bin"
+          cd "$WORKSPACE_POSIX/src/fcidecomp"
           ./fcidecomp-test/postInstallationTest.sh
