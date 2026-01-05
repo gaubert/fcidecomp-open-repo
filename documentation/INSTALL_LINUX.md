@@ -29,11 +29,13 @@ AlmaLinux:
 
 ## Dependencies from packages
 
-If your distro provides them, zlib and hdf5 can come from packages. CharLS should be built from source to ensure a static library.
+If your distro provides them, install zlib and hdf5 from the package manager (Ubuntu or AlmaLinux). CharLS should be built from source to ensure a static library.
 
 ## Build dependencies from source (CharLS, zlib, hdf5)
 
 CharLS:
+
+Download the source: https://github.com/team-charls/charls/releases/tag/2.4.2
 
   ```mkdir $HOME/charls-2.4.2/build
   cd $HOME/charls-2.4.2/build
@@ -44,6 +46,8 @@ CharLS:
 
 zlib:
 
+Download the source: https://zlib.net/ or https://github.com/madler/zlib/releases
+
   ```mkdir $HOME/zlib-1.3.1/build
   cd $HOME/zlib-1.3.1/build
   cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX="$HOME/.local/zlib"
@@ -52,6 +56,8 @@ zlib:
   ```
 
 hdf5 (optional from source):
+
+Download the source: https://www.hdfgroup.org/downloads/hdf5/
 
   ```mkdir $HOME/hdf5-1.14.6/build
   cd $HOME/hdf5-1.14.6/build

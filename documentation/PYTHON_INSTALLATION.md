@@ -17,14 +17,24 @@ https://satpy.readthedocs.io/en/latest/examples/fci_l1c_natural_color.html
 
 Minimal test:
 
-```python 
-import h5py
+```
+python - <<'PY'
+import netCDF4
 import hdf5plugin  # noqa: F401
 
-f = h5py.File("src/fcidecomp/fcidecomp-test/data/sample.nc", "r")
-print(list(f.keys()))
-print(f["effective_radiance"][0, 0])
-f.close()
+ds = netCDF4.Dataset("src/fcidecomp/fcidecomp-test/data/sample.nc", "r")
+print(list(ds.variables.keys()))
+print(ds.variables["effective_radiance"][0, 0])
+ds.close()
+PY
+```
+
+Optional: Using Conda (not recommended)
+
+If you already use Conda, you can install the Python stack there. This is optional and not the preferred path for FCIDECOMP.
+
+```
+conda install -y -c conda-forge hdf5plugin netcdf4 h5py
 ```
 
 ## Option 2: Build the FCIDECOMP plugin and set `HDF5_PLUGIN_PATH`
