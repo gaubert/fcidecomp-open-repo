@@ -53,12 +53,12 @@ jobs:
         run: |
           dnf install -y dnf-plugins-core epel-release
           dnf config-manager --set-enabled crb
-          dnf install -y git git-lfs gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf netcdf-devel curl
+          dnf install -y git git-lfs gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf netcdf-devel
           git lfs install
 
       - name: Build CharLS
         run: |
-          curl -L -o /tmp/charls-2.4.2.tar.gz https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz
+          curl-minimal -L -o /tmp/charls-2.4.2.tar.gz https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz
           tar -xzf /tmp/charls-2.4.2.tar.gz -C /tmp
           cmake -S /tmp/charls-2.4.2 -B /tmp/charls-2.4.2/build \
             -DCMAKE_BUILD_TYPE=Release \
