@@ -120,6 +120,8 @@ jobs:
 
   conda-ubuntu:
     runs-on: ubuntu-22.04
+    env:
+      CONDA_PKGS_DIRS: ${{ github.workspace }}/.conda_pkgs
 
     steps:
       - name: Checkout
@@ -137,25 +139,26 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/conda_pkgs_dir
-            ~/.conda
-            ~/conda-bld
+            ${{ env.CONDA_PKGS_DIRS }}
+            ${{ github.workspace }}/.conda
+            ${{ github.workspace }}/conda-bld
           key: conda-${{ runner.os }}-${{ hashFiles('conda/**') }}
           restore-keys: |
             conda-${{ runner.os }}-
 
       - name: Configure conda channels
         run: |
+          mkdir -p "$CONDA_PKGS_DIRS" "$GITHUB_WORKSPACE/conda-bld"
           conda config --add channels conda-forge
           conda config --set channel_priority strict
           mamba install -y conda-build
 
       - name: Build conda package
         run: |
-          conda build conda --no-test --croot "$HOME/conda-bld"
+          conda build conda --no-test --croot "$GITHUB_WORKSPACE/conda-bld"
 
       - name: Test conda package
         run: |
-          conda install -y --use-local fcidecomp
+          conda install -y --use-local fcidecomp netcdf4
           export HDF5_PLUGIN_PATH="$CONDA_PREFIX/hdf5/lib/plugin"
           python src/fcidecomp/fcidecomp-test/verify_sample_nc.py
