@@ -5,10 +5,20 @@ on:
   pull_request:
 
 jobs:
-  build:
+  build-ubuntu:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Print runner info
+        run: |
+          uname -a
+          lsb_release -a 2>/dev/null || cat /etc/os-release
+          cmake --version
+          gcc --version
+          g++ --version
+          h5dump -V || true
+          ncdump -V || true
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -49,6 +59,16 @@ jobs:
       image: almalinux:9
 
     steps:
+      - name: Print runner info
+        run: |
+          uname -a
+          cat /etc/os-release
+          cmake --version
+          gcc --version
+          g++ --version
+          h5dump -V || true
+          ncdump -V || true
+
       - name: Install deps
         run: |
           dnf install -y dnf-plugins-core epel-release

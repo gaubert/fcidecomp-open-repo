@@ -8,6 +8,15 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      - name: Print runner info
+        run: |
+          uname -a
+          sw_vers
+          cmake --version
+          clang --version
+          h5dump -V || true
+          ncdump -V || true
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
