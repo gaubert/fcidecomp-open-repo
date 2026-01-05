@@ -53,8 +53,20 @@ jobs:
         run: |
           dnf install -y dnf-plugins-core epel-release
           dnf config-manager --set-enabled crb
-          dnf install -y git git-lfs gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf netcdf-devel
+          dnf install -y git git-lfs gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf netcdf-devel curl
           git lfs install
+
+      - name: Build CharLS
+        run: |
+          curl -L -o /tmp/charls-2.4.2.tar.gz https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz
+          tar -xzf /tmp/charls-2.4.2.tar.gz -C /tmp
+          cmake -S /tmp/charls-2.4.2 -B /tmp/charls-2.4.2/build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+            -DCMAKE_INSTALL_PREFIX=/opt/charls
+          cmake --build /tmp/charls-2.4.2/build --config Release
+          cmake --install /tmp/charls-2.4.2/build --config Release
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -65,7 +77,8 @@ jobs:
         run: |
           cmake -S src/fcidecomp -B build \
             -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_SHARED_LIBS=OFF
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCHARLS_ROOT=/opt/charls
 
       - name: Build
         run: cmake --build build --config Release
