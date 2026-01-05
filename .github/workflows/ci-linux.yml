@@ -117,3 +117,58 @@ jobs:
         env:
           HDF5_PLUGIN_PATH: /opt/fcidecomp/hdf5/lib/plugin
         run: ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
+
+  conda-ubuntu:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Miniforge
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-variant: Mambaforge
+          miniforge-version: latest
+          use-mamba: true
+          auto-update-conda: true
+
+      - name: Configure conda channels
+        run: |
+          conda config --add channels conda-forge
+          conda config --set channel_priority strict
+          conda install -y conda-build
+
+      - name: Build conda package
+        run: |
+          conda build conda
+
+  conda-almalinux:
+    runs-on: ubuntu-latest
+    container:
+      image: almalinux:9
+
+    steps:
+      - name: Install deps
+        run: |
+          dnf install -y dnf-plugins-core epel-release
+          dnf config-manager --set-enabled crb
+          dnf install -y git gcc gcc-c++ make cmake zlib zlib-devel curl-minimal bzip2
+
+      - name: Install micromamba
+        run: |
+          curl -L -o /tmp/micromamba.tar.bz2 https://micro.mamba.pm/api/micromamba/linux-64/latest
+          tar -xjf /tmp/micromamba.tar.bz2 -C /usr/local/bin --strip-components=1 bin/micromamba
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure conda channels
+        run: |
+          micromamba config append channels conda-forge
+          micromamba config set channel_priority strict
+          micromamba create -y -n build conda-build
+
+      - name: Build conda package
+        run: |
+          micromamba run -n build conda build conda
