@@ -57,13 +57,7 @@ jobs:
         env:
           HDF5_PLUGIN_PATH: ${{ github.workspace }}/install/hdf5/lib/plugin
         run: |
-          python3 - <<'PY'
-          import netCDF4
-          ds = netCDF4.Dataset("src/fcidecomp/fcidecomp-test/data/sample.nc", "r")
-          print("variables:", list(ds.variables.keys()))
-          print("effective_radiance[0,0]:", ds.variables["effective_radiance"][0, 0])
-          ds.close()
-          PY
+          python3 src/fcidecomp/fcidecomp-test/verify_sample_nc.py
 
   build-almalinux:
     runs-on: ubuntu-latest
