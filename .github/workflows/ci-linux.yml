@@ -28,7 +28,7 @@ jobs:
           gcc --version
           g++ --version
           h5dump -V || true
-          ncdump -V || true
+          ncdump -version || true
 
       - name: Configure
         working-directory: src/fcidecomp
@@ -74,7 +74,7 @@ jobs:
           gcc --version
           g++ --version
           h5dump -V || true
-          ncdump -V || true
+          ncdump -version || true
 
       - name: Build CharLS
         run: |
