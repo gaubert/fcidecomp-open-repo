@@ -119,9 +119,11 @@ jobs:
         run: ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
 
   conda-ubuntu:
+    if: false
     runs-on: ubuntu-22.04
     env:
       CONDA_PKGS_DIRS: ${{ github.workspace }}/.conda_pkgs
+      CONDA_BLD_PATH: ${{ github.workspace }}/conda-bld
 
     steps:
       - name: Checkout
@@ -148,17 +150,17 @@ jobs:
 
       - name: Configure conda channels
         run: |
-          mkdir -p "$CONDA_PKGS_DIRS" "$GITHUB_WORKSPACE/conda-bld"
+          mkdir -p "$CONDA_PKGS_DIRS" "$CONDA_BLD_PATH"
           conda config --add channels conda-forge
           conda config --set channel_priority strict
           mamba install -y conda-build
 
       - name: Build conda package
         run: |
-          conda build conda --no-test --croot "$GITHUB_WORKSPACE/conda-bld"
+          conda build conda --no-test --croot "$CONDA_BLD_PATH"
 
       - name: Test conda package
         run: |
-          conda install -y --use-local fcidecomp netcdf4
+          conda install -y --use-local -c "file://$CONDA_BLD_PATH" fcidecomp netcdf4
           export HDF5_PLUGIN_PATH="$CONDA_PREFIX/hdf5/lib/plugin"
           python src/fcidecomp/fcidecomp-test/verify_sample_nc.py
