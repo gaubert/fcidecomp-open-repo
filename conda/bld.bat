@@ -25,63 +25,40 @@ setlocal enabledelayedexpansion
 set PATH_TO_DELIVERY=%cd%
 set FCIDECOMP_BUILD_PATH=%PATH_TO_DELIVERY%\build
 if not exist "%FCIDECOMP_BUILD_PATH%" mkdir "%FCIDECOMP_BUILD_PATH%"
-cd %FCIDECOMP_BUILD_PATH%
 
-if "%ARCH%"=="32" (
-    rem Install CharLS
-    cmake -LAH -G "Ninja"                                                     ^
-        -DCMAKE_BUILD_TYPE="Release"                                          ^
-        -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX%                               ^
-        -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX%                                  ^
-        -DOPENCV_BIN_INSTALL_PATH=bin                                         ^
-        -DOPENCV_LIB_INSTALL_PATH=lib                                         ^
-        -DBUILD_SHARED_LIBS=1                                                 ^
-        -DCHARLS_BUILD_TESTS=1                                                ^
-        -DCHARLS_BUILD_SAMPLES=0                                              ^
-        -DCHARLS_INSTALL=1                                                    ^
-        ..
+set CHARLS_VERSION=2.4.2
+set CHARLS_SRC=%FCIDECOMP_BUILD_PATH%\charls-%CHARLS_VERSION%
 
-    cmake --build . --target install --config Release
-    if errorlevel 1 exit 1
-)
-
-rem Build FCIDECMP
-xcopy /E %PATH_TO_DELIVERY%\fcidecomp\* %FCIDECOMP_BUILD_PATH%
-
-rem Build fcicomp-jpegls
-call gen\build.bat fcicomp-jpegls release                                 ^
-    -DCMAKE_BUILD_TYPE="Release"                                          ^
-    -DCMAKE_PREFIX_PATH=%CONDA_PREFIX%;%LIBRARY_PREFIX%                                    ^
-    -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX%                               ^
-    -DCHARLS_ROOT=%CONDA_PREFIX%                                          ^
-    -DCMAKE_INCLUDE_PATH=%SRC_DIR%\src                                    ^
+rem Build static CharLS from source and install to %LIBRARY_PREFIX%
+curl -L -o %FCIDECOMP_BUILD_PATH%\charls-%CHARLS_VERSION%.tar.gz https://github.com/team-charls/charls/archive/refs/tags/%CHARLS_VERSION%.tar.gz
+if errorlevel 1 exit 1
+tar -xzf %FCIDECOMP_BUILD_PATH%\charls-%CHARLS_VERSION%.tar.gz -C %FCIDECOMP_BUILD_PATH%
+if errorlevel 1 exit 1
+cmake -S %CHARLS_SRC% -B %CHARLS_SRC%\build                              ^
+    -DCMAKE_BUILD_TYPE="Release"                                         ^
     -DBUILD_SHARED_LIBS=OFF                                               ^
-    -DCHARLS_BUILT_DLL=1
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON                                 ^
+    -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX%
+if errorlevel 1 exit 1
+cmake --build %CHARLS_SRC%\build --config Release
+if errorlevel 1 exit 1
+cmake --install %CHARLS_SRC%\build --config Release
 if errorlevel 1 exit 1
 
-cd %FCIDECOMP_BUILD_PATH%
-call gen\build.bat fcicomp-jpegls test
-if errorlevel 1 exit 1
-
-cd %FCIDECOMP_BUILD_PATH%
-call gen\install.bat fcicomp-jpegls
-if errorlevel 1 exit 1
-
-rem Build fcicomp-H5Zjpegls
-cd %FCIDECOMP_BUILD_PATH%
-call gen\build.bat fcicomp-H5Zjpegls release                              ^
+rem Build FCIDECOMP with the unified CMake flow
+cmake -S %PATH_TO_DELIVERY%\fcidecomp -B %FCIDECOMP_BUILD_PATH%           ^
+    -DCMAKE_BUILD_TYPE="Release"                                         ^
+    -DBUILD_SHARED_LIBS=OFF                                               ^
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON                                 ^
     -DCMAKE_PREFIX_PATH=%CONDA_PREFIX%;%LIBRARY_PREFIX%                   ^
     -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX%                               ^
-    -DHDF5_USE_STATIC_LIBRARIES=1
+    -DCHARLS_ROOT=%LIBRARY_PREFIX%
 if errorlevel 1 exit 1
 
-:: Fails
-:: cd %FCIDECOMP_BUILD_PATH%
-:: call gen\build.bat fcicomp-H5Zjpegls test
-::if errorlevel 1 exit 1
+cmake --build %FCIDECOMP_BUILD_PATH% --config Release
+if errorlevel 1 exit 1
 
-cd %FCIDECOMP_BUILD_PATH%
-call gen\install.bat fcicomp-H5Zjpegls
+cmake --install %FCIDECOMP_BUILD_PATH% --config Release
 if errorlevel 1 exit 1
 
 cd %FCIDECOMP_BUILD_PATH%

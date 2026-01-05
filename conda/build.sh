@@ -33,24 +33,29 @@ FCIDECOMP_BUILD_PATH=${PATH_TO_DELIVERY}/build
 mkdir -p ${FCIDECOMP_BUILD_PATH}
 cd ${FCIDECOMP_BUILD_PATH}
 
-# Build FCIDECMP
-cp -r ${PATH_TO_DELIVERY}/fcidecomp/* ${FCIDECOMP_BUILD_PATH}
+# Build static CharLS from source and install to $PREFIX
+CHARLS_VERSION=2.4.2
+curl -L -o charls-${CHARLS_VERSION}.tar.gz https://github.com/team-charls/charls/archive/refs/tags/${CHARLS_VERSION}.tar.gz
+tar -xzf charls-${CHARLS_VERSION}.tar.gz
+cmake -S charls-${CHARLS_VERSION} -B charls-${CHARLS_VERSION}/build       \
+    -DCMAKE_BUILD_TYPE=Release                                            \
+    -DBUILD_SHARED_LIBS=OFF                                                \
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON                                  \
+    -DCMAKE_INSTALL_PREFIX="${PREFIX}"
+cmake --build charls-${CHARLS_VERSION}/build --config Release
+cmake --install charls-${CHARLS_VERSION}/build --config Release
 
-## Build fcicomp-jpegls
-./gen/build.sh fcicomp-jpegls release                                     \
-    -DCMAKE_PREFIX_PATH=${CONDA_PREFIX}                                   \
-    -DCMAKE_INSTALL_PREFIX=${PREFIX}                                      \
-    -DCHARLS_ROOT=${PREFIX}
-./gen/build.sh fcicomp-jpegls test
-./gen/install.sh fcicomp-jpegls
-
-## Build fcicomp-H5Zjpegls
-./gen/build.sh fcicomp-H5Zjpegls release                                  \
-    -DCMAKE_PREFIX_PATH="${PREFIX};${CONDA_PREFIX}"                       \
-    -DCMAKE_INSTALL_PREFIX=${PREFIX}
-# Fails (4 out of 7 tests failing)
-# ./gen/build.sh fcicomp-H5Zjpegls test
-./gen/install.sh fcicomp-H5Zjpegls
+# Build FCIDECOMP with the unified CMake flow
+FCIDECOMP_SRC=${PATH_TO_DELIVERY}/fcidecomp
+cmake -S "${FCIDECOMP_SRC}" -B "${FCIDECOMP_BUILD_PATH}"                  \
+    -DCMAKE_BUILD_TYPE=Release                                            \
+    -DBUILD_SHARED_LIBS=OFF                                               \
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON                                  \
+    -DCMAKE_PREFIX_PATH="${PREFIX}"                                       \
+    -DCMAKE_INSTALL_PREFIX="${PREFIX}"                                    \
+    -DCHARLS_ROOT="${PREFIX}"
+cmake --build "${FCIDECOMP_BUILD_PATH}" --config Release
+cmake --install "${FCIDECOMP_BUILD_PATH}" --config Release
 
 
 mkdir -p "${PREFIX}/etc/conda/activate.d"
