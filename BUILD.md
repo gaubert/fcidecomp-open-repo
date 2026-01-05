@@ -8,11 +8,12 @@ This describes the build and install of the **H5ZJPEGLS** HDF5 filter plugin fro
 
 Tested on the following 64-bit operating systems:
 
-  - RockLinux 8
+  - Ubuntu Linux 22.04
   - AlmaLinux 9.6
-  - Ubuntu Linux (20.04; 22.04)
-  - Opensuse Leap 15.04
-  - Windows-10/11 
+  - macOS (latest runner)
+  - Windows 11 (GitHub Actions uses a Windows Server runner)
+
+Other Linux distributions are expected to work but are not tested and are not supported by EUMETSAT; use them at your own risk.
 
 Platform-specific install guides:
   - Linux: [documentation/INSTALL_LINUX.md](./documentation/INSTALL_LINUX.md)
