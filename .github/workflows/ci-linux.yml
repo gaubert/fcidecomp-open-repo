@@ -51,7 +51,9 @@ jobs:
     steps:
       - name: Install deps
         run: |
-          dnf install -y git gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf
+          dnf install -y dnf-plugins-core epel-release
+          dnf config-manager --set-enabled crb
+          dnf install -y git git-lfs gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf netcdf-devel
           git lfs install
 
       - name: Checkout
