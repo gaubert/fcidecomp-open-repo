@@ -27,7 +27,7 @@ jobs:
           cmake --version
           clang --version
           h5dump -V || true
-          ncdump -V || true
+          ncdump -version || true
 
       - name: Configure
         run: |
