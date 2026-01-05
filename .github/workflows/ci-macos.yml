@@ -8,15 +8,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Print runner info
-        run: |
-          uname -a
-          sw_vers
-          cmake --version
-          clang --version
-          h5dump -V || true
-          ncdump -V || true
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -27,6 +18,15 @@ jobs:
           brew update
           brew install cmake hdf5 zlib netcdf git-lfs charls
           git lfs install
+
+      - name: Print runner info
+        run: |
+          uname -a
+          sw_vers
+          cmake --version
+          clang --version
+          h5dump -V || true
+          ncdump -V || true
 
       - name: Configure
         run: |

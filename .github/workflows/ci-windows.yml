@@ -8,13 +8,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Print runner info
-        shell: pwsh
-        run: |
-          Get-ComputerInfo | Select-Object OsName, OsVersion, WindowsVersion
-          cmake --version
-          & "$Env:VCPKG_ROOT\installed\x64-windows-static\tools\netcdf-c\ncdump.exe" --version
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -40,6 +33,13 @@ jobs:
             charls:x64-windows-static `
             hdf5[cpp,zlib]:x64-windows-static `
             netcdf-c[tools]:x64-windows-static
+
+      - name: Print runner info
+        shell: pwsh
+        run: |
+          Get-ComputerInfo | Select-Object OsName, OsVersion, WindowsVersion
+          cmake --version
+          & "$Env:VCPKG_ROOT\installed\x64-windows-static\tools\netcdf-c\ncdump.exe" --version
 
       - name: Configure
         shell: bash
