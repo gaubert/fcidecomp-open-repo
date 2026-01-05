@@ -28,10 +28,12 @@ In addition:
 
 fcidecomp build is quite generic and should work in most Operating Systems, following 64-bit platforms have been successfully tested:
 
-- RockyLinux 8 
-- AlmaLinux 9 
-- Linux Ubuntu (18.04; 20.04 22.04) 
-- Windows (10; 11)
+- Ubuntu Linux 22.04
+- AlmaLinux 9.6
+- macOS X (from 15.7.x)
+- Windows 11
+  
+Other Linux distributions are expected to work but are not tested and are not supported by EUMETSAT; use them at your own risk.
 
 ## Using the ``fcidecomp`` software
 
