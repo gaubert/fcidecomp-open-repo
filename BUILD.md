@@ -37,3 +37,7 @@ For more details on the builds, check the workflow definitions in the repo:
   - [ci-linux.yml](.github/workflows/ci-linux.yml)
   - [ci-windows.yml](.github/workflows/ci-windows.yml)
   - [ci-macos.yml](.github/workflows/ci-macos.yml)
+
+## Built Libraries
+
+Most libraries are built and linked statically (e.g., CharLS and `libfcicomp_jpegls.a`) to avoid runtime dependencies. These static libraries are linked into a single shared object: the HDF5 filter plugin (`libH5Zjpegls.so` / `.dylib` / `.dll`), which is built as a shared library by design as required by the HDF5 plugin mechanism.
