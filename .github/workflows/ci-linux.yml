@@ -53,7 +53,7 @@ jobs:
         run: |
           dnf install -y dnf-plugins-core epel-release
           dnf config-manager --set-enabled crb
-          dnf install -y git git-lfs gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf netcdf-devel
+          dnf install -y git git-lfs gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf netcdf-devel curl-minimal
           git lfs install
 
       - name: Build CharLS
