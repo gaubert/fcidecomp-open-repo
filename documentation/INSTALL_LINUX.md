@@ -100,3 +100,5 @@ Optional CTest hook:
   cmake --build build --config Release
   ctest --test-dir build --output-on-failure
   ```
+
+The CTest hook simply sets the required environment variables (notably `HDF5_PLUGIN_PATH`) and runs `postInstallationTest.sh` for you.

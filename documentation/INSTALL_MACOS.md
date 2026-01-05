@@ -60,3 +60,11 @@ Run the post-install test:
   ```
 
 It succeeds if it prints "*** SUCCESS! ***".
+
+Optional CTest hook (runs the same script):
+
+  cmake -S src/fcidecomp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DCHARLS_ROOT="$(brew --prefix charls)" -DFCIDECOMP_ENABLE_POSTINSTALL_TEST=ON -DFCIDECOMP_ENABLE_COMPONENT_TESTS=OFF
+  cmake --build build --config Release
+  ctest --test-dir build --output-on-failure
+
+The CTest hook simply sets the required environment variables (notably `HDF5_PLUGIN_PATH`) and runs `postInstallationTest.sh` for you.
