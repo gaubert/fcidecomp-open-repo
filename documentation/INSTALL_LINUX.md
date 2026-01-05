@@ -2,7 +2,7 @@
 
 This guide covers Linux setup for building and testing fcidecomp on Ubuntu.
 
-For AlmaLinux, refer to the Linux CI (AlmaLinux container) and the workflow definition:
+For AlmaLinux, refer to the Linux CI (target job build-almalinux) and the workflow definition:
 - [ci-linux actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml)
 - [ci-linux workflow](../.github/workflows/ci-linux.yml)
 
