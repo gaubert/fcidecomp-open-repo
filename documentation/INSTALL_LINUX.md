@@ -10,16 +10,18 @@ This guide covers Linux setup for building and testing fcidecomp.
 
 Ubuntu:
 
-  sudo apt update
+```sudo apt update
   sudo apt install build-essential cmake git-lfs
   sudo apt install zlib1g-dev libhdf5-dev hdf5-tools netcdf-bin
+```
 
 AlmaLinux:
 
-  sudo dnf install epel-release
+```sudo dnf install epel-release
   sudo dnf groupinstall "Development Tools"
   sudo dnf install cmake git-lfs
   sudo dnf install zlib zlib-devel hdf5 hdf5-devel
+```
 
 ## Dependencies from packages
 
