@@ -34,9 +34,9 @@ try:
 except FileNotFoundError:
     version = os.environ.get(
         "CI_COMMIT_TAG", os.popen("git describe --tags --abbrev=0").read()
-        )
+    )
     if version == "":
-        version = "0.0.0+"+os.environ.get("CI_COMMIT_SHORT_SHA")
+        version = "0.0.0+" + os.environ.get("CI_COMMIT_SHORT_SHA", "unknown")
     with open("VERSION", "w") as version_file:
         version_file.write(version)
 
