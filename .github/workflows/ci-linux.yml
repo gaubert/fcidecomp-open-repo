@@ -153,3 +153,9 @@ jobs:
       - name: Build conda package
         run: |
           conda build conda --no-test --croot "$HOME/conda-bld"
+
+      - name: Test conda package
+        run: |
+          conda install -y --use-local fcidecomp
+          export HDF5_PLUGIN_PATH="$CONDA_PREFIX/hdf5/lib/plugin"
+          python src/fcidecomp/fcidecomp-test/verify_sample_nc.py

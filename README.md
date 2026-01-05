@@ -45,6 +45,10 @@ Building fcidecomp from source code requires charls, zlib, and hdf5. See [BUILD.
 
 Running fcidecomp HDF5 filter plugin (H5ZJPEGLS) requires hdf5 with zlib.
 
+## Installing and Using fcidecomp in a Python Environment
+
+Python users can enable FCIDECOMP either via `hdf5plugin` or by building the plugin and setting `HDF5_PLUGIN_PATH`. See [documentation/PYTHON_INSTALLATION.md](./documentation/PYTHON_INSTALLATION.md) for setup and examples.
+
 ## CI Platforms
 
 CI currently runs on:
