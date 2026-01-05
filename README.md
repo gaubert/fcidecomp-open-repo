@@ -75,6 +75,6 @@ Following versions have been tested with fcidecomp hdf5 filter plugin
 
 ## Inventory Notes
 
-Licenses and copyright information for software dependencies is documented within the ``inventory`` folder.
+Licenses and copyright information for software dependencies is documented within the [inventory](./inventory) folder.
 
-Files listed under `inventory/items/data_proprietary.ABOUT` are licensed under EUMETSAT Proprietary license.
+Files listed under [`inventory/items/data_proprietary.ABOUT`](./inventory/items/data_proprietary.ABOUT) are licensed under EUMETSAT Proprietary license.
