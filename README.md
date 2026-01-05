@@ -24,24 +24,6 @@ In addition:
 - by using fcidecomp, the EUMETSAT Data-Tailor provides decompression of MTG JEPG-LS netCDF files. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
 - the python package hdf5plugin (authored by ESRF) also includes fcidecomp decompression https://pypi.org/project/hdf5plugin/
 
-## CI Platforms
-
-CI currently runs on:
-- Ubuntu (ubuntu-latest)
-- AlmaLinux (almalinux:9 container)
-- Windows (windows-latest)
-- macOS (macos-latest)
-
-For the exact tested versions or to look at builds outputs and testing, check the GitHub Actions runs:
-  - [ci-linux actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml) for both Ubuntu and Alma Linux versions.
-  - [ci-windows actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml).
-  - [ci-macos actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml).
-
-For more details on the builds, check the workflow definitions in the repo:
-  - [ci-linux.yml](.github/workflows/ci-linux.yml)
-  - [ci-windows.yml](.github/workflows/ci-windows.yml)
-  - [ci-macos.yml](.github/workflows/ci-macos.yml)
-
 ## Supported Operating Systems 
 
 fcidecomp build is quite generic and should work in most Operating Systems, following 64-bit platforms have been successfully tested:
@@ -60,6 +42,24 @@ See [USAGE.md](./USAGE.md) file.
 Building fcidecomp from source code requires charls, zlib, and hdf5. See [BUILD.md](./BUILD.md). 
 
 Running fcidecomp HDF5 filter plugin (H5ZJPEGLS) requires hdf5 with zlib.
+
+## CI Platforms
+
+CI currently runs on:
+- Ubuntu (ubuntu-latest)
+- AlmaLinux (almalinux:9 container)
+- Windows (windows-latest)
+- macOS (macos-latest)
+
+For the exact tested versions or to look at builds outputs and testing, check the GitHub Actions runs:
+  - [ci-linux actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml) for both Ubuntu and Alma Linux versions.
+  - [ci-windows actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml).
+  - [ci-macos actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml).
+
+For more details on the builds, check the workflow definitions in the repo:
+  - [ci-linux.yml](.github/workflows/ci-linux.yml)
+  - [ci-windows.yml](.github/workflows/ci-windows.yml)
+  - [ci-macos.yml](.github/workflows/ci-macos.yml)
 
 ### Tools versions
 
