@@ -5,6 +5,9 @@ The ``fcidecomp`` software enables decompression of MTG JPEG-LS netCDF files, it
 [![ci-linux](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml/badge.svg?branch=main)](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml)
 [![ci-windows](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml/badge.svg?branch=main)](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml)
 [![ci-macos](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml/badge.svg?branch=main)](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml)
+[![release](https://img.shields.io/github/v/release/gaubert/fcidecomp-open-repo)](https://github.com/gaubert/fcidecomp-open-repo/releases)
+[![issues](https://img.shields.io/github/issues/gaubert/fcidecomp-open-repo)](https://github.com/gaubert/fcidecomp-open-repo/issues)
+[![commit-activity](https://img.shields.io/github/commit-activity/m/gaubert/fcidecomp-open-repo)](https://github.com/gaubert/fcidecomp-open-repo/commits/main)
 
 - hdf5 (e.g. h5dump)
 - netCDF-C tools (e.g. nccopy, ncdump) 
