@@ -25,6 +25,16 @@ jobs:
           }
           "VCPKG_ROOT=$Env:VCPKG_ROOT" | Out-File -FilePath $Env:GITHUB_ENV -Append
 
+      - name: Cache vcpkg artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            C:\vcpkg\installed
+            C:\vcpkg\downloads
+          key: vcpkg-${{ runner.os }}-x64-windows-static-${{ hashFiles('**/conda/**', '**/CMakeLists.txt', '**/vcpkg.json') }}
+          restore-keys: |
+            vcpkg-${{ runner.os }}-x64-windows-static-
+
       - name: Install dependencies (vcpkg)
         shell: pwsh
         run: |
