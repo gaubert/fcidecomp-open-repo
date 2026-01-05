@@ -17,7 +17,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake build-essential libhdf5-dev hdf5-tools zlib1g-dev libcharls-dev git-lfs netcdf-bin
+          sudo apt-get install -y cmake build-essential libhdf5-dev hdf5-tools zlib1g-dev libcharls-dev git-lfs netcdf-bin python3 python3-netcdf4
           git lfs install
 
       - name: Print runner info
@@ -52,6 +52,18 @@ jobs:
         run: |
           cd src/fcidecomp
           ./fcidecomp-test/postInstallationTest.sh
+
+      - name: Python netCDF4 test
+        env:
+          HDF5_PLUGIN_PATH: ${{ github.workspace }}/install/hdf5/lib/plugin
+        run: |
+          python3 - <<'PY'
+          import netCDF4
+          ds = netCDF4.Dataset("src/fcidecomp/fcidecomp-test/data/sample.nc", "r")
+          print("variables:", list(ds.variables.keys()))
+          print("effective_radiance[0,0]:", ds.variables["effective_radiance"][0, 0])
+          ds.close()
+          PY
 
   build-almalinux:
     runs-on: ubuntu-latest
