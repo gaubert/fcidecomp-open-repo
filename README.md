@@ -17,12 +17,10 @@ fcidecomp is provided as:
   - [documentation/INSTALL_LINUX.md](./documentation/INSTALL_LINUX.md)
   - [documentation/INSTALL_WINDOWS.md](./documentation/INSTALL_WINDOWS.md)
   - [documentation/INSTALL_MACOS.md](./documentation/INSTALL_MACOS.md)
-- already built conda package, to be used directly as HDF5 filter plugin in a conda environment, see the [CONDA.md](CONDA.md) documentation file.
 
 In addition:
 
 - by using fcidecomp, the EUMETSAT Data-Tailor provides decompression of MTG JEPG-LS netCDF files. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
-- the python package hdf5plugin (authored by ESRF) also includes fcidecomp decompression https://pypi.org/project/hdf5plugin/
 
 ## Supported Operating Systems 
 
