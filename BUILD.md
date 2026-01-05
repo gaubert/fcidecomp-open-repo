@@ -10,8 +10,8 @@ Tested on the following 64-bit operating systems:
 
   - Ubuntu Linux 22.04
   - AlmaLinux 9.6
-  - macOS (latest runner)
-  - Windows 11 (GitHub Actions uses a Windows Server runner)
+  - macOS X (from 15.7.x)
+  - Windows 11
 
 Other Linux distributions are expected to work but are not tested and are not supported by EUMETSAT; use them at your own risk.
 
