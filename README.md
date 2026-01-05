@@ -24,6 +24,24 @@ In addition:
 - by using fcidecomp, the EUMETSAT Data-Tailor provides decompression of MTG JEPG-LS netCDF files. See [public GitLab repository](<https://gitlab.eumetsat.int/open-source>)
 - the python package hdf5plugin (authored by ESRF) also includes fcidecomp decompression https://pypi.org/project/hdf5plugin/
 
+## CI Platforms
+
+CI currently runs on:
+- Ubuntu (ubuntu-latest)
+- AlmaLinux (almalinux:9 container)
+- Windows (windows-latest)
+- macOS (macos-latest)
+
+For the exact tested versions, check the GitHub Actions runs:
+  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml
+  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml
+  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml
+
+Workflow definitions in the repo:
+  - .github/workflows/ci-linux.yml
+  - .github/workflows/ci-windows.yml
+  - .github/workflows/ci-macos.yml
+
 ## Supported Operating Systems 
 
 fcidecomp build is quite generic and should work in most Operating Systems, following 64-bit platforms have been successfully tested:

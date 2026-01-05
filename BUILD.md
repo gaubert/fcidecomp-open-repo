@@ -15,9 +15,25 @@ it has been tested in following 64-bit Operating Systems:
   - Windows-10/11 
 
 Platform-specific install guides:
-  - documentation/INSTALL_LINUX.md
-  - documentation/INSTALL_WINDOWS.md
-  - documentation/INSTALL_MACOS.md
+  - [documentation/INSTALL_LINUX.md](./documentation/INSTALL_LINUX.md)
+  - [documentation/INSTALL_WINDOWS.md](./documentation/INSTALL_WINDOWS.md)
+  - [documentation/INSTALL_MACOS.md](./documentation/INSTALL_MACOS.md)
+
+CI is exercised on:
+  - Ubuntu (ubuntu-latest)
+  - AlmaLinux (almalinux:9 container)
+  - Windows (windows-latest)
+  - macOS (macos-latest)
+
+For the exact tested versions, check the GitHub Actions runs:
+  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml
+  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml
+  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml
+
+Workflow definitions in the repo:
+  - .github/workflows/ci-linux.yml
+  - .github/workflows/ci-windows.yml
+  - .github/workflows/ci-macos.yml
 
 
 ## 🧰 Prerequisites
@@ -28,9 +44,9 @@ Fcidecomp is built using cmake as a shared libray from C/C++ source code, follow
 	 -Windows: Visual Studio 2022 with "Desktop development with C++" (includes Developer PowerShell, cmake, vcpkg)
 
 For detailed platform instructions, see:
-  - documentation/INSTALL_LINUX.md
-  - documentation/INSTALL_WINDOWS.md
-  - documentation/INSTALL_MACOS.md
+  - [documentation/INSTALL_LINUX.md](./documentation/INSTALL_LINUX.md)
+  - [documentation/INSTALL_WINDOWS.md](./documentation/INSTALL_WINDOWS.md)
+  - [documentation/INSTALL_MACOS.md](./documentation/INSTALL_MACOS.md)
 
 ## 📦 Dependencies
 
