@@ -58,8 +58,7 @@ jobs:
 
       - name: Build CharLS
         run: |
-          CURL_BIN="$(command -v curl-minimal || command -v curl)"
-          "$CURL_BIN" -L -o /tmp/charls-2.4.2.tar.gz https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz
+          curl -L -o /tmp/charls-2.4.2.tar.gz https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz
           tar -xzf /tmp/charls-2.4.2.tar.gz -C /tmp
           cmake -S /tmp/charls-2.4.2 -B /tmp/charls-2.4.2/build \
             -DCMAKE_BUILD_TYPE=Release \
@@ -79,6 +78,7 @@ jobs:
           cmake -S src/fcidecomp -B build \
             -DCMAKE_BUILD_TYPE=Release \
             -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
             -DCHARLS_ROOT=/opt/charls
 
       - name: Build
