@@ -51,6 +51,7 @@ jobs:
           Get-ComputerInfo | Select-Object OsName, OsVersion, WindowsVersion
           cmake --version
           & "$Env:VCPKG_ROOT\installed\x64-windows-static\tools\netcdf-c\ncdump.exe" --version
+          $global:LASTEXITCODE = 0
 
       - name: Configure
         shell: bash
