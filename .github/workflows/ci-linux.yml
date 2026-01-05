@@ -133,12 +133,23 @@ jobs:
           use-mamba: true
           auto-update-conda: true
 
+      - name: Cache conda packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/conda_pkgs_dir
+            ~/.conda
+            ~/conda-bld
+          key: conda-${{ runner.os }}-${{ hashFiles('conda/**') }}
+          restore-keys: |
+            conda-${{ runner.os }}-
+
       - name: Configure conda channels
         run: |
           conda config --add channels conda-forge
           conda config --set channel_priority strict
-          conda install -y conda-build
+          mamba install -y conda-build
 
       - name: Build conda package
         run: |
-          conda build conda
+          conda build conda --no-test --croot "$HOME/conda-bld"
