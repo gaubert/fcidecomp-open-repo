@@ -6,7 +6,7 @@ This describes the build and install of the **H5ZJPEGLS** HDF5 filter plugin fro
   - HDF5 filter plugin is built as a shared library (PIC), conforming to HDF5 filter plugin API
   - uses cmake, therefore it is quite generic and should work on most recent Operating Systems
 
-it has been tested in following 64-bit Operating Systems:
+Tested on the following 64-bit operating systems:
 
   - RockLinux 8
   - AlmaLinux 9.6
@@ -15,9 +15,11 @@ it has been tested in following 64-bit Operating Systems:
   - Windows-10/11 
 
 Platform-specific install guides:
-  - [documentation/INSTALL_LINUX.md](./documentation/INSTALL_LINUX.md)
-  - [documentation/INSTALL_WINDOWS.md](./documentation/INSTALL_WINDOWS.md)
-  - [documentation/INSTALL_MACOS.md](./documentation/INSTALL_MACOS.md)
+  - Linux: [documentation/INSTALL_LINUX.md](./documentation/INSTALL_LINUX.md)
+  - Windows: [documentation/INSTALL_WINDOWS.md](./documentation/INSTALL_WINDOWS.md)
+  - macOS: [documentation/INSTALL_MACOS.md](./documentation/INSTALL_MACOS.md)
+
+These guides include the full build, install, and test steps for each platform.
 
 CI is exercised on:
   - Ubuntu (ubuntu-latest)
@@ -25,7 +27,7 @@ CI is exercised on:
   - Windows (windows-latest)
   - macOS (macos-latest)
 
-For the exact tested versions or to look at builds outputs and testing, check the GitHub Actions runs:
+For the exact tested versions and build/test outputs, check the GitHub Actions runs:
   - [ci-linux actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml) for both Ubuntu and Alma Linux versions.
   - [ci-windows actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml).
   - [ci-macos actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml).
@@ -34,4 +36,3 @@ For more details on the builds, check the workflow definitions in the repo:
   - [ci-linux.yml](.github/workflows/ci-linux.yml)
   - [ci-windows.yml](.github/workflows/ci-windows.yml)
   - [ci-macos.yml](.github/workflows/ci-macos.yml)
-
