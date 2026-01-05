@@ -59,18 +59,24 @@ It succeeds if it prints "*** SUCCESS! ***".
 
 You can also run it via Git Bash directly from the Git installation:
 
+```
   "C:\Program Files\Git\bin\bash.exe" --noprofile --norc -e -o pipefail -lc "cd /c/path/to/fcidecomp && export HDF5_PLUGIN_PATH=/c/fcidecomp/hdf5/bin && export PATH=/c/fcidecomp/hdf5/bin:/c/fcidecomp/bin:/c/vcpkg/installed/x64-windows-static/tools/netcdf-c:$PATH && ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh"
+```
 
 Alternative (native CMD/PowerShell) test script:
 
+```
   set HDF5_PLUGIN_PATH=C:\fcidecomp\hdf5\lib\plugin
   set PATH=C:\fcidecomp\hdf5\bin;C:\fcidecomp\bin;C:\vcpkg\installed\x64-windows-static\tools\netcdf-c;%PATH%
   src\fcidecomp\fcidecomp-test\postInstallationTest.bat
+```
 
 Optional CTest hook (runs the same script):
 
+```
   cmake -S src\fcidecomp -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DFCIDECOMP_ENABLE_POSTINSTALL_TEST=ON -DFCIDECOMP_ENABLE_COMPONENT_TESTS=OFF
   cmake --build build --config Release
   ctest --test-dir build --output-on-failure
+```
 
 The CTest hook simply sets the required environment variables (notably `HDF5_PLUGIN_PATH`) and runs `postInstallationTest.sh` for you.
