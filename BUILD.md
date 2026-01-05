@@ -25,15 +25,15 @@ CI is exercised on:
   - Windows (windows-latest)
   - macOS (macos-latest)
 
-For the exact tested versions, check the GitHub Actions runs:
-  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml
-  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml
-  - https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml
+For the exact tested versions or to look at builds outputs and testing, check the GitHub Actions runs:
+  - [ci-linux actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-linux.yml) for both Ubuntu and Alma Linux versions.
+  - [ci-windows actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-windows.yml).
+  - [ci-macos actions](https://github.com/gaubert/fcidecomp-open-repo/actions/workflows/ci-macos.yml).
 
-Workflow definitions in the repo:
-  - .github/workflows/ci-linux.yml
-  - .github/workflows/ci-windows.yml
-  - .github/workflows/ci-macos.yml
+For more details on the builds, check the workflow definitions in the repo:
+  - [ci-linux.yml](.github/workflows/ci-linux.yml)
+  - [ci-windows.yml](.github/workflows/ci-windows.yml)
+  - [ci-macos.yml](.github/workflows/ci-macos.yml)
 
 
 ## 🧰 Prerequisites
