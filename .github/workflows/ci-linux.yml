@@ -42,3 +42,36 @@ jobs:
         run: |
           cd src/fcidecomp
           ./fcidecomp-test/postInstallationTest.sh
+
+  build-almalinux:
+    runs-on: ubuntu-latest
+    container:
+      image: almalinux:9
+
+    steps:
+      - name: Install deps
+        run: |
+          dnf install -y git gcc gcc-c++ make cmake zlib zlib-devel hdf5 hdf5-devel netcdf
+          git lfs install
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Configure
+        run: |
+          cmake -S src/fcidecomp -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=OFF
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Install
+        run: cmake --install build --config Release --prefix /opt/fcidecomp
+
+      - name: Post-install test
+        env:
+          HDF5_PLUGIN_PATH: /opt/fcidecomp/hdf5/lib/plugin
+        run: ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
