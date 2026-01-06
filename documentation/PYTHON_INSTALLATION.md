@@ -66,7 +66,10 @@ Example:
 
 ```bash
 conda activate <your-env>
-python - <<'PY'
+python
+```
+
+```python
 import netCDF4
 import hdf5plugin  # noqa: F401
 
@@ -74,5 +77,4 @@ ds = netCDF4.Dataset("src/fcidecomp/fcidecomp-test/data/sample.nc", "r")
 print(list(ds.variables.keys()))
 print(ds.variables["effective_radiance"][0, 0])
 ds.close()
-PY
 ```
