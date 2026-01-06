@@ -100,12 +100,19 @@ where fcidecomp_ex.py is:
 
 ### Use with Conda: `h5py`-based Python libraries.
 
-Once the `fcidecomp` Conda package is installed and the Conda environment in which it is installed is activated (see CONDA.md),
-use of the ``fcidecomp`` decompression libraries should be automatically enabled for `h5py`-based Python libraries.
+Once the `hdf5plugin` Conda package is installed, use of the ``fcidecomp`` decompression libraries should be automatically enabled for `h5py`-based Python libraries.
 
-To ensure the ``fcidecomp`` filter is loaded, in a Python shell execute:
+```python
+import netCDF4
+import hdf5plugin  # noqa: F401
 
-    import fcidecomp
-    
+ds = netCDF4.Dataset("src/fcidecomp/fcidecomp-test/data/sample.nc", "r")
+print(list(ds.variables.keys()))
+print(ds.variables["effective_radiance"][0, 0])
+ds.close()
+```
+
 Now every `h5py`-based Python library, such as `xarray`, will be able to open and read JPEG-LS compressed files without 
 further steps.
+
+For more information on the Python installation, please refer to [documentation/PYTHON_INSTALLATION.md](./documentation/PYTHON_INSTALLATION.md).
