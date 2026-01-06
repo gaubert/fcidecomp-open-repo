@@ -35,7 +35,7 @@ If your distro provides them, install zlib and hdf5 from the package manager (Ub
 
 CharLS:
 
-Download the source: https://github.com/team-charls/charls/releases/tag/2.4.2
+Download the source: https://github.com/team-charls/charls/releases
 
   ```mkdir $HOME/charls-2.4.2/build
   cd $HOME/charls-2.4.2/build
