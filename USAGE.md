@@ -8,7 +8,10 @@ Once built and installed, the ``fcidecomp`` library, HDF5 filter plugin H5ZJPEGL
 - make sure netCDF tools are installed
 - set ``HDF5_PLUGIN_PATH`` environment to the directory containing the plugin. (see `BUILD` file).
 
-Note that the fcidecomp conda environment (see `CONDA` file) already contains netCDF tools and the plugin configuration.
+For example:
+```bash
+export HDF5_PLUGIN_PATH="HOME/.local/fcidecomp/hdf5/lib/plugin"
+```
 
 #### Example with ``nccopy``
 
