@@ -17,8 +17,7 @@ https://satpy.readthedocs.io/en/latest/examples/fci_l1c_natural_color.html
 
 Minimal test:
 
-```
-python - <<'PY'
+```python
 import netCDF4
 import hdf5plugin  # noqa: F401
 
@@ -26,26 +25,17 @@ ds = netCDF4.Dataset("src/fcidecomp/fcidecomp-test/data/sample.nc", "r")
 print(list(ds.variables.keys()))
 print(ds.variables["effective_radiance"][0, 0])
 ds.close()
-PY
-```
-
-Optional: Using Conda (not recommended)
-
-If you already use Conda, you can install the Python stack there. This is optional and not the preferred path for FCIDECOMP.
-
-```
-conda install -y -c conda-forge hdf5plugin netcdf4 h5py
 ```
 
 ## Option 2: Build the FCIDECOMP plugin and set `HDF5_PLUGIN_PATH`
 
 Build the plugin from source (see the platform install guides). Then set the plugin path and use Python.
 
-Example:
+Example in shell/python:
 
 ```bash
-$> export HDF5_PLUGIN_PATH="$HOME/.local/fcidecomp/hdf5/lib/plugin"
-$> python
+export HDF5_PLUGIN_PATH="$HOME/.local/fcidecomp/hdf5/lib/plugin"
+python
 ```
 
 ```python
@@ -62,4 +52,19 @@ You can also run the packaged validator script:
 ```bash
 $> export HDF5_PLUGIN_PATH="$HOME/.local/fcidecomp/hdf5/lib/plugin"
 $> python src/fcidecomp/fcidecomp-test/verify_sample_nc.py
+```
+
+## Option 3: Use fcidecomp with Conda
+
+Install the Python stack in Conda and use the FCIDECOMP plugin as in Option 2:
+
+```bash
+conda install -y -c conda-forge hdf5plugin netcdf4 h5py
+```
+
+Then export the plugin path and run your Python code:
+
+```bash
+export HDF5_PLUGIN_PATH="$HOME/.local/fcidecomp/hdf5/lib/plugin"
+python src/fcidecomp/fcidecomp-test/verify_sample_nc.py
 ```
