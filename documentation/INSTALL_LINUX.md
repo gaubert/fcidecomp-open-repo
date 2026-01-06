@@ -44,7 +44,7 @@ Download the source: https://github.com/team-charls/charls/releases
   cmake --install . --config Release
   ```
 
-zlib:
+zlib (optional from source):
 
 Download the source: https://zlib.net/ or https://github.com/madler/zlib/releases
 
