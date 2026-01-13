@@ -5,8 +5,10 @@ This guide covers Windows 10/11 setup for building and testing fcidecomp.
 ## Prerequisites
 
 - Visual Studio 2022 with "Desktop development with C++"
+- CMake 3.20+ (the CI uses 3.31.x)
 - Developer PowerShell for VS (for building)
-- Git + Git LFS
+- Git for Windows + Git LFS (Git provides `bash.exe` for the test script)
+- vcpkg (for charls, hdf5, netcdf-c)
 
 ## Dependencies with vcpkg (recommended)
 
