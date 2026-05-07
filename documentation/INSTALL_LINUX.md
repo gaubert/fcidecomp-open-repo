@@ -93,7 +93,7 @@ Set environment variables:
 Ensure the sample file is present (LFS):
 
   ```
-  git lfs pull -I src/fcidecomp/fcidecomp-test/data/sample.nc
+  git lfs pull -I src/fcidecomp/fcidecomp-test/data/W_XX-EUMETSAT-Darmstadt,IMG+SAT,MTI1+FCI-1C-RRAD-HRFI-FD--CHK-BODY--DIS-NC4E_C_EUMT_20260507092518_IDPFI_OPE_20260507092052_20260507092132_N_JLS_O_0057_0007.nc
   ```
 
 Run the post-install test:

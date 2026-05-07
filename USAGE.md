@@ -109,9 +109,10 @@ Once the `hdf5plugin` Conda package is installed, use of the ``fcidecomp`` decom
 import netCDF4
 import hdf5plugin  # noqa: F401
 
-ds = netCDF4.Dataset("src/fcidecomp/fcidecomp-test/data/sample.nc", "r")
-print(list(ds.variables.keys()))
-print(ds.variables["effective_radiance"][0, 0])
+ds = netCDF4.Dataset("src/fcidecomp/fcidecomp-test/data/W_XX-EUMETSAT-Darmstadt,IMG+SAT,MTI1+FCI-1C-RRAD-HRFI-FD--CHK-BODY--DIS-NC4E_C_EUMT_20260507092518_IDPFI_OPE_20260507092052_20260507092132_N_JLS_O_0057_0007.nc", "r")
+measured = ds.groups["data"].groups["vis_06_hr"].groups["measured"]
+print(list(measured.variables.keys()))
+print(measured.variables["effective_radiance"][250, 10000])
 ds.close()
 ```
 

@@ -62,7 +62,7 @@ fcicomp-jpegls/test/src/jpegls_decompress_nominal.c
 fcicomp-jpegls/test/src/jpegls_read_header_error_case.c
 fcicomp-jpegls/test/src/jpegls_test.c
 fcicomp-jpegls/Version.cmake
-fcidecomp-test/data/sample.nc
+fcidecomp-test/data/W_XX-EUMETSAT-Darmstadt,IMG+SAT,MTI1+FCI-1C-RRAD-HRFI-FD--CHK-BODY--DIS-NC4E_C_EUMT_20260507092518_IDPFI_OPE_20260507092052_20260507092132_N_JLS_O_0057_0007.nc
 fcidecomp-test/data/sample_ref.txt
 fcidecomp-test/postInstallationTest.sh
 gen/build.sh

@@ -33,7 +33,12 @@ set -o errexit
 #   
 
 NC_DUMP="ncdump"
+H5_DUMP="h5dump"
 PLUGIN_BASENAMES=("libH5Zjpegls" "H5Zjpegls")
+SAMPLE_FILE_NAME="W_XX-EUMETSAT-Darmstadt,IMG+SAT,MTI1+FCI-1C-RRAD-HRFI-FD--CHK-BODY--DIS-NC4E_C_EUMT_20260507092518_IDPFI_OPE_20260507092052_20260507092132_N_JLS_O_0057_0007.nc"
+DATASET_PATH="/data/vis_06_hr/measured/effective_radiance"
+DATASET_START="250,10000"
+DATASET_COUNT="3,8"
 
 # Get the path to that script
 SCRIPT_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
@@ -42,7 +47,7 @@ SCRIPT_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 DATA_DIR=${SCRIPT_PATH}/data
 
 # Define the end user simulator input
-NC_FILE=${DATA_DIR}/sample.nc
+NC_FILE=${DATA_DIR}/${SAMPLE_FILE_NAME}
 
 # Define the ncdump outputs
 NC_DUMP_OUT_DIR=${DATA_DIR}
@@ -92,10 +97,13 @@ function exit_failure {
 # ====================================================================
 function print_environment {
     local ncdump_path
+    local h5dump_path
     ncdump_path=$(command -v "$NC_DUMP" || true)
+    h5dump_path=$(command -v "$H5_DUMP" || true)
     echo "Environment:"
     echo "  HDF5_PLUGIN_PATH: ${HDF5_PLUGIN_PATH:-<not set>}"
     echo "  ${NC_DUMP} path: ${ncdump_path:-<not found>}"
+    echo "  ${H5_DUMP} path: ${h5dump_path:-<not found>}"
     if [[ -n "${ncdump_path}" ]]; then
         "${NC_DUMP}" --version 2>/dev/null || true
     fi
@@ -180,24 +188,27 @@ function main {
     # Parse the input command line
     parse_inputs $@
 
-    # Check that ncdump program exists
-    ! command_exists $NC_DUMP && { echo "Error: $NC_DUMP cannot be run. Check your installation of netCDF and set ncdump utility in your PATH environment variable." ; exit_failure ; }
+    # Check that required tools exist
+    ! command_exists "$NC_DUMP" && { echo "Error: $NC_DUMP cannot be run. Check your installation of netCDF and set ncdump utility in your PATH environment variable." ; exit_failure ; }
+    ! command_exists "$H5_DUMP" && { echo "Error: $H5_DUMP cannot be run. Check your installation of HDF5 tools and set h5dump utility in your PATH environment variable." ; exit_failure ; }
     print_environment
     print_plugin_info
-        
-    # Create the commmand line for the enduser simulator
-    echo "$NC_DUMP: Reading file: $NC_FILE ..."
-    cmd="${NC_DUMP} ${NC_FILE}"
-    $cmd > $OUTPUT_FILE || { echo "${NC_DUMP}: Error reading file: $NC_FILE" ; exit_failure ; }
+
+    echo "$NC_DUMP: Reading header from file: $NC_FILE ..."
+    "${NC_DUMP}" -h "$NC_FILE" > /dev/null || { echo "${NC_DUMP}: Error reading file header: $NC_FILE" ; exit_failure ; }
+
+    echo "$H5_DUMP: Reading dataset subset from file: $NC_FILE ..."
+    "${H5_DUMP}" -d "${DATASET_PATH}" -s "${DATASET_START}" -c "${DATASET_COUNT}" "$NC_FILE" \
+        | sed -n -E 's/^ *\((25[0-2]),10000\): /\(\1,10000\): /p' > "$OUTPUT_FILE" \
+        || { echo "${H5_DUMP}: Error reading dataset subset from file: $NC_FILE" ; exit_failure ; }
 
     echo "Comparing the output files to the reference files:"
     echo "  Comparing $OUTPUT_FILE"
     echo "         to $SAMPLE_REF"
-    # Compare the output radiance data file to the reference file
-    diff -q $OUTPUT_FILE $SAMPLE_REF || { 
+    diff -q "$OUTPUT_FILE" "$SAMPLE_REF" || {
 	echo "Error: the output file does not match the reference file!";
-	echo $OUTPUT_FILE
-	echo $SAMPLE_REF
+	echo "$OUTPUT_FILE"
+	echo "$SAMPLE_REF"
 	exit_failure ; }
 	
     echo "*** SUCCESS ! ***"

@@ -12,7 +12,7 @@ fcicomp-jpegls/include/fcicomp_jpegls_messages.h
 fcicomp-jpegls/src/fcicomp_jpegls.c
 fcicomp-jpegls/test/src/jpegls_test.c
 fcicomp-jpegls/Version.cmake
-fcidecomp-test/data/sample.nc
+fcidecomp-test/data/W_XX-EUMETSAT-Darmstadt,IMG+SAT,MTI1+FCI-1C-RRAD-HRFI-FD--CHK-BODY--DIS-NC4E_C_EUMT_20260507092518_IDPFI_OPE_20260507092052_20260507092132_N_JLS_O_0057_0007.nc
 gen/Version.txt
 SCF_fcidecomp/add-files.txt
 SCF_fcidecomp/all-files.txt
