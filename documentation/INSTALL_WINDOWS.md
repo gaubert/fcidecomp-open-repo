@@ -12,7 +12,7 @@ This guide covers Windows 10/11 setup for building and testing fcidecomp. In Git
 
 ## Dependencies with vcpkg (recommended)
 
-Install vcpkg and dependencies (including ncdump tools), (during the installation, first change the directory to C: (in mingw64));
+Install `vcpkg` and dependencies, including the `ncdump` and `h5dump` tools, from a Developer PowerShell or CMD session:
 
   ```
   git clone https://github.com/microsoft/vcpkg C:\vcpkg
