@@ -18,6 +18,7 @@ Makefile
 # local build artifacts
 dependencies/
 install/
+/.local/
 src/fcidecomp/charls-2.4.2.tar.gz
 src/fcidecomp/fcidecomp-test/data/sample.txt
 
