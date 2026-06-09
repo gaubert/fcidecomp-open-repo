@@ -77,7 +77,7 @@ jobs:
           VCPKG_ROOT_POSIX="$(cygpath -u "$VCPKG_ROOT")"
           WORKSPACE_POSIX="$(cygpath -u "$GITHUB_WORKSPACE")"
           WORKSPACE_WIN="$(cygpath -w "$GITHUB_WORKSPACE")"
-          export PATH="$WORKSPACE_POSIX/install/hdf5/bin:$WORKSPACE_POSIX/install/bin:$VCPKG_ROOT_POSIX/installed/x64-windows-static/tools/netcdf-c:$PATH"
-          export HDF5_PLUGIN_PATH="$WORKSPACE_WIN\\install\\hdf5\\bin;$WORKSPACE_WIN\\install\\hdf5\\lib\\plugin"
+          export PATH="$WORKSPACE_POSIX/install/bin:$WORKSPACE_POSIX/install/hdf5/lib/plugin:$VCPKG_ROOT_POSIX/installed/x64-windows-static/tools/netcdf-c:$VCPKG_ROOT_POSIX/installed/x64-windows-static/tools/hdf5:$VCPKG_ROOT_POSIX/installed/x64-windows-static/tools/hdf5/bin:$PATH"
+          export HDF5_PLUGIN_PATH="$WORKSPACE_WIN\\install\\hdf5\\lib\\plugin"
           cd "$WORKSPACE_POSIX/src/fcidecomp"
           ./fcidecomp-test/postInstallationTest.sh

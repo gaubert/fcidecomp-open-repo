@@ -42,8 +42,8 @@ The plugin is installed to:
 Set environment variables (PowerShell):
   
   ```
-  $env:HDF5_PLUGIN_PATH = "C:\fcidecomp\hdf5\bin"
-  $env:PATH = "C:\fcidecomp\hdf5\lib\plugin;C:\fcidecomp\lib;C:\vcpkg\installed\x64-windows-static\tools\netcdf-c;$env:PATH"
+  $env:HDF5_PLUGIN_PATH = "C:\fcidecomp\hdf5\lib\plugin"
+  $env:PATH = "C:\fcidecomp\lib;C:\fcidecomp\hdf5\lib\plugin;C:\vcpkg\installed\x64-windows-static\tools\netcdf-c;C:\vcpkg\installed\x64-windows-static\tools\hdf5;C:\vcpkg\installed\x64-windows-static\tools\hdf5\bin;$env:PATH"
   ```
 
 ## Test the installation
@@ -55,8 +55,8 @@ Ensure the sample file is present (LFS):
   ```
 Run the post-install test from Git Bash (or a bash shell):
   ```
-  export HDF5_PLUGIN_PATH="/c/fcidecomp/hdf5/bin"
-  export PATH="/c/fcidecomp/hdf5/lib/plugin:/c/fcidecomp/lib:/c/vcpkg/installed/x64-windows-static/tools/netcdf-c:$PATH"
+  export HDF5_PLUGIN_PATH="/c/fcidecomp/hdf5/lib/plugin"
+  export PATH="/c/fcidecomp/lib:/c/fcidecomp/hdf5/lib/plugin:/c/vcpkg/installed/x64-windows-static/tools/netcdf-c:/c/vcpkg/installed/x64-windows-static/tools/hdf5:/c/vcpkg/installed/x64-windows-static/tools/hdf5/bin:$PATH"
   cd /c/path/to/fcidecomp
   ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh
   ```
@@ -65,14 +65,14 @@ It succeeds if it prints "*** SUCCESS! ***".
 You can also run it via Git Bash directly from the Git installation:
 
 ```
-  "C:\Program Files\Git\bin\bash.exe" --noprofile --norc -e -o pipefail -lc "cd /c/path/to/fcidecomp && export HDF5_PLUGIN_PATH=/c/fcidecomp/hdf5/bin && export PATH=/c/fcidecomp/hdf5/bin:/c/fcidecomp/bin:/c/vcpkg/installed/x64-windows-static/tools/netcdf-c:$PATH && ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh"
+  "C:\Program Files\Git\bin\bash.exe" --noprofile --norc -e -o pipefail -lc "cd /c/path/to/fcidecomp && export HDF5_PLUGIN_PATH=/c/fcidecomp/hdf5/lib/plugin && export PATH=/c/fcidecomp/lib:/c/fcidecomp/hdf5/lib/plugin:/c/vcpkg/installed/x64-windows-static/tools/netcdf-c:/c/vcpkg/installed/x64-windows-static/tools/hdf5:/c/vcpkg/installed/x64-windows-static/tools/hdf5/bin:$PATH && ./src/fcidecomp/fcidecomp-test/postInstallationTest.sh"
 ```
 
 Alternative (native CMD/PowerShell) test script:
 
 ```
   set HDF5_PLUGIN_PATH=C:\fcidecomp\hdf5\lib\plugin
-  set PATH=C:\fcidecomp\hdf5\bin;C:\fcidecomp\bin;C:\vcpkg\installed\x64-windows-static\tools\netcdf-c;%PATH%
+  set PATH=C:\fcidecomp\lib;C:\fcidecomp\hdf5\lib\plugin;C:\vcpkg\installed\x64-windows-static\tools\netcdf-c;C:\vcpkg\installed\x64-windows-static\tools\hdf5;C:\vcpkg\installed\x64-windows-static\tools\hdf5\bin;%PATH%
   src\fcidecomp\fcidecomp-test\postInstallationTest.bat
 ```
 
