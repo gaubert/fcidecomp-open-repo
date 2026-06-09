@@ -40,7 +40,10 @@ def main() -> int:
             print("Error: variable 'effective_radiance' not found in data/vis_06_hr/measured")
             return 1
 
-        data = measured.variables["effective_radiance"][250:253, 10000:10008]
+        variable = measured.variables["effective_radiance"]
+        # Compare packed on-disk values so this check matches the HDF5-based post-install test.
+        variable.set_auto_maskandscale(False)
+        data = variable[250:253, 10000:10008]
 
     if data.shape != (3, 8):
         print(f"Error: expected a 3x8 subset, got shape {data.shape}")

@@ -85,6 +85,26 @@ function command_exists () {
 }
 
 # ====================================================================
+# Convert Windows-style paths to shell-readable paths when possible
+# ====================================================================
+function normalize_shell_path {
+    local input_path="${1:-}"
+
+    if [[ -z "${input_path}" ]]; then
+        return 0
+    fi
+
+    if command_exists cygpath; then
+        if [[ "${input_path}" == *\\* ]] || [[ "${input_path}" =~ ^[A-Za-z]: ]]; then
+            cygpath -u "${input_path}" 2>/dev/null || printf '%s\n' "${input_path}"
+            return 0
+        fi
+    fi
+
+    printf '%s\n' "${input_path}"
+}
+
+# ====================================================================
 # Exit failure function
 # ====================================================================
 function exit_failure {
@@ -129,12 +149,14 @@ function print_plugin_info {
 
     while IFS= read -r plugin_dir; do
         [[ -z "${plugin_dir}" ]] && continue
-        if [[ ! -d "${plugin_dir}" ]]; then
+        local shell_plugin_dir
+        shell_plugin_dir=$(normalize_shell_path "${plugin_dir}")
+        if [[ ! -d "${shell_plugin_dir}" ]]; then
             echo "Plugin: directory not found: ${plugin_dir}"
             continue
         fi
         for plugin_base in "${PLUGIN_BASENAMES[@]}"; do
-            plugin_match=$(find "${plugin_dir}" -maxdepth 1 -type f -name "${plugin_base}.*" 2>/dev/null | head -n 1 || true)
+            plugin_match=$(find "${shell_plugin_dir}" -maxdepth 1 -type f -name "${plugin_base}.*" 2>/dev/null | head -n 1 || true)
             if [[ -n "${plugin_match}" ]]; then
                 echo "Plugin: using ${plugin_match}"
                 plugin_found=1
@@ -148,8 +170,10 @@ function print_plugin_info {
         echo "Plugin: no match found; contents of HDF5_PLUGIN_PATH:"
         printf '%s\n' "${HDF5_PLUGIN_PATH}" | tr "${path_separator}" '\n' | while IFS= read -r plugin_dir; do
             [[ -z "${plugin_dir}" ]] && continue
+            local shell_plugin_dir
+            shell_plugin_dir=$(normalize_shell_path "${plugin_dir}")
             echo "  ${plugin_dir}"
-            ls -la "${plugin_dir}" 2>/dev/null || true
+            ls -la "${shell_plugin_dir}" 2>/dev/null || true
         done
         echo "Plugin: no ${PLUGIN_BASENAMES[*]}.* found in HDF5_PLUGIN_PATH"
         exit_failure
