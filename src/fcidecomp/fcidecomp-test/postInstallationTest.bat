@@ -70,7 +70,11 @@ if errorlevel 1 (
   goto :fail
 )
 
-findstr /C:"(250,10000):" /C:"(251,10000):" /C:"(252,10000):" "%OUTPUT_FULL%" > "%OUTPUT_FILE%"
+> "%OUTPUT_FILE%" (
+  for /f "usebackq tokens=* delims= " %%L in (`findstr /C:"(250,10000):" /C:"(251,10000):" /C:"(252,10000):" "%OUTPUT_FULL%"`) do (
+    echo %%L
+  )
+)
 if errorlevel 1 (
   echo Failed to extract the expected dataset lines from %OUTPUT_FULL%
   goto :fail
