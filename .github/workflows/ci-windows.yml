@@ -73,12 +73,10 @@ jobs:
         run: cmake --install build --config Release --prefix "$GITHUB_WORKSPACE/install"
 
       - name: Post-install test
-        shell: bash
+        shell: pwsh
         run: |
-          VCPKG_ROOT_POSIX="$(cygpath -u "$VCPKG_ROOT")"
-          WORKSPACE_POSIX="$(cygpath -u "$GITHUB_WORKSPACE")"
-          WORKSPACE_WIN="$(cygpath -w "$GITHUB_WORKSPACE")"
-          export PATH="$WORKSPACE_POSIX/install/bin:$WORKSPACE_POSIX/install/hdf5/lib/plugin:$VCPKG_ROOT_POSIX/installed/x64-windows-static/tools/netcdf-c:$VCPKG_ROOT_POSIX/installed/x64-windows-static/tools/hdf5:$PATH"
-          export HDF5_PLUGIN_PATH="$WORKSPACE_WIN\\install\\hdf5\\lib\\plugin"
-          cd "$WORKSPACE_POSIX/src/fcidecomp"
-          ./fcidecomp-test/postInstallationTest.sh
+          $Env:PATH = "$Env:GITHUB_WORKSPACE\install\bin;$Env:GITHUB_WORKSPACE\install\hdf5\lib\plugin;$Env:VCPKG_ROOT\installed\x64-windows-static\tools\netcdf-c;$Env:VCPKG_ROOT\installed\x64-windows-static\tools\hdf5;$Env:PATH"
+          $Env:HDF5_PLUGIN_PATH = "$Env:GITHUB_WORKSPACE\install\hdf5\lib\plugin"
+          Set-Location "$Env:GITHUB_WORKSPACE\src\fcidecomp"
+          cmd /c "fcidecomp-test\postInstallationTest.bat"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

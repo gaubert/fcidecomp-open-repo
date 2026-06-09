@@ -23,9 +23,14 @@ add_subdirectory(fcicomp-H5Zjpegls)
 
 if(FCIDECOMP_ENABLE_POSTINSTALL_TEST)
   enable_testing()
+  if(WIN32)
+    set(POSTINSTALL_TEST_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/fcidecomp-test/postInstallationTest.bat)
+  else()
+    set(POSTINSTALL_TEST_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/fcidecomp-test/postInstallationTest.sh)
+  endif()
   add_test(
     NAME post_installation_test
-    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/fcidecomp-test/postInstallationTest.sh
+    COMMAND ${POSTINSTALL_TEST_COMMAND}
   )
   set_tests_properties(post_installation_test PROPERTIES
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}

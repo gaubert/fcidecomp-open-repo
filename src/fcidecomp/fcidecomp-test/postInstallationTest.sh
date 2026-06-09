@@ -145,6 +145,8 @@ function print_plugin_info {
 
     if [[ "${HDF5_PLUGIN_PATH}" == *";"* ]]; then
         path_separator=';'
+    elif [[ "${HDF5_PLUGIN_PATH}" =~ ^[A-Za-z]:[\\/].* ]]; then
+        path_separator=$'\n'
     fi
 
     while IFS= read -r plugin_dir; do
