@@ -1,10 +1,10 @@
 # Install on Windows
 
-This guide covers Windows 10/11 setup for building and testing fcidecomp.
+This guide covers Windows 10/11 setup for building and testing fcidecomp. In GitHub Actions, the Windows CI job is pinned to `windows-2025-vs2026` to match the current hosted-runner migration.
 
 ## Prerequisites
 
-- Visual Studio 2022 with "Desktop development with C++"
+- Visual Studio 2022 or newer with "Desktop development with C++"
 - CMake 3.20+ (the CI uses 3.31.x). If you install via Visual Studio, enable the individual component "CMake tools for Windows".
 - Developer PowerShell for VS (for building)
 - Git for Windows + Git LFS (Git provides `bash.exe` for the test script)

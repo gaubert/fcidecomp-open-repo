@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2025-vs2026
 
     steps:
       - name: Checkout
@@ -32,9 +32,9 @@ jobs:
           path: |
             C:\vcpkg\installed
             C:\vcpkg\downloads
-          key: vcpkg-${{ runner.os }}-x64-windows-static-${{ hashFiles('**/conda/**', '**/CMakeLists.txt', '**/vcpkg.json') }}
+          key: vcpkg-${{ runner.os }}-windows-2025-vs2026-x64-windows-static-${{ hashFiles('**/conda/**', '**/CMakeLists.txt', '**/vcpkg.json') }}
           restore-keys: |
-            vcpkg-${{ runner.os }}-x64-windows-static-
+            vcpkg-${{ runner.os }}-windows-2025-vs2026-x64-windows-static-
 
       - name: Install dependencies (vcpkg)
         shell: pwsh
