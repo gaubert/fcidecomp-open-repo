@@ -1,0 +1,119 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-21T00:00:00Z",
+    "tools": [
+      {
+        "name": "generate_sbom.py",
+        "version": "1.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "fcidecomp",
+      "version": "2.1.2",
+      "description": "EUMETSAT fcidecomp software: HDF5 filter plugin (H5ZJPEGLS) enabling decompression of MTG JPEG-LS netCDF files."
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "charls",
+      "version": "2.4.2",
+      "description": "JPEG-LS codec library, built and linked statically (build-time dependency)",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:github/team-charls/charls@2.4.2"
+    },
+    {
+      "type": "library",
+      "name": "zlib",
+      "version": "1.3.1",
+      "description": "Compression library, fetched at build time via CMake FetchContent",
+      "licenses": [
+        {
+          "license": {
+            "id": "Zlib"
+          }
+        }
+      ],
+      "purl": "pkg:github/madler/zlib@1.3.1"
+    },
+    {
+      "type": "library",
+      "name": "hdf5",
+      "version": "1.14.0",
+      "description": "HDF5 library; versions 1.12.x to 1.14.x tested (build and runtime dependency)",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:github/HDFGroup/hdf5@1.14.0"
+    },
+    {
+      "type": "library",
+      "name": "libnetcdf",
+      "version": "4.8.1",
+      "description": "netCDF-C library (build and runtime dependency)",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:github/Unidata/netcdf-c@4.8.1"
+    },
+    {
+      "type": "library",
+      "name": "h5py",
+      "version": "3.6.0",
+      "description": "Python HDF5 bindings (optional Python runtime dependency)",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/h5py@3.6.0"
+    },
+    {
+      "type": "library",
+      "name": "netCDF4",
+      "version": "1.6.2",
+      "description": "Python netCDF library (optional Python runtime dependency)",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/netCDF4@1.6.2"
+    },
+    {
+      "type": "application",
+      "name": "CPython",
+      "version": "3.12.0",
+      "description": "Python interpreter; versions 3.9 to 3.12 tested (optional Python runtime dependency)",
+      "licenses": [
+        {
+          "license": {
+            "id": "Python-2.0"
+          }
+        }
+      ]
+    }
+  ]
+}

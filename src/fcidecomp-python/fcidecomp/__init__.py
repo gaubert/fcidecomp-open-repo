@@ -91,10 +91,9 @@ def _init_filters():
     filter_id = FILTER_ID
 
     # Check if filter is already loaded (not on buggy HDF5 versions)
-    if (1, 8, 20) <= hdf5_version < (1, 10) or hdf5_version >= (1, 10, 2):
-        if _h5py.h5z.filter_avail(filter_id):
-            _logger.warning("%s filter already loaded, skip it.", filter_name)
-            return
+    if ((1, 8, 20) <= hdf5_version < (1, 10) or hdf5_version >= (1, 10, 2)) and _h5py.h5z.filter_avail(filter_id):
+        _logger.warning("%s filter already loaded, skip it.", filter_name)
+        return
 
     # Load DLL
     if _sys.platform.startswith('win'):

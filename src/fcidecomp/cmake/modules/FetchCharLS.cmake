@@ -2,7 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
   charls
-  URL https://github.com/team-charls/charls/archive/refs/tags/2.4.1.tar.gz
+  URL https://github.com/team-charls/charls/archive/refs/tags/2.4.2.tar.gz
 )
 
 FetchContent_MakeAvailable(charls)

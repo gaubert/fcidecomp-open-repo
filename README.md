@@ -79,6 +79,18 @@ Following versions have been tested with fcidecomp hdf5 filter plugin
 | python | 3.9 to 3.12 | see https://docs.python.org/3/license.html | https://www.python.org |
 | h5py | 2.* and 3.6.0 | BDS 3-Clause | https://www.python.org |
 
+## Software Bill of Materials
+
+The software bill of materials is provided in CycloneDX 1.5 format in [`sbom.cdx.json`](./sbom.cdx.json) and lists the build and runtime dependencies with their versions and licenses.
+
+Regenerate locally with:
+
+```bash
+python3 scripts/generate_sbom.py
+```
+
+The dependency manifest is maintained in [`scripts/generate_sbom.py`](./scripts/generate_sbom.py); keep it in sync with the "Tools versions" table above and the build scripts.
+
 ## Inventory Notes
 
 Licenses and copyright information for software dependencies is documented within the [inventory](./inventory) folder.
