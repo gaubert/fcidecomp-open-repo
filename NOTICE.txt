@@ -171,7 +171,7 @@ https://docs.python.org/3/license.html
 
 ************************************************************
 
-team-charls-charls 2.1  [Dependency for the full package]  (BSD-3-Clause)
+team-charls-charls 2.4.2  [Dependency for the full package]  (BSD-3-Clause)
 
 https://github.com/team-charls/charls
 

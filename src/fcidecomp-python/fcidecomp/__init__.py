@@ -20,11 +20,12 @@
 # - B-Open Solutions srl
 
 import ctypes as _ctypes
-from glob import glob as _glob
 import logging as _logging
 import os as _os
 import sys as _sys
 from collections.abc import Mapping as _Mapping
+from glob import glob as _glob
+
 import h5py as _h5py
 
 _logger = _logging.getLogger(__name__)
